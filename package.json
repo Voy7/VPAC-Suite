@@ -1,7 +1,7 @@
 {
-  "name": "vpac-stats",
+  "name": "vpac-suite",
   "version": "1.0.0",
-  "description": "VPAC-Stats",
+  "description": "All things related to the VPAC DCS group. Controls the website, Discord bot, lua scripts & others.",
   "main": "src/main.js",
   "author": {
     "name": "Voy"
