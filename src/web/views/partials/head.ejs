@@ -1,0 +1,18 @@
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=0.9">
+<meta content="VPAC - <%= title %>" property="og:title" />
+<% try { if (desc) { %>
+    <meta content="<%= desc %>" property="og:description" />
+<% }} catch { %>
+    <meta content="The official Virtual Pacific Air Command website. A hub for all things squadron and mission related." property="og:description" />
+<% } %>
+<meta content="/assets/logo.png" property="og:image" />
+<meta content="#2a6f96" data-react-helmet="true" name="theme-color" />
+<title>VPAC - <%= title %></title>
+<link rel="icon" href="/assets/logo.png" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto" />
+<link rel="stylesheet" href="/css/main.css" />
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/jQuery.js"></script>
+<script src="/js/main.js"></script>

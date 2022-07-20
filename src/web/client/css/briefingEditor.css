@@ -1,0 +1,40 @@
+body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
+
+#editor-container {
+    margin: 30px;
+    padding: 10px;
+    background-color: rgb(16, 16, 45);
+    border: 1px solid rgb(36, 36, 61);
+    border-radius: 10px;
+}
+
+#editor-container #header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#editor-container #header label {
+    font-size: 14px;
+}
+
+#editor-container #header input {
+    font-size: 14px;
+    padding: .2em .5em;
+    background-color: rgb(60, 60, 60);
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#editor-container #header p {
+    display: inline;
+    font-size: 14px;
+}
+
+#editor-container #header button {
+    padding: .2em .5em;
+    font-size: 16px;
+    color: black;
+    background-color: white;
+    border: 1px dashed black;
+}

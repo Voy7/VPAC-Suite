@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head", { title: "Briefing" }) %>
+    <link rel="stylesheet" href="/css/briefing.css" />
+    <script src="/js/briefing.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJoQnM07KZu2NiFwba16dy_3SfR1hFa8&libraries=geometry&callback=initMap" async></script>
+</head>
+<body>
+    <%- include("partials/header", { selectedPage: "" }) %>
+    
+    <script>
+        const miz = JSON.parse('<%- JSON.stringify(data) %>')
+        </script>
+
+    <div id="map" style="display: none;"></div>
+    
+
+    <%- include("partials/footer") %>
+</body>
+</html>

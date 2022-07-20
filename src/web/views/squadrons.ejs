@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% let desc = `View list of all VPAC squadrons, including airframes, members, and checkride information.\n`
+    squadrons.forEach(squadron => {
+        desc += `\n${squadron.squadron.name}`
+    }) %>
+    <%- include("partials/head", { title: "Squadrons", desc }) %>
+    <link rel="stylesheet" href="/css/squadrons.css" />
+    <link rel="stylesheet" href="/css/checkride.css">
+    <script src="/js/squadrons.js"></script>
+</head>
+<body>
+    <%- include("partials/header", { selectedPage: "/squadrons" }) %>
+    <h2>VPAC SQUADRONS</h2>
+    <section id="main-squadrons-container">
+        <% squadrons.forEach(squadron => { %>
+            <section>
+                <h2 class="name"><%= squadron.squadron.name %></h2>
+                <p class="description"><%= squadron.squadron.description.replace(/@1;/g, "'") %></p>
+                <div class="info-container">
+                    <div class="info-part">
+                        <h3 class="label">COMMON CALLSIGNS:</h3>
+                        <ul>
+                            <% squadron.squadron.callsigns.forEach(callsign => { %>
+                                <li class="callsign"><%= callsign %></li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                    <div class="info-part">
+                        <h3 class="label">AIRFRAMES:</h3>
+                        <ul>
+                            <% squadron.squadron.airframes.forEach(airframe => { %>
+                                <li class="airframe"><%= airframe %></li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="members-container">
+                    <div class="expandable-container" data-squadron="<%= squadron.squadron.abbreviation %>">
+                        <h3 class="label">SQUADRON MEMBERS (<%= squadron.members.length %>):</h3>
+                        <span class="arrow" data-arrow="<%= squadron.squadron.abbreviation %>">&#9655;</span>
+                    </div>
+                    <% let activeUsers = []
+                    let otherUsers = []
+                    squadron.members.forEach(user => {
+                        if (user.data.status) activeUsers.push(user)
+                        else otherUsers.push(user)
+                    })
+                    let users = [...activeUsers, ...otherUsers]
+                    users.forEach(user => { %>
+                        <%- include("partials/user", { user, group: squadron.squadron.abbreviation }) %>
+                    <% }) %>
+                    <div id="members-preview" data-preview="<%= squadron.squadron.abbreviation %>">
+                        <% let memberCount = 0
+                        squadron.members.forEach(member => {
+                            memberCount++
+                            if (memberCount <= 11) { %>
+                            <img class="member-avatar" src="<%= member.avatar %>" />
+                        <% }}) %>
+                    </div>
+                </div>
+                
+                <a class="apply-button" href="https://forms.gle/S7ddem74tqikrY5T9">Apply to Join</a>
+                <a class="checkride-button" data-checkride="<%= squadron.squadron.abbreviation %>">Checkride Info</a>
+            </section>
+        <% }) %>
+    </section>
+    <% squadrons.forEach(squadron => { %>
+        <div class="checkride-modal-overlay modal" data-checkride-modal="<%= squadron.squadron.abbreviation %>">
+            <div class="checkride-modal">
+                <button class="checkride-close">X</button>
+                <div class="checkride-content checkride">
+                    <% if (!squadron.squadron.checkride) squadron.squadron.checkride = "" %>
+                    <%- squadron.squadron.checkride.replace(/@1;/g, "'").replace(/>\r\n/g, ">") %>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+
+    <%- include("partials/footer") %>
+</body>
+</html>

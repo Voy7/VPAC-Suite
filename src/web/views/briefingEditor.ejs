@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head", { title: "Briefing Editor" }) %>
+    <link rel="stylesheet" href="/css/briefingEditor.css" />
+    <script src="/js/briefingEditor.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJoQnM07KZu2NiFwba16dy_3SfR1hFa8&libraries=geometry&callback=initMap" async></script>
+</head>
+<body>
+    <%- include("partials/header", { selectedPage: "" }) %>
+    
+    <script>
+        const briefing = JSON.parse('<%- JSON.stringify(info) %>')
+    </script>
+
+    <section id="editor-container">
+        <div id="header">
+            <div>
+                <label for="briefing-name">Mission/Briefing Name</label>
+                <input type="text" value="<%= info.name %>" id="briefing-name" name="briefingName">
+            </div>
+            <div>
+                <p>Upload .miz File</p>
+                <button>Upload File</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="map" style="display: none;"></div>
+    
+
+    <%- include("partials/footer") %>
+</body>
+</html>

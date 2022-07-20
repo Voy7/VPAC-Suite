@@ -1,0 +1,53 @@
+.checkride {
+    padding: 10px;
+    color: var(--text-color-1);
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+.checkride h1 {
+    padding: .4em;
+    background-color: rgb(50, 50, 60);
+    border-radius: 5px;
+}
+
+.checkride h1, .checkride h2, .checkride h3,
+.checkride h4, .checkride h5, .checkride h6 {
+    margin: .1em;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+}
+
+.checkride h2 { font-size: 17px; }
+.checkride h3 { font-size: 16px; }
+.checkride h4 { font-size: 14px; }
+.checkride h5 { font-size: 14px; }
+.checkride h6 { font-size: 14px; }
+
+.checkride ul, .checkride ol {
+    padding-left: .5em;
+    white-space: pre-wrap;
+    border-left: 2px solid var(--border-color-2);
+}
+.checkride li { margin-left: 16px; padding: .1em 0; }
+.checkride hr { margin: .5em 0; color: var(--border-color-2); }
+.checkride div { padding-left: .5em; border-left: 2px solid rgb(0, 209, 209); }
+.checkride section { padding-left: .5em; border-left: 2px solid rgb(196, 186, 0); }
+.checkride img { max-width: 100%; }
+.checkride p { color: rgb(52, 174, 255); }
+.checkride b { color: white; }
+.checkride i { color: inherit; }
+.checkride u { color: inherit; }
+.checkride a:hover { color: blue; }
+
+.checkride .download {
+    text-decoration: none;
+    padding: .3em .6em;
+    color: white;
+    background-color: rgb(0, 181, 24);
+    border-radius: 5px;
+    transition: 300ms;
+}
+
+.checkride .download:hover { color: inherit; background-color: rgb(0, 113, 15); }

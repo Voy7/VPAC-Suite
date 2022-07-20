@@ -1,0 +1,20 @@
+body { background-image: url("/assets/bg3.png"); }
+
+#error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 75vh;
+}
+
+#error-container img {
+    width: 100px;
+    height: 100px;
+}
+
+#error-container h2 {
+    font-weight: normal;
+    font-size: 24px;
+    margin: 20px;
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head", { title: "Admin Panel" }) %>
+    <link rel="stylesheet" href="/css/admin.css" />
+    <link rel="stylesheet" href="/css/checkride.css" />
+    <script src="/js/admin.js"></script>
+</head>
+<body>
+    <%- include("partials/header", { selectedPage: "/admin" }) %>
+    <p id="popup-updated">Your changes have been submitted.</p>
+    <section id="main-section-container">
+        <ul id="main-section-list">
+            <li data-section="squadrons">Squadrons</li>
+            <li data-section="missions">Missions</li>
+            <li data-section="resources">Resources</li>
+            <li data-section="briefings">Briefings</li>
+        </ul>
+
+        <!-- Squadrons section -->
+        <section id="section-squadrons" style="display: none;" data-is-section>
+            <div id="select-squadrons" class="select-list">
+                <h4>All Squadrons</h4>
+                <ul>
+                    <% squadrons.forEach(squadron => { %>
+                        <li data-squadron="<%= squadron.squadron.abbreviation %>"><%= squadron.squadron.name %></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <% squadrons.forEach(squadron => { %>
+                <div class="squadron-container" data-squadron-sec="<%= squadron.squadron.abbreviation %>">
+                    <h4><%= squadron.squadron.name %></h4>
+                    <p>Note: Squadron name and members are tied to the Discord role ID: <%= squadron.squadron.id %></p>
+                    <form action="/squadron_update" method="POST" class="options-text">
+                        <input type="hidden" value="<%= squadron.squadron.abbreviation %>" name="squadron">
+                        <label for="squadron-<%= squadron.squadron.abbreviation %>-description">Squadron Description</label>
+                        <textarea id="squadron-<%= squadron.squadron.abbreviation %>-description" name="squadronDescription" required><%= squadron.squadron.description %></textarea>
+                        <label for="squadron-<%= squadron.squadron.abbreviation %>-callsigns">Squadron Callsigns</label>
+                        <input type="text" value="<%= squadron.squadron.callsigns %>" id="squadron-<%= squadron.squadron.abbreviation %>-callsigns" name="squadronCallsigns" required>
+                        <label for="squadron-<%= squadron.squadron.abbreviation %>-airframes">Squadron Airframes</label>
+                        <input type="text" value="<%= squadron.squadron.airframes %>" id="squadron-<%= squadron.squadron.abbreviation %>-airframes" name="squadronAirframes" required>
+                        <label for="squadron-<%= squadron.squadron.abbreviation %>-checkride">Checkride Info</label>
+                        <div class="checkride-container">
+                            <textarea id="squadron-<%= squadron.squadron.abbreviation %>-checkride" name="squadronCheckride" required><%= squadron.squadron.checkride %></textarea>
+                            <div id="squadron-<%= squadron.squadron.abbreviation %>-checkride-preview" class="checkride-preview checkride"></div>
+                        </div>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            <% })
+            if (squadrons.length > 0) { %>
+                <script>openList("squadron", "<%- squadrons[0].squadron.abbreviation %>")</script>
+            <% } %>
+        </section>
+
+        <!-- Missions section -->
+        <section id="section-missions" style="display: none;" data-is-section>
+            <% const missionList = []
+            missions.forEach(mission => { missionList.unshift(mission) })
+            missions = missionList %>
+            <div id="select-missions" class="select-list">
+                <h4>All Missions</h4>
+                <ul>
+                    <% missions.forEach(mission => { %>
+                        <li data-mission="<%= mission.name %>"><%= mission.name.replace(/_/g, " ") %></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <% missions.forEach(mission => { %>
+                <div class="mission-container" data-mission-sec="<%= mission.name %>">
+                    <h4><%= mission.name.replace(/_/g, " ") %></h4>
+                    <form action="/mission_update" method="POST" class="options-text">
+                        <input type="hidden" value="<%= mission.name %>" name="mission">
+                        <label for="mission-<%= mission.name %>-name">Mission Name</label>
+                        <input type="text" value="<%= mission.name.replace(/_/g, " ") %>" id="mission-<%= mission.name %>-name" name="missionName" required>
+                        <button type="submit">Update</button>
+                    </form>
+                    <form action="/mission_delete" method="POST" class="options-delete">
+                        <input type="hidden" value="<%= mission.name %>" name="mission">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            <% })
+            if (missions.length > 0) { %>
+                <script>openList("mission", "<%- missions[0].name %>")</script>
+            <% } %>
+        </section>
+
+        <!-- Resources section -->
+        <section id="section-resources" style="display: none;" data-is-section>
+            <% const resourceList = []
+            resources.forEach(resource => { resourceList.unshift(resource) })
+            resources = resourceList %>
+            <div id="select-resources" class="select-list">
+                <h4>All Resources</h4>
+                <ul>
+                    <% resources.forEach(resource => { %>
+                        <li data-resource="<%= resource.name %>"><%= resource.name %></li>
+                    <% }) %>
+                </ul>
+                <button class="create-new">Create Resource</button>
+            </div>
+            <div class="resource-container" data-resource-sec="create-new">
+                <h4>Create New Resource</h4>
+                <form action="/resource_create" method="POST" class="options-text">
+                    <label for="resource-createnew-name">Resource Name</label>
+                    <input type="text" value="" id="resource-createnew-name" name="resourceName" required>
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+            <% resources.forEach(resource => { %>
+                <div class="resource-container" data-resource-sec="<%= resource.name %>">
+                    <h4><%= resource.name %></h4>
+                    <form action="/resource_update" method="POST" class="options-text">
+                        <input type="hidden" value="<%= resource.name %>" name="resource">
+                        <button type="submit">Update</button>
+                    </form>
+                    <form action="/resource_delete" method="POST" class="options-delete">
+                        <input type="hidden" value="<%= resource.name %>" name="resource">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            <% })
+            if (resources.length > 0) { %>
+                <script>openList("resource", "<%- resources[0].name %>")</script>
+            <% } %>
+
+
+        </section>
+
+        <!-- Briefings section -->
+        <% console.log(briefings) %>
+        <section id="section-briefings" style="display: none;" data-is-section>
+            <% const briefingList = []
+            briefings.forEach(briefing => { briefingList.unshift(briefing) })
+            briefings = briefingList %>
+            <div id="select-briefings" class="select-list">
+                <h4>All Briefings</h4>
+                <ul>
+                    <% briefings.forEach(briefing => { %>
+                        <li data-briefing="<%= briefing.id %>"><%= briefing.name %></li>
+                    <% }) %>
+                </ul>
+                <button class="create-new">Create Briefing</button>
+            </div>
+            <div class="briefing-container" data-briefing-sec="create-new">
+                <h4>Create New Briefing</h4>
+                <form action="/briefing_create" method="POST" class="options-text">
+                    <label for="briefing-createnew-name">Resource Name</label>
+                    <input type="text" value="" id="briefing-createnew-name" name="briefingName" required>
+                    <button type="submit">Create</button>
+                </form>
+            </div>
+            <% briefings.forEach(briefing => { %>
+                <div class="briefing-container" data-briefing-sec="<%= briefing.id %>">
+                    <h4><%= briefing.name %></h4>
+                    <form action="/briefing_update" method="POST" class="options-text">
+                        <input type="hidden" value="<%= briefing.name %>" name="briefing">
+                        <button type="submit">Update</button>
+                    </form>
+                    <form action="/briefing_delete" method="POST" class="options-delete">
+                        <input type="hidden" value="<%= briefing.name %>" name="briefing">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            <% })
+            if (briefings.length > 0) { %>
+                <script>openList("briefing", "<%- briefings[0].id %>")</script>
+            <% } %>
+
+            
+        </section>
+    </section>
+
+    <%- include("partials/footer") %>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "vpac-stats",
+  "version": "1.0.0",
+  "description": "VPAC-Stats",
+  "main": "src/main.js",
+  "author": {
+    "name": "Voy"
+  },
+  "dependencies": {
+    "archiver": "^5.3.1",
+    "bcrypt": "^5.0.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.7",
+    "express": "^4.17.3",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^10.1.0",
+    "https": "^1.0.0",
+    "ip": "^1.1.5",
+    "luaparse": "^0.3.1",
+    "net": "^1.0.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "socket.io": "^4.5.0",
+    "sqlite3": "^5.0.5",
+    "zip-lib": "^0.7.3"
+  }
+}

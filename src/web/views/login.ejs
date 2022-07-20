@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head", { title: "Resources" }) %>
+    <link rel="stylesheet" href="/css/login.css" />
+    <script src="/js/login.js"></script>
+</head>
+<body>
+    <%- include("partials/header", { selectedPage: "/login" }) %>
+    <h2>LOGIN</h2>
+    <div id="login-container">
+        <form action="/login" method="POST">
+            <label for="login">Enter your secret key / password</label>
+            <input type="password" id="key" name="key" required>
+            <button type="submit">Login</button>
+        </form>
+        <% try {
+            if (unknown) { %>
+            <p id="login-unknown">Unknown password, please try again.</p>
+        <% }} catch { } %>
+    </div>
+    <%- include("partials/footer") %>
+</body>
+</html>

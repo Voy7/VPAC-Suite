@@ -1,0 +1,159 @@
+body { background-image: url("/assets/bg6.png"); }
+
+#main-squadrons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px 20px;
+    margin: 20px 10px;
+}
+
+#main-squadrons-container section {
+    position: relative;
+    width: 520px;
+    min-height: 400px;
+    padding: 10px;
+    background-color: var(--bg-color-1);
+    border: 1px solid var(--border-color-1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#main-squadrons-container .name {
+    margin: -10px -10px 5px -10px;
+    padding: .2em;
+    font-size: 22px;
+    font-weight: normal;
+    text-align: center;
+    background-color: rgb(30, 35, 40);
+    border-bottom: 1px solid var(--border-color-1);
+}
+
+#main-squadrons-container .description {
+    min-height: 120px; /* Align horizontal fix */
+    margin: 15px 10px;
+    padding-bottom: 5px;
+    font-size: 15px;
+    border-bottom: 1px solid var(--border-color-1);
+}
+
+#main-squadrons-container .expandable-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+#main-squadrons-container .expandable-container:hover { background-color: var(--bg-color-2); }
+
+#main-squadrons-container .arrow {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 50%;
+    transition: 300ms;
+    transform: rotate(0deg);
+}
+
+#main-squadrons-container .label {
+    margin: 5px;
+    font-weight: normal;
+    font-size: 16px;
+    color: gray;
+}
+
+#main-squadrons-container .info-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0 15px 0;
+}
+
+#main-squadrons-container .info-part ul {
+    min-width: 150px;
+    list-style: none;
+}
+
+#main-squadrons-container .info-part ul li {
+    display: inline-block;
+    margin: 3px 0 3px 1px;
+    padding: 3px 6px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+#main-squadrons-container .callsign { background-color: rgb(35, 35, 35); }
+#main-squadrons-container .airframe { background-color: rgb(21, 70, 88); }
+
+#main-squadrons-container .members-container { margin-bottom: 60px; }
+#main-squadrons-container #members-preview { display: flex; margin: 3px 10px 10px 5px; }
+
+#main-squadrons-container #members-preview .member-avatar {
+    width: 20px;
+    height: 20px;
+    margin-right: -3px;
+    border-radius: 50%;
+}
+
+#main-squadrons-container a {
+    position: absolute;
+    bottom: 0;
+    padding: 7px 10px;
+    margin: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid rgb(40, 40, 40);
+    border-radius: 5px;
+}
+
+#main-squadrons-container a { transition: 100ms; cursor: pointer; }
+#main-squadrons-container .apply-button { left: 0; background-color: rgb(48, 127, 34); }
+#main-squadrons-container .checkride-button { left: 8em; background-color: rgb(30, 30, 40); }
+#main-squadrons-container .apply-button:hover { background-color: rgb(78, 157, 64); }
+#main-squadrons-container .checkride-button:hover { background-color: rgb(60, 60, 70); }
+
+.checkride-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1001;
+}
+
+.checkride-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    min-height: 400px;
+    max-height: 90vh;
+    background-color: var(--bg-color-1);
+    border: 1px solid var(--border-color-1);
+    border-radius: 10px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.checkride-modal .checkride-content {
+    margin-top: -3em; /* Temp fix */
+    padding: 0 20px;
+}
+
+.checkride-modal .checkride-close {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    font-size: 20px;
+    background: none;
+    border: none;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.checkride-modal .checkride-close:hover { color: white; }
