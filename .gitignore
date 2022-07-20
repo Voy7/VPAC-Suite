@@ -129,5 +129,5 @@ dist
 # VPAC-Suite specific
 config.json
 database.sqlite
-ssl
+ssl/
 mission
