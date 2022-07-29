@@ -38,3 +38,64 @@ body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
     background-color: white;
     border: 1px dashed black;
 }
+
+#editor-container #new-element-button {
+    margin: 20px 0;
+    padding: .3em .6em;
+    font-size: 16px;
+    color: lime;
+    background: none;
+    border: 1px solid lime;
+    border-radius: 10px;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+#editor-container #new-element-button:hover { color: white; background-color: lime; }
+
+.error-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1001;
+}
+
+.error-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    width: 500px;
+    padding: 20px;
+    background-color: rgb(80, 20, 20);
+    border: 1px solid var(--border-color-1);
+    border-radius: 10px;
+}
+
+.error-modal h1 { font-size: 20px; }
+
+.error-modal p {
+    font-size: 16px;
+    color: var(--text-color-1);
+}
+
+.error-modal button {
+    padding: .3em 1em;
+    font-size: 18px;
+    color: aqua;
+    background: none;
+    border: 1px solid aqua;
+    border-radius: 10px;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+.error-modal button:hover { color: white; background-color: aqua; }

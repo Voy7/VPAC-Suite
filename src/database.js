@@ -1,6 +1,9 @@
 const dcsUtils = require("./web/dcsUtils")
 const sqlite3 = require("sqlite3")
 const db = new sqlite3.Database("./database.sqlite")
+const fs = require("fs")
+const miz = require("./web/mizUtils")
+const luaJson = require("luaparse")
 
 // Run given query/queries.
 function run(queries) {
@@ -238,11 +241,19 @@ function briefingGetInfo(id, name) {
                         db.run(`INSERT INTO briefings (id, name, data) VALUES ("${id}", "Untitled Briefing", '[]')`)
                         resolve([])
                     }
-                    else resolve({
-                        id: row.id,
-                        name: row.name,
-                        data: JSON.parse(row.data)
-                    })
+                    else {
+                        // const mizRaw = await fs.readFileSync(`miz/${id}/mission`)
+                        fs.readFile(`miz/${id}/mission`, "utf8", async (err, mizRaw) => {
+                            let mizRawData = null
+                            if (!err) mizRawData = await miz.getMissionData(luaJson.parse(mizRaw.toString()))
+                            resolve({
+                                id: row.id,
+                                name: row.name,
+                                data: JSON.parse(row.data),
+                                miz: mizRawData
+                            })
+                        })
+                    }
                 })
             }
         })

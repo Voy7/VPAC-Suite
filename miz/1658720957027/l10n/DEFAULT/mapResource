@@ -1,0 +1,6 @@
+mapResource = 
+{
+    ["ResKey_Action_1063"] = "KeyIn.wav",
+    ["ResKey_Action_976"] = "KeyIn.wav",
+    ["ResKey_Action_975"] = "KeyIn.wav",
+} -- end of mapResource

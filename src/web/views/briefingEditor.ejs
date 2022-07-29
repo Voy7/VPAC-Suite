@@ -21,13 +21,32 @@
             </div>
             <div>
                 <p>Upload .miz File</p>
-                <button>Upload File</button>
+                <input type="file" onchange="uploadMiz(files)">
             </div>
         </div>
+        
+        <div id="elements"></div>
+
+        <button id="new-element-button">+ New Element</button>
     </section>
 
     <div id="map" style="display: none;"></div>
-    
+
+    <div id="new-element-overlay" class="modal">
+        <div id="new-element-modal">
+            <h1>Add New Element</h1>
+            // Create left sidebar with element bullets selector
+            // Right side is options.
+        </div>
+    </div>
+
+    <div id="upload-failed" class="error-modal-overlay modal">
+        <div class="error-modal">
+            <h1>.miz File Error</h1>
+            <p>There was an error processing your .miz file. Make sure you are uploading a valid .miz file. If the error persists, contact the developer.</p>
+            <button>Close</button>
+        </div>
+    </div>
 
     <%- include("partials/footer") %>
 </body>

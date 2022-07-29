@@ -2,39 +2,43 @@ const coalitions = ["red", "blue"]
 const flightPath = {}
 
 const elements = [
-    { type: "title", title: "Georgian Resolve Campaign - Day 7", },
+    { type: "title", title: "Georgian Resolve Campaign - Day 9 (FINAL MISSION)", },
     { type: "line" },
     { type: "header", text: "Briefing" },
-    { type: "paragraph", text: "The day is August 10th, 2008, local time 23:00. In the previous mission we successfully disabled the air defenses in the east, leaving a SAM-free path to Mozdok. In this mission we will be attacking Mozdok airfield, including it's short range air defenses (SA-8, SA-15, MANPADS, & AAA), parked aircraft, taxiways, & targets of opportunity. We will be performing the strike at night to nullify AAA. It is crucial that the short range defenses are deprecated enough for our B-1B bombers to strike the runway at 01:20 (2h 20m in).<br><br></br>CAP aircraft will be tasked with defending the strike aircraft around Mozdok and escorting the B-1Bs to their target. Russia is aware of our plan and will most likely scramble aircraft out of Mozdok and neighboring airfields in the north-west. <br><br></br>Whilst in the previous mission the SA-20 near Mozdok was disabled, only the track & search radar were destroyed. These assets can be easily replaced and the rest of the site needs to be destroyed. Therefore there will be a secondary strike objective to destroy the remaining launchers & support vehicles at this site."},
+    { type: "paragraph", text: "The day is August 13th, 2008, local time 18:00. Following a devastating week of fighting, it appears Russia is retreating out of the Georgian region. Reconnaissance aircraft have spotted IL-76 transport aircraft loading troops and armor at Beslan airport. And several Russian convoys appear to be getting ready to head back up north. Our mission will be to intercept all these elements to ensure they can't be used in future attacks.<br><br>The transport aircraft at Beslan are expected to depart around 19:00, heading for Krasnodar Center. We can expect these aircraft to have fighter escorts, which will need to be dealt with before shooting down the IL-76s.<br><br></br>Meanwhile west of Beslan, several Russian convoys are heading north and need to be destroyed. Waypoint 3 has been provided as a rough area of where you can expect to find these convoys, initially search 10nm radius, shifted north further along into the mission. These convoys will be protected by AAA and short-range SAMs. (Tip: some SAMs may have their radar on, use this to help you find the convoys)."},
     { type: "line" },
     { type: "map" },
     { type: "line" },
+    {
+        type: "weather",
+        wind: "140&deg; 7 kts",
+        clouds: "Scattered at 12,000",
+        qnh: "763 / 30.04",
+        tempature: "64&deg; F"
+    },
+    { type: "line" },
     { type: "header", text: "Objectives" },
-    { type: "paragraph", text: "Objective 1:<br>Execute strike plan at Mozdok.", align: true },
-    { type: "paragraph", text: "Objective 2:<br>Destroy remaining assets at SA-20 site.", align: true },
+    { type: "paragraph", text: "Objective 1:<br>Destroy transport and fighter aircraft coming out of Beslan.", align: true },
+    { type: "paragraph", text: "Objective 2:<br>Find and destroy Russian convoys retreating north.", align: true },
     { type: "paragraph", text: "Objective 3:<br>Provide CAP/Escort for above operations.", align: true },
     { type: "line" },
     { type: "header", text: "Known Threats" },
     { type: "paragraph", text: "Air: Su-24, Su-25, Su-27, Su-30, Su-33, MiG-29, MiG-31, Tu-22, Tu-160, Ka-50, Mi-24, Mi-26, Mi-28", align: true },
-    { type: "paragraph", text: "Ground: SA-5, SA-6, SA-8, SA-13, SA-15, SA-18, SA-19, SA-20, ZSU-23, ZSU-58", align: true },
+    { type: "paragraph", text: "Ground: SA-5, SA-6, SA-8, SA-13, SA-15, SA-18, SA-19, SA-20, ZSU-23, ZSU-57", align: true },
     { type: "line" },
     { type: "header", text: "Callsigns" },
-    { type: "paragraph", text: "A-10s - Hawg 1-x<br />F-16s - Falcon 1-x<br />F-14s - Vampire 1-x<br />F/A-18s - Bloodhound 1-x<br />AV-8s - Bulldog 1-x<br />AH-64s - Nightmare 1-x<br />UH-1s - Checkmate 1-x", align: true },
+    { type: "paragraph", text: "A-10s - Hawg #<br />F-16s - Falcon #<br />F-14s - Vampire #<br />F/A-18s - Bloodhound #<br />AV-8s - Bulldog #<br />AH-64s - Nightmare #<br />UH-1s - Ghostrider #", align: true },
     { type: "line" },
     {
         type: "waypoints",
         groupName: "Falcon-1",
         chartName: "All Flights",
         labels: {
-            1: { loc: "Kutaisi Airfield", task: "All fixed-wing flights takeoff & land" },
-            2: { loc: "FARP", task: "Helicopters takeoff & land" },
-            3: { loc: "SA-20 Site", task: "Destroy remaining launchers & support vehicles" },
-            4: { loc: "Mozdok Taxiway A", task: "Destroy taxiway connecting to runway" },
-            5: { loc: "Mozdok Taxiway B", task: "Destroy taxiway connecting to runway" },
-            6: { loc: "Mozdok Taxiway C", task: "Destroy taxiway connecting to runway" },
-            7: { loc: "Mozdok Taxiway D", task: "Destroy taxiway connecting to runway" },
-            8: { loc: "Mozdok Taxiway E", task: "Destroy taxiway connecting to runway" },
-            9: { loc: "Bullseye", task: "-" }
+            1: { loc: "Kutaisi Airfield", task: "All fixed-wing flights: takeoff & land" },
+            2: { loc: "Friendly FARP", task: "Helicopters & Harriers: takeoff & land" },
+            3: { loc: "Rough Convoy Zone", task: "Destroy Russian convoys retreating north" },
+            4: { loc: "Beslan", task: "Engage transport & fighter aircraft leaving Beslan" },
+            5: { loc: "Bullseye", task: "-" }
         }
     },
     { type: "line" },
@@ -61,21 +65,11 @@ const elements = [
         }
     },
     { type: "line" },
-    {
-        type: "weather",
-        wind: "055&deg; 5 kts",
-        clouds: "Few Scattered at 16,000",
-        qnh: "763 / 30.04",
-        tempature: "68&deg; F"
-    },
-    { type: "line" },
-    { type: "header", text: "Mozdok Airfield" },
-    { type: "image", url: "/assets/sat1.jpg" },
 ]
 
 
 
-$(() => {
+function renderElements() {
 elements.forEach(element => {
     if (element.type == "map") {
         document.body.appendChild(document.querySelector("#map"))
@@ -202,7 +196,7 @@ elements.forEach(element => {
         addElement(`<img class="image" src="${element.url}" />`)
     }
 })
-})
+}
 
 function initMap() {
     const map = new google.maps.Map(document.querySelector("#map"), {
@@ -273,6 +267,7 @@ function initMap() {
                 }
                 // Racetrack aircraft
                 if (group.task == "Refueling" || group.task == "AWACS") {
+                    if (coalition != "blue") return
                     console.log(group)
                     let path = []
                     group.route.forEach(waypoint => {
@@ -383,6 +378,9 @@ function initMap() {
 
         return d
     }
+
+    // Load elements after everything is loaded.
+    renderElements()
 }
 
 // Custom HTML markers function / class extender.

@@ -5,6 +5,7 @@ const https = require("https")
 const cors = require("cors")
 const session = require("express-session")
 const fs = require("fs")
+const zip = require("zip-lib")
 const luaJson = require("luaparse")
 const db = require("../database")
 const dcs = require("./dcsUtils")
@@ -18,37 +19,31 @@ function main(g) {
     app.set("views", "src/web/views/")
     app.use(cors())
     app.use(express.urlencoded({ extended: false }))
-    app.set('trust proxy', 1)
+    app.set('trust proxy', true)
     app.use(session({
         secret: "VoyIsAwesome",
         resave: true,
         saveUninitialized: true,
         cookie: { secure: false }
     }))
-
-    // Simple custom URL requests.
-    app.get("/", async (req, res) => {
-        let squadrons = await squadronsAndMembers(g.config.web.squadrons)
-        render(req, res, "home", { squadrons })
-    })
-
-    app.get("/resources", async (req, res) => render(req, res, "resources"))
     
     // Custom URL requests with more info.
-    app.get("/login", (req, res) => {
-        if (req.query.r) req.session.redirect = req.query.r
-        render(req, res, "login")
+    app.get("/", async (req, res) => {
+        let squadrons = await squadronsAndMembers(g.config.web.squadrons)
+        render(req, res, "home", { squadrons, dcs })
     })
 
     app.get("/squadrons", async (req, res) => {
         let squadrons = await squadronsAndMembers(g.config.web.squadrons)
-        render(req, res, "squadrons", { squadrons })
+        render(req, res, "squadrons", { squadrons, dcs })
     })
 
     app.get("/missions", async (req, res) => {
         let missions = await db.missionGetInfo("*")
         render(req, res, "missions", { missions })
     })
+
+    app.get("/resources", async (req, res) => render(req, res, "resources"))
 
     app.get("/briefing", async (req, res) => {
         let data = await fs.readFileSync(`./mission`)
@@ -68,6 +63,11 @@ function main(g) {
         let guild = await db.get("guild")
         let users = await db.getUser("*")
         render(req, res, "database", { guild, users }, { adminOnly: true })
+    })
+
+    app.get("/login", (req, res) => {
+        if (req.query.r) req.session.redirect = req.query.r
+        render(req, res, "login")
     })
 
     // Logining in logic.
@@ -131,16 +131,20 @@ function main(g) {
             let info = (await db.briefingGetInfo(briefing))
             console.log(info)
             if (info) {
-                render(req, res, "briefingEditor", { info }, { adminOnly: true })
+                // render(req, res, "briefingEditor", { info }, { adminOnly: true })
+                render(req, res, "briefingEditor", { info }, { adminOnly: false })
             }
             else render(req, res, "unknown")
         }
 
         // Non-custom URLs.
         if (!wasCustom) {
-            console.log(`REQUEST: ${req.url}`.cyan)
             res.sendFile(__dirname + `/client/${req.url}`, err => {
-                if (err) render(req, res, "unknown")
+                if (err) {
+                    render(req, res, "unknown")
+                    if (g.config.log.unknownFile) console.log(`[${(new Date).toLocaleTimeString()}] `.gray + `[WEB] [${req.ip}] unknown file: ${req.url}`.yellow)
+                }
+                else if (g.config.log.sentFile) console.log(`[${(new Date).toLocaleTimeString()}] `.gray + `[WEB] [${req.ip}] sent file: ${req.url}`.cyan)
             })
         }
     })
@@ -154,6 +158,7 @@ function main(g) {
         if (options.adminOnly && !loginInfo) res.redirect(`/login?r=${req.url}`)
         else if (options.adminOnly && !loginInfo.admin) render(req, res, "unknown", { notAdmin: true })
         else res.render(view, vars)
+        if (g.config.log.visitLink) console.log(`[${(new Date).toLocaleTimeString()}] `.gray + `[WEB] [${req.ip}] visited: ${view}`.cyan)
     }
 
     const server = https.createServer({
@@ -164,7 +169,7 @@ function main(g) {
     server.listen(g.config.web.port, ()=>{
         let host = server.address().address
         let port = server.address().port
-        console.log(`Web server listening on ${host}:${port}`.green)
+        console.log(`[WEB] Web server listening on: ${host}:${port}`.green)
     })
 
     // Set web server to listen on port.
@@ -184,6 +189,34 @@ function main(g) {
             console.log(briefing)
             db.run(`UPDATE briefings SET name='${briefing.name}', data='${JSON.stringify(briefing.data)}' WHERE id = ${briefing.id}`)
             io.sockets.emit("briefing-data", briefing)
+        })
+
+        socket.on("upload-miz", async ({ id, file }) => {
+            console.log(file)
+            fs.mkdir(`miz/${id}/`, err => {
+                fs.writeFile(`miz/${id}/file.miz`, file, err => {
+                    if (!err) {
+                        zip.extract(`miz/${id}/file.miz`, `miz/${id}/`).then(() => {
+                            fs.readFile(`miz/${id}/mission`, "utf8", (err, data) => {
+                                if (!err) {
+                                    console.log(data.toString())
+                                }
+                                else {
+                                    console.log(err)
+                                    socket.emit("miz-upload-failed")        
+                                }
+                            })
+                        }, err => {
+                            console.log(err)
+                            socket.emit("miz-upload-failed")
+                        })
+                    }
+                    else {
+                        console.log(err)
+                        socket.emit("miz-upload-failed")
+                    }
+                })
+            })
         })
         // socket.on("request-events", async () => {
         //     let events = await db.get("events")

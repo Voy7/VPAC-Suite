@@ -131,6 +131,7 @@ body { background-image: url("/assets/bg6.png"); }
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
+    max-width: 90vw;
     min-height: 400px;
     max-height: 90vh;
     background-color: var(--bg-color-1);

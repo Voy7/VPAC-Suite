@@ -154,10 +154,10 @@ header #header-login-modal a:hover { background-color: rgb(255, 39, 39); }
 
 /* Standard user container / hover */
 .user {
-    padding: 3px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 3px;
     cursor: pointer;
     opacity: 0.8;
 }
