@@ -130,4 +130,5 @@ dist
 config.json
 database.sqlite
 ssl/
+miz/
 mission

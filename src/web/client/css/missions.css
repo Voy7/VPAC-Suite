@@ -37,6 +37,8 @@
 
 .mission:hover { background-color: var(--bg-color-2); }
 
+.briefing { background-color: rgb(15, 25, 25); }
+
 .mission .left {
     display: flex;
     justify-content: center;
@@ -90,17 +92,19 @@
     font-size: 12px;
 }
 
-.mission ul .briefing {
+.mission ul .brief {
     display: inline;
     position: absolute;
     transform: translate(5px, -3px); /* Align fix */
 }
 
-.mission ul .briefing p {
+.mission ul .brief p {
     display: inline;
     font-size: 12px;
     color: rgb(80, 80, 80);
 }
+
+.mission ul .brief .brief-true { color: rgb(0, 152, 169); }
 
 .mission .date {
     margin-top: 3px;
@@ -113,6 +117,11 @@
     text-decoration: underline;
     font-size: 14px;
     color: var(--text-color-1);
+}
+
+.mission .note {
+    font-size: 16px;
+    color: rgb(0, 152, 169);
 }
 
 #about-container .about {

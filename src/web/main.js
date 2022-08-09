@@ -40,7 +40,8 @@ function main(g) {
 
     app.get("/missions", async (req, res) => {
         let missions = await db.missionGetInfo("*")
-        render(req, res, "missions", { missions })
+        let briefings = await db.briefingGetInfo("*")
+        render(req, res, "missions", { missions, briefings })
     })
 
     app.get("/resources", async (req, res) => render(req, res, "resources"))
@@ -126,15 +127,23 @@ function main(g) {
 
         if (req.url.startsWith("/briefing-editor/")) {
             wasCustom = true
-            let briefing = req.url.split("/")[2]
-            console.log(briefing)
-            let info = (await db.briefingGetInfo(briefing))
-            console.log(info)
-            if (info) {
-                // render(req, res, "briefingEditor", { info }, { adminOnly: true })
-                render(req, res, "briefingEditor", { info }, { adminOnly: false })
-            }
-            else render(req, res, "unknown")
+            let id = req.url.split("/")[2]
+            // console.log(briefing)
+            let briefing = (await db.briefingGetInfo(id))
+            // console.log(info)
+            // console.log(briefing)
+            let mizData = null
+            fs.readFile(`miz/${id}/mission`, "utf8", async (err, data) => {
+                if (!err) {
+                    // console.log(data.toString())
+                    mizData = await miz.getMissionData(luaJson.parse(data.toString()))
+                }
+                if (briefing) {
+                    // render(req, res, "briefingEditor", { info }, { adminOnly: true })
+                    render(req, res, "briefingEditor", { briefing, mizData }, { adminOnly: false })
+                }
+                else render(req, res, "unknown")
+            })
         }
 
         // Non-custom URLs.
@@ -180,15 +189,15 @@ function main(g) {
     // })
 
     // SocketIO section
-    const socketIO = require("socket.io")
-    io = socketIO(server)
+    const io = require("socket.io")(server, {
+        maxHttpBufferSize: 1e8 // 10 MB
+    })
 
     // Socket requests & emits.
     io.sockets.on("connection", socket => {
         socket.on("briefing-update", async briefing => {
             console.log(briefing)
-            db.run(`UPDATE briefings SET name='${briefing.name}', data='${JSON.stringify(briefing.data)}' WHERE id = ${briefing.id}`)
-            io.sockets.emit("briefing-data", briefing)
+            db.run(`UPDATE briefings SET name='${briefing.name}', public='${briefing.public}', elements='${JSON.stringify(briefing.elements)}', data='${JSON.stringify(briefing.data)}' WHERE id = ${briefing.id}`)
         })
 
         socket.on("upload-miz", async ({ id, file }) => {
@@ -197,9 +206,11 @@ function main(g) {
                 fs.writeFile(`miz/${id}/file.miz`, file, err => {
                     if (!err) {
                         zip.extract(`miz/${id}/file.miz`, `miz/${id}/`).then(() => {
-                            fs.readFile(`miz/${id}/mission`, "utf8", (err, data) => {
+                            fs.readFile(`miz/${id}/mission`, "utf8", async (err, data) => {
                                 if (!err) {
-                                    console.log(data.toString())
+                                    // console.log(data.toString())
+                                    const mizData = await miz.getMissionData(luaJson.parse(data.toString()))
+                                    socket.emit("miz-data", { data: mizData })
                                 }
                                 else {
                                     console.log(err)

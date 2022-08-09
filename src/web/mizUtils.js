@@ -6,6 +6,7 @@ const { resolve } = require("path")
 const mapInfo = {}
 //mapInfo["Caucasus"] = { center: {lat: 45.746, lng: 34.1555}, deviation: 9.04, expand: 1.059 }
 mapInfo["Caucasus"] = { center: {lat: 45.746, lng: 34.1555}, deviation: 6.04, expand: 1.059 }
+mapInfo["PersianGulf"] = { center: {lat: 26.1018, lng: 56.1430}, deviation: 2, expand: 1.059 }
 
 // Convert .miz coords to lat, long.
 function convertMapCoords(map, x, y) {

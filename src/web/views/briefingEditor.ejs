@@ -3,21 +3,37 @@
 <head>
     <%- include("partials/head", { title: "Briefing Editor" }) %>
     <link rel="stylesheet" href="/css/briefingEditor.css" />
-    <script src="/js/briefingEditor.js"></script>
+    <link rel="stylesheet" href="/css/briefing.css" />
+    <script src="/js/briefingEditor.js"></script>    
+    <script src="/js/briefing.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJoQnM07KZu2NiFwba16dy_3SfR1hFa8&libraries=geometry&callback=initMap" async></script>
 </head>
 <body>
     <%- include("partials/header", { selectedPage: "" }) %>
+
+    <% const elementNames = ["Header", "Text", "Waypoint Chart", "Radio Chart", "Image", "Raw HTML"] %>
     
     <script>
-        const briefing = JSON.parse('<%- JSON.stringify(info) %>')
+        let miz = JSON.parse('<%- JSON.stringify(mizData).replaceAll("\\", "\\\\") %>')
+        let briefing = JSON.parse('<%- JSON.stringify(briefing).replaceAll("\\", "\\\\") %>')
     </script>
 
     <section id="editor-container">
         <div id="header">
             <div>
                 <label for="briefing-name">Mission/Briefing Name</label>
-                <input type="text" value="<%= info.name %>" id="briefing-name" name="briefingName">
+                <input type="text" value="<%= briefing.name.replaceAll("_", " ") %>" id="briefing-name" name="briefingName">
+            </div>
+            <div class="toggle-container">
+                <p>Briefing Is Public</p>
+                <label class="toggle">
+                    <% if (briefing.public == "true") { %>
+                        <input id="briefing-public" type="checkbox" checked>
+                    <% } else { %>
+                        <input id="briefing-public" type="checkbox">
+                    <% } %>
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div>
                 <p>Upload .miz File</p>
@@ -25,18 +41,25 @@
             </div>
         </div>
         
-        <div id="elements"></div>
-
-        <button id="new-element-button">+ New Element</button>
+        <div id="elements-container">
+            <div id="elements-list">
+                <h1>Elements List</h1>
+                <div id="elements"></div>
+                <button id="new-element-button">+ New Element</button>
+            </div>
+            <div id="options"></div>
+        </div>
     </section>
-
-    <div id="map" style="display: none;"></div>
 
     <div id="new-element-overlay" class="modal">
         <div id="new-element-modal">
-            <h1>Add New Element</h1>
-            // Create left sidebar with element bullets selector
-            // Right side is options.
+            <h1>Select New Element</h1>
+            <div class="element" data-new-element="header">Header</div>
+            <div class="element" data-new-element="text">Text</div>
+            <div class="element" data-new-element="waypointChart">Waypoint Chart</div>
+            <div class="element" data-new-element="radioChart">Radio Chart</div>
+            <div class="element" data-new-element="image">Image</div>
+            <div class="element" data-new-element="rawHtml">Raw HTML</div>
         </div>
     </div>
 
@@ -47,6 +70,10 @@
             <button>Close</button>
         </div>
     </div>
+
+    <section id="briefing"></section>
+
+    <div id="map"></div>
 
     <%- include("partials/footer") %>
 </body>

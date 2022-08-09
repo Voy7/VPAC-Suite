@@ -1,14 +1,16 @@
-#briefing {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    /* border: 1px solid white; */
-}
-
 body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
 
-* { scrollbar-width: thin; }
-/* *::-webkit-scrollbar { display: none; } */
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+
+/* Element - Title */
+.title-container h1 {
+    margin: 30px;
+    text-align: center;
+    text-decoration: underline;
+    font-size: 30px;
+    color: rgb(235, 235, 235);
+}
 
 /* Element - Header */
 .header {
@@ -16,19 +18,18 @@ body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
     font-weight: normal;
     font-size: 28px;
     letter-spacing: 1px;
-    margin: 0 40px;
+    margin: 20px 40px;
 }
 
 /* Element - Paragraph */
-.textblock {
+.paragraph {
     max-width: 900px;
-    margin: 0 auto;
+    margin: 10px auto 15px auto;
     padding: 0 40px;
     font-size: 18px;
-    white-space: pre-wrap;
 }
 
-.centered { text-align: center; }
+.align-center { text-align: center; }
 
 /* Element - Line break */
 hr {
@@ -166,10 +167,9 @@ hr {
 
 /* Element - Map & it's child element / markers */
 #map {
-    background: green;
     width: auto;
     height: 92vh;
-    /* margin: 15px; */
+    margin: 15px;
     border: 1px solid var(--border-color-1);
     border-radius: 10px;
     caret-color: transparent;

@@ -26,6 +26,30 @@
             const takeoffLandingRatio = landings / takeoffs
             const aircraftKillRatio = aakills / crashes
             const groundKillRatio = agkills / crashes
+            // console.log(missions)
+            let firstBriefing = true
+            briefings.forEach(briefing => {
+                if (briefing.public != "true") return
+                let mission = missionOrder.find(e => e.name == briefing.name)
+                if (mission) return
+                if (firstBriefing) { 
+                    firstBriefing = false %>
+                    <h3>UPCOMING MISSION BRIEFINGS</h3>
+                <% } %>
+                <a class="mission briefing" href="/mission/<%= briefing.name %>">
+                    <div class="left">
+                        <img class="icon" src="/assets/SU25-red.png" />
+                        <div class="left-sub">
+                            <h4 class="name"><%= briefing.name.replace(/_/g, " ") %></h4>
+                            <p class="note">Briefing is now available.</p>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <p class="date">UPCOMING</p>
+                        <p class="stats">View Briefing</p>
+                    </div>
+                </a>
+            <% })
             let index = 0
             missionOrder.forEach(mission => {
                 index++
@@ -53,8 +77,17 @@
                                     <img src="/assets/motorized-sam-icon-red.png" />
                                     <p><%= mission.agkills %> A/G Kills</p>
                                 </li>
-                                <li class="briefing">
-                                    <p>&bull; No Briefing</p>
+                                <li class="brief">
+                                    <% let brief = false
+                                    briefings.forEach(briefing => {
+                                        if (briefing.name != mission.name) return
+                                        brief = briefing
+                                    })
+                                    if (brief && brief.public == "true") { %>
+                                        <p class="brief-true">&bull; Briefing Attached</p>
+                                    <% } else { %>
+                                        <p>&bull; No Briefing</p>
+                                    <% } %>
                                 </li>
                             </ul>
                         </div>

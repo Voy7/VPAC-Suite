@@ -1,201 +1,33 @@
-const coalitions = ["red", "blue"]
-const flightPath = {}
+function updateBriefing(briefing) {
+    console.log("briefing!")
+    console.log(briefing)
 
-const elements = [
-    { type: "title", title: "Georgian Resolve Campaign - Day 9 (FINAL MISSION)", },
-    { type: "line" },
-    { type: "header", text: "Briefing" },
-    { type: "paragraph", text: "The day is August 13th, 2008, local time 18:00. Following a devastating week of fighting, it appears Russia is retreating out of the Georgian region. Reconnaissance aircraft have spotted IL-76 transport aircraft loading troops and armor at Beslan airport. And several Russian convoys appear to be getting ready to head back up north. Our mission will be to intercept all these elements to ensure they can't be used in future attacks.<br><br>The transport aircraft at Beslan are expected to depart around 19:00, heading for Krasnodar Center. We can expect these aircraft to have fighter escorts, which will need to be dealt with before shooting down the IL-76s.<br><br></br>Meanwhile west of Beslan, several Russian convoys are heading north and need to be destroyed. Waypoint 3 has been provided as a rough area of where you can expect to find these convoys, initially search 10nm radius, shifted north further along into the mission. These convoys will be protected by AAA and short-range SAMs. (Tip: some SAMs may have their radar on, use this to help you find the convoys)."},
-    { type: "line" },
-    { type: "map" },
-    { type: "line" },
-    {
-        type: "weather",
-        wind: "140&deg; 7 kts",
-        clouds: "Scattered at 12,000",
-        qnh: "763 / 30.04",
-        tempature: "64&deg; F"
-    },
-    { type: "line" },
-    { type: "header", text: "Objectives" },
-    { type: "paragraph", text: "Objective 1:<br>Destroy transport and fighter aircraft coming out of Beslan.", align: true },
-    { type: "paragraph", text: "Objective 2:<br>Find and destroy Russian convoys retreating north.", align: true },
-    { type: "paragraph", text: "Objective 3:<br>Provide CAP/Escort for above operations.", align: true },
-    { type: "line" },
-    { type: "header", text: "Known Threats" },
-    { type: "paragraph", text: "Air: Su-24, Su-25, Su-27, Su-30, Su-33, MiG-29, MiG-31, Tu-22, Tu-160, Ka-50, Mi-24, Mi-26, Mi-28", align: true },
-    { type: "paragraph", text: "Ground: SA-5, SA-6, SA-8, SA-13, SA-15, SA-18, SA-19, SA-20, ZSU-23, ZSU-57", align: true },
-    { type: "line" },
-    { type: "header", text: "Callsigns" },
-    { type: "paragraph", text: "A-10s - Hawg #<br />F-16s - Falcon #<br />F-14s - Vampire #<br />F/A-18s - Bloodhound #<br />AV-8s - Bulldog #<br />AH-64s - Nightmare #<br />UH-1s - Ghostrider #", align: true },
-    { type: "line" },
-    {
-        type: "waypoints",
-        groupName: "Falcon-1",
-        chartName: "All Flights",
-        labels: {
-            1: { loc: "Kutaisi Airfield", task: "All fixed-wing flights: takeoff & land" },
-            2: { loc: "Friendly FARP", task: "Helicopters & Harriers: takeoff & land" },
-            3: { loc: "Rough Convoy Zone", task: "Destroy Russian convoys retreating north" },
-            4: { loc: "Beslan", task: "Engage transport & fighter aircraft leaving Beslan" },
-            5: { loc: "Bullseye", task: "-" }
-        }
-    },
-    { type: "line" },
-    {
-        type: "radios",
-        unitName: "Falcon-1-1",
-        chartName: "Radio Channels & Presets",
-        labels: {
-            245: "Mission Common",
-            264: "CTAF / ATC",
-            250: "KC-135MPRS (Arco) - TCN: 25Y",
-            248: "AWACS E-3 (Magic)",
-            133: "Kobuleti",
-            132: "Senaki",
-            134: "Kutaisi",
-            143: "F-14s Interflight",
-            141: "F/A-18s Interflight",
-            148: "F-16s Interflight",
-            145: "A-10s Interflight",
-            146: "AH-64s Interflight",
-            140: "UH-1s Interflight",
-            139: "AV-8s Interflight",
-            125: "FARP (Moscow)"
-        }
-    },
-    { type: "line" },
-]
+    const mapElem = document.querySelector("#map")
+    document.body.append(mapElem)
+    const brief = document.querySelector("#briefing")
+    brief.innerHTML = ``
 
+    briefing.elements.forEach(element => {
+        if (element.type == "map") {
+            addElement(`<div id="map-here"></div>`)
+            const mapHere = document.querySelector("#map-here")
+            mapHere.parentNode.insertBefore(mapElem, mapHere.nextSibling)
+        }
+        else if (element.type == "header") {
+            addElement(`<h4 class="header">${element.args.text}</h4>`)
+        }
+        else if (element.type == "text") {
+            if (element.args.centered) addElement(`<p class="textblock centered">${element.args.text}</p>`)
+            else addElement(`<p class="textblock">${element.args.text}</p>`)
+        }
+    })
+}
 
-
-function renderElements() {
-elements.forEach(element => {
-    if (element.type == "map") {
-        document.body.appendChild(document.querySelector("#map"))
-        document.querySelector("#map").style.display = "block"
-    }
-    else if (element.type == "title") {
-        addElement(`
-            <div class="title-container">
-                <h1>${element.title}</h1>
-            </div>
-        `)
-    }
-    else if (element.type == "paragraph") {
-        if (element.align) addElement(`<p class="paragraph align-center">${element.text}</p>`)
-        else addElement(`<p class="paragraph">${element.text}</p>`)
-    }
-    else if (element.type == "header") {
-        addElement(`<h4 class="header">${element.text}</h4>`)
-    }
-    else if (element.type == "line") {
-        addElement(`<hr />`)
-    }
-    else if (element.type == "radios") {
-        let unit = getUnitByName(element.unitName)
-        if (!unit) return
-        let radios = unit.radios
-        let freqs = ``
-        for(let i = 1; i < radios[1].length; i++) {
-            let freq1 = getRadioInfo(radios[1][i])
-            let freq2 = getRadioInfo(radios[2][i])
-            freqs += `
-                <tr>
-                    <td class="id">${i}</td><td class="freq">${freq1.channel}</td><td class="for">${freq1.label}</td>
-                    <td class="id">${i}</td><td class="freq">${freq2.channel}</td><td class="for">${freq2.label}</td>
-                </tr>`
-        }
-        addElement(`
-            <div class="radio-chart">
-                <h4>${element.chartName}</h4>
-                <img src="/assets/logo.png" />
-                <table cellspacing="0">
-                    <tr class="rows-header">
-                        <td>#</td><td>Freq</td><td>Radio 1 / UHF</td>
-                        <td>#</td><td>Freq</td><td>Radio 2 / VHF</td>
-                    </tr>
-                    ${freqs}
-                </table>
-            </div>
-        `)
-        function getRadioInfo(channel) {
-            if (channel.length <= 3) channel += ".0"
-            let label = "-"
-            Object.keys(element.labels).forEach(key => {
-                if (!channel.startsWith(key)) return
-                label = element.labels[key]
-            })
-            return { channel, label }
-        }
-    }
-    else if (element.type == "waypoints") {
-        let group = getGroupByName(element.groupName)
-        if (!group) return
-        let route = group.route
-        let waypoints = ``
-        for(let i = 1; i <= 10; i++) {
-            let waypoint = getWaypointInfo(route[i + 1], route[i])
-            waypoints += `
-                <tr>
-                    <td class="id">${i}</td>
-                    <td class="loc">${waypoint.loc}</td>
-                    <td class="task">${waypoint.task}</td>
-                    <td class="alt">${waypoint.alt}</td>
-                    <td class="dist">${waypoint.distance}</td>
-                </tr>`
-        }
-        addElement(`
-            <div class="waypoints-chart">
-                <h4>Waypoints (${element.chartName})</h4>
-                <img src="/assets/logo.png" />
-                <table cellspacing="0">
-                    <tr class="rows-header">
-                        <td>#</td><td>Location</td><td>Task</td><td>Alt</td><td>Dist</td>
-                    </tr>
-                    ${waypoints}
-                </table>
-            </div>
-        `)
-        function getWaypointInfo(waypoint, prevWaypoint) {
-            let loc = "-"
-            let task = "-"
-            let alt = `-`
-            let distance = "-"
-            if (waypoint && element.labels[waypoint.id - 1]) {
-                loc = element.labels[waypoint.id - 1].loc
-                task = element.labels[waypoint.id - 1].task
-            }
-            if (waypoint && prevWaypoint) {
-                let dist = google.maps.geometry.spherical.computeDistanceBetween (waypoint.loc, prevWaypoint.loc)
-                if (waypoint.id == 2 && dist < 1852) distance = "-"
-                else if (dist < 3704) distance = `${(dist * 3.28).toFixed(0)} ft`
-                else distance = `${(dist / 1852).toFixed(0)} nm`
-            }
-            if (waypoint) alt = `${(waypoint.alt * 3.28).toFixed(0)} ft`
-            return { loc, task, distance, alt }
-        }
-    }
-    else if (element.type == "weather") {
-        addElement(`
-            <div class="weather-container">
-                <h4>Weather</h4>
-                <img src="/assets/logo.png" />
-                <section>
-                    <div><h5>Wind</h5><p>${element.wind}</p></div>
-                    <div><h5>Clouds</h5><p>${element.clouds}</p></div>
-                </section>
-                <section>
-                    <div><h5>QNH</h5><p>${element.qnh}</p></div>
-                    <div><h5>Tempature</h5><p>${element.tempature}</p></div>
-                </section>
-            </div>
-        `)
-    }
-    else if (element.type == "image") {
-        addElement(`<img class="image" src="${element.url}" />`)
-    }
-})
+function addElement(text) {
+    const template = document.createElement("template")
+    template.innerHTML = text.trim()
+    const brief = document.querySelector("#briefing")
+    brief.appendChild(template.content.firstElementChild)
 }
 
 function initMap() {
@@ -203,7 +35,7 @@ function initMap() {
         zoom: 7,
         maxZoom: 12,
         minZoom: 6,
-        center: {lat: 45.746, lng: 34.1555},
+        center: { lat: 45.746, lng: 34.1555 },
         disableDefaultUI: true,
         scrollwheel: true,
         gestureHandling: "greedy",
@@ -213,96 +45,7 @@ function initMap() {
         styles: mapStyles
     })
 
-    // Bullseyes, blue & red.
-    createHTMLMapMarker({
-        map, position: miz.bullseyes.blue.loc,
-        html: `<div class="bullseye-1 bullseye-blue map-item"></div><div class="bullseye-2 bullseye-blue map-item"></div><div class="bullseye-3 bullseye-blue map-item"></div>`
-    })
-    createHTMLMapMarker({
-        map, position: miz.bullseyes.red.loc,
-        html: `<div class="bullseye-1 bullseye-red map-item"></div><div class="bullseye-2 bullseye-red map-item"></div><div class="bullseye-3 bullseye-red map-item"></div>`
-    })
-
-    // Groups / aircraft.
-    coalitions.forEach(coalition => {
-        miz.groups[coalition].forEach(group => {
-            if (group.type == "ground") {
-                // Get name for dev stuff.
-                // group.units.forEach(unit => {
-                //     console.log(`${unit.name} - ${unit.type}`)
-                // })
-                // ================
-
-                if (group.name.startsWith("AIRPORT")) {
-                    let airport = group.name.replace("AIRPORT ", "")
-                    let html = `<div class="airport airport-${coalition} map-item" data-airport="${airport}"></div>`
-                    createHTMLMapMarker({ map, html, position: group.loc })
-                }
-                if (group.hiddenOnMFD == "true") return
-                // if (group.hiddenOnMFD == "true") return
-                let ring = null
-                group.units.forEach(unit => {
-                    if (unit.ring != null) ring = unit.ring
-                })
-
-                let html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${group.units[0].short}</div>`
-                if (ring != null) html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-ring map-item" data-size="${ring}"></div><div class="sam-label map-item" style="z-index: ${ring};">${group.units[0].short}</div>`
-                
-                createHTMLMapMarker({ map, html, position: group.loc })
-            }
-            else if (group.type == "aircraft") {
-                if (group.name == "Falcon-1") {
-                    // console.log(group)
-                    let path = []
-                    group.route.forEach(waypoint => {
-                        if (!waypoint || waypoint.id <= 1) return
-                        path.push(waypoint.loc)
-                        let html = `<div class="waypoint map-item" data-label="${waypoint.id - 1}"></div>`
-                        createHTMLMapMarker({ map, html, position: waypoint.loc })
-                    })
-                    flightPath[group.name] = new google.maps.Polyline({
-                        path, strokeColor: "#FFF", strokeWeight: 0.7
-                    })
-                    flightPath[group.name].setMap(map)
-                }
-                // Racetrack aircraft
-                if (group.task == "Refueling" || group.task == "AWACS") {
-                    if (coalition != "blue") return
-                    console.log(group)
-                    let path = []
-                    group.route.forEach(waypoint => {
-                        if (!waypoint || waypoint.id <= 0) return
-                        path.push(waypoint.loc)
-                        if (waypoint.id == 1) {
-                            let angle = google.maps.geometry.spherical.computeHeading(waypoint.loc, group.route[2].loc)
-                            let html = `<img src="${group.units[0].icon}" class="aircraft icon-${coalition} map-item" style="transform: translate(-50%, -50%) rotate(${angle}deg);" /><div class="aircraft-label map-item aircraft-${coalition}">${group.units[0].short} (${group.name.split('-')[0]})</div>`
-                            createHTMLMapMarker({ map, html, position: waypoint.loc })
-                        }
-                        else {
-                            let html = `<div class="aircraft-orbit map-item" style="background-color: #326973;"></div>`
-                            createHTMLMapMarker({ map, html, position: waypoint.loc })
-                        }
-                    })
-                    flightPath[group.name] = new google.maps.Polyline({
-                        path, strokeColor: "#326973", strokeWeight: 2.5
-                    })
-                    flightPath[group.name].setMap(map)
-                }
-            }
-        })
-    })
-
-    // Select which aircraft to get info about.
-    let aircraftHTML = `<ul>`
-    let aircraftElement = document.createElement("aircrafts")
-    miz.groups["blue"].forEach(group => {
-        if (group.type != "aircraft") return
-        if (group.units[0].skill != "Client") return
-        aircraftHTML += `<li><img class="icon-blue" src="${group.units[0].icon}" /><span>${group.units[0].name.split("-")[0]}</span></li>`
-    })
-    aircraftHTML += `</ul>`
-    aircraftElement.innerHTML = aircraftHTML.trim()
-    document.querySelector("#map").appendChild(aircraftElement)
+    
 
     // 2 markers 1nm or 1,852m apart for measuring pixels.
     const ruler1 = new google.maps.Marker({ map, position: {lat: 45.746, lng: 34.1555}, icon: "/assets/blank.png" })
@@ -341,15 +84,112 @@ function initMap() {
 
 
 
-    // new google.maps.Marker({
-    //     map, position: {lat: 41.5429, lng: 41.4943}, title: "Blue patriot 2",
-    // })
-    // new google.maps.Marker({
-    //     map, position: {lat: 43.67610931117853, lng: 39.652110177202104}, title: "OA 1",
-    // })
-    // new google.maps.Marker({
-    //     map, position: {lat: 41.555558, lng: 41.523534}, title: "OA 1",
-    // })
+
+    const waitMiz = setInterval(() => {
+        if (miz) {
+            clearInterval(waitMiz)
+            populateMap()
+        }
+    }, 500)
+
+    function populateMap() {
+        const coalitions = ["red", "blue"]
+        const flightPath = {}
+
+        // Bullseyes, blue & red.
+        createHTMLMapMarker({
+            map, position: miz.bullseyes.blue.loc,
+            html: `<div class="bullseye-1 bullseye-blue map-item"></div><div class="bullseye-2 bullseye-blue map-item"></div><div class="bullseye-3 bullseye-blue map-item"></div>`
+        })
+        createHTMLMapMarker({
+            map, position: miz.bullseyes.red.loc,
+            html: `<div class="bullseye-1 bullseye-red map-item"></div><div class="bullseye-2 bullseye-red map-item"></div><div class="bullseye-3 bullseye-red map-item"></div>`
+        })
+
+        // Groups / aircraft.
+        coalitions.forEach(coalition => {
+            miz.groups[coalition].forEach(group => {
+                if (group.type == "ground") {
+                    // Get name for dev stuff.
+                    // group.units.forEach(unit => {
+                    //     console.log(`${unit.name} - ${unit.type}`)
+                    // })
+                    // ================
+
+                    if (group.name.startsWith("AIRPORT")) {
+                        let airport = group.name.replace("AIRPORT ", "")
+                        let html = `<div class="airport airport-${coalition} map-item" data-airport="${airport}"></div>`
+                        createHTMLMapMarker({ map, html, position: group.loc })
+                    }
+                    if (group.hiddenOnMFD == "true") return
+                    // if (group.hiddenOnMFD == "true") return
+                    let ring = null
+                    group.units.forEach(unit => {
+                        if (unit.ring != null) ring = unit.ring
+                    })
+
+                    let html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${group.units[0].short}</div>`
+                    if (ring != null) html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-ring map-item" data-size="${ring}"></div><div class="sam-label map-item" style="z-index: ${ring};">${group.units[0].short}</div>`
+                    
+                    createHTMLMapMarker({ map, html, position: group.loc })
+                }
+                else if (group.type == "aircraft") {
+                    if (group.name == "Falcon-1") {
+                        // console.log(group)
+                        let path = []
+                        group.route.forEach(waypoint => {
+                            if (!waypoint || waypoint.id <= 1) return
+                            path.push(waypoint.loc)
+                            let html = `<div class="waypoint map-item" data-label="${waypoint.id - 1}"></div>`
+                            createHTMLMapMarker({ map, html, position: waypoint.loc })
+                        })
+                        flightPath[group.name] = new google.maps.Polyline({
+                            path, strokeColor: "#FFF", strokeWeight: 0.7
+                        })
+                        flightPath[group.name].setMap(map)
+                    }
+                    // Racetrack aircraft
+                    if (group.task == "Refueling" || group.task == "AWACS") {
+                        if (coalition != "blue") return
+                        console.log(group)
+                        let path = []
+                        group.route.forEach(waypoint => {
+                            if (!waypoint || waypoint.id <= 0) return
+                            if (!group.route[2]) return
+                            path.push(waypoint.loc)
+                            if (waypoint.id == 1) {
+                                let angle = google.maps.geometry.spherical.computeHeading(waypoint.loc, group.route[2].loc)
+                                let html = `<img src="${group.units[0].icon}" class="aircraft icon-${coalition} map-item" style="transform: translate(-50%, -50%) rotate(${angle}deg);" /><div class="aircraft-label map-item aircraft-${coalition}">${group.units[0].short} (${group.name.split('-')[0]})</div>`
+                                createHTMLMapMarker({ map, html, position: waypoint.loc })
+                            }
+                            else {
+                                let html = `<div class="aircraft-orbit map-item" style="background-color: #326973;"></div>`
+                                createHTMLMapMarker({ map, html, position: waypoint.loc })
+                            }
+                        })
+                        flightPath[group.name] = new google.maps.Polyline({
+                            path, strokeColor: "#326973", strokeWeight: 2.5
+                        })
+                        flightPath[group.name].setMap(map)
+                    }
+                }
+            })
+        })
+
+        // Select which aircraft to get info about.
+        let aircraftHTML = `<ul>`
+        let aircraftElement = document.createElement("aircrafts")
+        miz.groups["blue"].forEach(group => {
+            if (group.type != "aircraft") return
+            if (group.units[0].skill != "Client") return
+            aircraftHTML += `<li><img class="icon-blue" src="${group.units[0].icon}" /><span>${group.units[0].name.split("-")[0]}</span></li>`
+        })
+        aircraftHTML += `</ul>`
+        aircraftElement.innerHTML = aircraftHTML.trim()
+        document.querySelector("#map").appendChild(aircraftElement)
+    }
+
+
 
     // Runs every time map view is moved.
     function updateMap() {
@@ -378,9 +218,6 @@ function initMap() {
 
         return d
     }
-
-    // Load elements after everything is loaded.
-    renderElements()
 }
 
 // Custom HTML markers function / class extender.
@@ -432,7 +269,7 @@ function createHTMLMapMarker({ OverlayView = google.maps.OverlayView,  ...args }
     return new HTMLMapMarker()
 }
 
-// Identify custom  map styles.
+// Set custom  map styles.
 const mapStyles = [
     { elementType: "geometry", stylers: [{ color: "#050c17" }] },
     { elementType: "labels", stylers: [{ visibility: "off" }] },
@@ -444,38 +281,3 @@ const mapStyles = [
     { featureType: "transit", stylers: [{ visibility: "off" }] },
     { featureType: "water", stylers: [{ color: "#0c1a33" }] }
 ]
-
-// -------------------------
-// Other briefing elements.
-// -------------------------
-
-function getGroupByName(name) {
-    let returnGroup = null
-    coalitions.forEach(coalition => {
-        miz.groups[coalition].forEach(group => {
-            if (group.name != name) return
-            returnGroup = group
-        })
-    })
-    return returnGroup
-}
-
-function getUnitByName(name) {
-    let returnUnit = null
-    coalitions.forEach(coalition => {
-        miz.groups[coalition].forEach(group => {
-            group.units.forEach(unit => {
-                if (unit.name != name) return
-                returnUnit = unit
-            })
-        })
-    })
-    return returnUnit
-}
-
-// Add HTML/elements to body.
-function addElement(html) {
-    let template = document.createElement("template")
-    template.innerHTML = html.trim()
-    document.body.appendChild(template.content.firstElementChild)
-}

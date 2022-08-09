@@ -138,7 +138,14 @@
                 <h4>All Briefings</h4>
                 <ul>
                     <% briefings.forEach(briefing => { %>
-                        <li data-briefing="<%= briefing.id %>"><%= briefing.name %></li>
+                        <li data-briefing="<%= briefing.id %>">
+                            <% if (briefing.public == "true") { %>
+                                <div class="public-true"></div>
+                            <% } else { %>
+                                <div class="public-false"></div>
+                            <% } %>
+                            <%= briefing.name %>
+                        </li>
                     <% }) %>
                 </ul>
                 <button class="create-new">Create Briefing</button>
@@ -154,10 +161,8 @@
             <% briefings.forEach(briefing => { %>
                 <div class="briefing-container" data-briefing-sec="<%= briefing.id %>">
                     <h4><%= briefing.name %></h4>
-                    <form action="/briefing_update" method="POST" class="options-text">
-                        <input type="hidden" value="<%= briefing.name %>" name="briefing">
-                        <button type="submit">Update</button>
-                    </form>
+                    <p>Briefing is Public: <%= briefing.public.toUpperCase() %></p>
+                    <a href="/briefing-editor/<%= briefing.id %>" class="options-open">Open Editor</a>
                     <form action="/briefing_delete" method="POST" class="options-delete">
                         <input type="hidden" value="<%= briefing.name %>" name="briefing">
                         <button type="submit">Delete</button>

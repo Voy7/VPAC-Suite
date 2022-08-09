@@ -213,7 +213,7 @@ function briefingGetInfo(id, name) {
     return p = new Promise((resolve, reject) => {
         // let data = { description: "description.", callsigns: "C1,C2,C3", airframes: "A1,A2,A3" }
         db.serialize(() => {
-            db.run(`CREATE TABLE IF NOT EXISTS briefings (id TEXT, name TEXT, data TEXT)`)
+            db.run(`CREATE TABLE IF NOT EXISTS briefings (id TEXT, name TEXT, public TEXT, elements TEXT, data TEXT)`)
             if (id == "*") {
                 let briefings = new Map()
                 db.all(`SELECT * FROM briefings`, (err, rows) => {
@@ -224,7 +224,8 @@ function briefingGetInfo(id, name) {
                             let info = briefings.get(row.id)
                             if (!info) info = {
                                 id: row.id,
-                                name: row.name
+                                name: row.name,
+                                public: row.public
                             }
                             briefings.set(row.id, info)
                         })
@@ -238,7 +239,7 @@ function briefingGetInfo(id, name) {
                 db.get(select, (err, row) => {
                     if (!row) {
                         if (!id) return
-                        db.run(`INSERT INTO briefings (id, name, data) VALUES ("${id}", "Untitled Briefing", '[]')`)
+                        db.run(`INSERT INTO briefings (id, name, public, elements, data) VALUES ("${id}", "Untitled Briefing", "false", '[]', '[]')`)
                         resolve([])
                     }
                     else {
@@ -249,6 +250,8 @@ function briefingGetInfo(id, name) {
                             resolve({
                                 id: row.id,
                                 name: row.name,
+                                public: row.public,
+                                elements: JSON.parse(row.elements),
                                 data: JSON.parse(row.data),
                                 miz: mizRawData
                             })
