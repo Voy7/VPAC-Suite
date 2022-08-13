@@ -100,8 +100,16 @@ function main(g) {
         if (req.url.startsWith("/mission/")) {
             wasCustom = true
             let mission = req.url.split("/")[2]
-            let info = (await db.missionGetInfo(mission))
-            if (info.get(mission)) {
+            let info = await db.missionGetInfo(mission)
+            let briefings = await db.briefingGetInfo("*")
+            let briefing = null
+            briefings.forEach(brief => {
+                if (brief.public != "true") return
+                if (brief.name == mission) briefing = brief
+            })
+            if (briefing) briefing = await db.briefingGetInfo(briefing.id)
+            // console.log(briefing)
+            if (info.get(mission) || briefing) {
                 info = info.get(mission)
                 let events = await db.missionGetEvent(mission, null)
                 let users = await db.getUser("*")
@@ -120,7 +128,7 @@ function main(g) {
                         })
                     })
                 })
-                render(req, res, "mission", { mission, info, events, userList, dcs })
+                render(req, res, "mission", { mission, info, events, userList, briefing, dcs })
             }
             else render(req, res, "unknown")
         }

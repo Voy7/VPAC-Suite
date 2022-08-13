@@ -1,6 +1,16 @@
+const coalitions = ["blue", "red"]
+
 function updateBriefing(briefing) {
-    console.log("briefing!")
-    console.log(briefing)
+    // Super hacky, will fix later.
+    let good = true
+    try { if (!google) return }
+    catch {
+        good = false
+        setTimeout(() => { updateBriefing(briefing) }, 100)
+    }
+    if (!good) return
+    // console.log("briefing!")
+    // console.log(briefing)
 
     const mapElem = document.querySelector("#map")
     document.body.append(mapElem)
@@ -14,11 +24,133 @@ function updateBriefing(briefing) {
             mapHere.parentNode.insertBefore(mapElem, mapHere.nextSibling)
         }
         else if (element.type == "header") {
-            addElement(`<h4 class="header">${element.args.text}</h4>`)
+            addElement(`<h4 class="header">${parseOut(element.args.text)}</h4>`)
         }
         else if (element.type == "text") {
             if (element.args.centered) addElement(`<p class="textblock centered">${element.args.text}</p>`)
-            else addElement(`<p class="textblock">${element.args.text}</p>`)
+            else addElement(`<p class="textblock">${parseOut(element.args.text)}</p>`)
+        }
+        else if (element.type == "waypointChart") {
+            let group = getGroupByName(element.args.groupName)
+            if (!group) return
+            let route = group.route
+            let waypoints = ``
+            let labels = {}
+            element.args.labels.split("\n").forEach(line => {
+                let args = line.split(" | ")
+                if (!args[1]) return
+                labels[args[0]] = { loc: "-", task: "-" }
+                if (args[1]) labels[args[0]].loc = args[1]
+                if (args[2]) labels[args[0]].task = args[2]
+            })
+            for(let i = 1; i <= 10; i++) {
+                let waypoint = getWaypointInfo(route[i + 1], route[i])
+                waypoints += `
+                    <tr>
+                        <td class="id">${i}</td>
+                        <td class="loc">${waypoint.loc}</td>
+                        <td class="task">${waypoint.task}</td>
+                        <td class="alt">${waypoint.alt}</td>
+                        <td class="dist">${waypoint.distance}</td>
+                    </tr>`
+            }
+            addElement(`
+                <div class="waypoints-chart">
+                    <h4>${element.args.chartName}</h4>
+                    <img src="/assets/logo.png" />
+                    <table cellspacing="0">
+                        <tr class="rows-header">
+                            <td>#</td><td>Location</td><td>Task</td><td>Alt</td><td>Dist</td>
+                        </tr>
+                        ${waypoints}
+                    </table>
+                </div>
+            `)
+            function getWaypointInfo(waypoint, prevWaypoint) {
+                let loc = "-"
+                let task = "-"
+                let alt = `-`
+                let distance = "-"
+                if (waypoint && labels[waypoint.id - 1]) {
+                    loc = labels[waypoint.id - 1].loc
+                    task = labels[waypoint.id - 1].task
+                }
+                if (waypoint && prevWaypoint) {
+                    let dist = google.maps.geometry.spherical.computeDistanceBetween (waypoint.loc, prevWaypoint.loc)
+                    if (waypoint.id == 2 && dist < 1852) distance = "-"
+                    else if (dist < 3704) distance = `${(dist * 3.28).toFixed(0)} ft`
+                    else distance = `${(dist / 1852).toFixed(0)} nm`
+                }
+                if (waypoint) alt = `${(waypoint.alt * 3.28).toFixed(0)} ft`
+                return { loc, task, distance, alt }
+            }
+        }
+        else if (element.type == "radioChart") {
+            let unit = getUnitByName(element.args.unitName)
+            if (!unit) return
+            let radios = unit.radios
+            let freqs = ``
+            let labels = {}
+            element.args.labels.split("\n").forEach(line => {
+                let args = line.split(" | ")
+                if (!args[1]) return
+                labels[args[0]] = args[1]
+            })
+            for(let i = 1; i < radios[1].length; i++) {
+                let freq1 = getRadioInfo(radios[1][i])
+                let freq2 = getRadioInfo(radios[2][i])
+                freqs += `
+                    <tr>
+                        <td class="id">${i}</td><td class="freq">${freq1.channel}</td><td class="for">${freq1.label}</td>
+                        <td class="id">${i}</td><td class="freq">${freq2.channel}</td><td class="for">${freq2.label}</td>
+                    </tr>`
+            }
+            addElement(`
+                <div class="radio-chart">
+                    <h4>${element.args.chartName}</h4>
+                    <img src="/assets/logo.png" />
+                    <table cellspacing="0">
+                        <tr class="rows-header">
+                            <td>#</td><td>Freq</td><td>Radio 1 / UHF</td>
+                            <td>#</td><td>Freq</td><td>Radio 2 / VHF</td>
+                        </tr>
+                        ${freqs}
+                    </table>
+                </div>
+            `)
+            function getRadioInfo(channel) {
+                if (channel.length <= 3) channel += ".0"
+                let label = "-"
+                Object.keys(labels).forEach(key => {
+                    if (!channel.startsWith(key)) return
+                    label = labels[key]
+                })
+                return { channel, label }
+            }
+        }
+        else if (element.type == "weatherChart") {
+            addElement(`
+                <div class="weather-chart">
+                    <h4>Weather Information</h4>
+                    <table cellspacing="0">
+                        <tr>
+                            <th>Wind</th>
+                            <th>Clouds</th>
+                            <th>QNH</th>
+                            <th>Tempature</th>
+                        </tr>
+                        <tr>
+                            <td>${element.args.wind}</td>
+                            <td>${element.args.clouds}</td>
+                            <td>${element.args.qnh}</td>
+                            <td>${element.args.temp}</td>
+                        </tr>
+                    </table>
+                </div>
+            `)
+        }
+        else if (element.type == "rawHtml") {
+            addElement(`${element.args.html}`)
         }
     })
 }
@@ -33,7 +165,7 @@ function addElement(text) {
 function initMap() {
     const map = new google.maps.Map(document.querySelector("#map"), {
         zoom: 7,
-        maxZoom: 12,
+        maxZoom: 9,
         minZoom: 6,
         center: { lat: 45.746, lng: 34.1555 },
         disableDefaultUI: true,
@@ -54,33 +186,39 @@ function initMap() {
     // Wait a second to let the map finish loading.
     setTimeout(() => {
         map.addListener("center_changed", () => { updateMap() })
-        map.addListener("zoom_changed", () => { updateMap() })
+        map.addListener("zoom_changed", () => {
+            updateMap()
+            console.log(map.zoom)
+            if (map.zoom <= 7) $(".sam-label").fadeOut(500)
+            else $(".sam-label").fadeIn(500)
+        })
         updateMap()
-    }, 100)
+        $(".sam-label").fadeOut(0)
+    }, 1000)
 
     // Toggle map elements
-    let showOrbits = true
-    document.addEventListener("keydown", event => {
-        if (event.key.toLowerCase() == "o") {
-            coalitions.forEach(coalition => {
-                miz.groups[coalition].forEach(group => {
-                    if (group.task != "AWACS" && group.task != "Refueling") return
-                    if (showOrbits == true) {
-                        flightPath[group.name].setMap(undefined)
-                        $(".aircraft").fadeOut(300)
-                        $(".aircraft-label").fadeOut(300)
-                    }
-                    else {
-                        flightPath[group.name].setMap(map)
-                        $(".aircraft").fadeIn(300)
-                        $(".aircraft-label").fadeIn(300)
-                    }
-                })
-            })
-            if (showOrbits) showOrbits = false
-            else showOrbits = true
-        }
-    })
+    // let showOrbits = true
+    // document.addEventListener("keydown", event => {
+    //     if (event.key.toLowerCase() == "o") {
+    //         coalitions.forEach(coalition => {
+    //             miz.groups[coalition].forEach(group => {
+    //                 if (group.task != "AWACS" && group.task != "Refueling") return
+    //                 if (showOrbits == true) {
+    //                     flightPath[group.name].setMap(undefined)
+    //                     $(".aircraft").fadeOut(300)
+    //                     $(".aircraft-label").fadeOut(300)
+    //                 }
+    //                 else {
+    //                     flightPath[group.name].setMap(map)
+    //                     $(".aircraft").fadeIn(300)
+    //                     $(".aircraft-label").fadeIn(300)
+    //                 }
+    //             })
+    //         })
+    //         if (showOrbits) showOrbits = false
+    //         else showOrbits = true
+    //     }
+    // })
 
 
 
@@ -95,6 +233,9 @@ function initMap() {
     function populateMap() {
         const coalitions = ["red", "blue"]
         const flightPath = {}
+
+        // Move to relavant area.
+        map.panTo(miz.bullseyes.blue.loc)
 
         // Bullseyes, blue & red.
         createHTMLMapMarker({
@@ -111,9 +252,9 @@ function initMap() {
             miz.groups[coalition].forEach(group => {
                 if (group.type == "ground") {
                     // Get name for dev stuff.
-                    // group.units.forEach(unit => {
-                    //     console.log(`${unit.name} - ${unit.type}`)
-                    // })
+                    group.units.forEach(unit => {
+                        console.log(`${unit.name} - ${unit.type}`)
+                    })
                     // ================
 
                     if (group.name.startsWith("AIRPORT")) {
@@ -123,14 +264,20 @@ function initMap() {
                     }
                     if (group.hiddenOnMFD == "true") return
                     // if (group.hiddenOnMFD == "true") return
-                    let ring = null
+                    let ringUnit = null
                     group.units.forEach(unit => {
-                        if (unit.ring != null) ring = unit.ring
+                        if (unit.ring != null) ringUnit = unit
                     })
 
                     let html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${group.units[0].short}</div>`
-                    if (ring != null) html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-ring map-item" data-size="${ring}"></div><div class="sam-label map-item" style="z-index: ${ring};">${group.units[0].short}</div>`
+                    if (ringUnit != null) html = `<img src="${ringUnit.icon}" class="sam icon-${coalition} map-item" /><div class="sam-ring ring-${coalition} map-item" data-size="${ringUnit.ring}"></div><div class="sam-label map-item" style="z-index: ${ringUnit.ring};">${ringUnit.short}</div>`
                     
+                    createHTMLMapMarker({ map, html, position: group.loc })
+                }
+                else if (group.type == "ship") {
+                    if (group.hiddenOnMFD == "true") return
+                    let ship = group.name
+                    let html = `<div class="airport airport-${coalition} map-item" data-airport="${ship}"></div>`
                     createHTMLMapMarker({ map, html, position: group.loc })
                 }
                 else if (group.type == "aircraft") {
@@ -151,7 +298,7 @@ function initMap() {
                     // Racetrack aircraft
                     if (group.task == "Refueling" || group.task == "AWACS") {
                         if (coalition != "blue") return
-                        console.log(group)
+                        // console.log(group)
                         let path = []
                         group.route.forEach(waypoint => {
                             if (!waypoint || waypoint.id <= 0) return
@@ -267,6 +414,34 @@ function createHTMLMapMarker({ OverlayView = google.maps.OverlayView,  ...args }
         getDraggable() { return false }
     }
     return new HTMLMapMarker()
+}
+
+function getGroupByName(name) {
+    let returnGroup = null
+    coalitions.forEach(coalition => {
+        miz.groups[coalition].forEach(group => {
+            if (group.name != name) return
+            returnGroup = group
+        })
+    })
+    return returnGroup
+}
+
+function getUnitByName(name) {
+    let returnUnit = null
+    coalitions.forEach(coalition => {
+        miz.groups[coalition].forEach(group => {
+            group.units.forEach(unit => {
+                if (unit.name != name) return
+                returnUnit = unit
+            })
+        })
+    })
+    return returnUnit
+}
+
+function parseOut(text) {
+    return text.replaceAll(`@1;`, `'`)
 }
 
 // Set custom  map styles.

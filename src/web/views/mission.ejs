@@ -3,216 +3,239 @@
 <head>
     <%- include("partials/head", { title: `Mission - ${mission.replace(/_/g, " ")}` }) %>
     <link rel="stylesheet" href="/css/mission.css" />
+    <link rel="stylesheet" href="/css/briefing.css" />
     <script src="/js/mission.js"></script>
+    <script src="/js/briefing.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJoQnM07KZu2NiFwba16dy_3SfR1hFa8&libraries=geometry&callback=initMap" async></script>
 </head>
 <body>
     <%- include("partials/header", { selectedPage: "/missions" }) %>
-    <h2><%= mission.replace(/_/g, " ") %></h2>
-    <section id="main-mission-container">
-        <section id="main-kills-container">
-            <h3>KILL BOARD</h3>
-            <div id="kills-container">
-                <div class="toggle-container">
-                    <p>Show All Events</p>
-                    <label class="toggle">
-                        <input id="toggle-events" type="checkbox">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <% // Create a map for each user with their events.
-                let users = new Map()
-                events.forEach(event => {
-                    // All shown events filter.
-                    const events = ["KILL", "CRASH", "TAKEOFF", "LANDING"]
-                    if (!events.includes(event.event)) return
-
-                    // Create array with all events for each user.
-                    if (!users.get(event.data.playerUCID)) users.set(event.data.playerUCID, [])
-                    let data = event.data
-                    data.event = event.event
-                    users.get(event.data.playerUCID).push(data)
-                })
-
-                // Loop each user and create their header.
-                let entryID = 0
-                Array.from(users.keys()).forEach(user => {
-                    let entries = users.get(user)
-                    let clusters = new Map()
-                    let killInfo = new Map()
-
-                    // Set default user info / fetch unique user data.
-                    let aircraft = dcs.parseLong(entries[0].playerAircraft)
-                    let name = entries[0].playerName
-                    let avatar = "/assets/logo.png"
-                    userList.forEach(user2 => {
-                        if (user2.ucid != entries[0].playerUCID) return
-                        name = user2.nickname
-                        avatar = user2.avatar
-                    }) %>
-                    <div class="kill-container">
-                        <div class="kill-user-header">
-                            <img src="<%= avatar %>" />
-                            <h4><%= name %><br /><span><%= aircraft %></span></h4>
-                        </div>
-                        <% // Loop through user's events/kills.
-                        entries.forEach(entry => {
-                            if (entry.event == "KILL") {
-                                if (!clusters.get(entry.killedUnit)) clusters.set(entry.killedUnit, 0)
-                                if (!killInfo.get(entry.killedUnit)) killInfo.set(entry.killedUnit, [])
-                                clusters.set(entry.killedUnit, clusters.get(entry.killedUnit) + 1)
-                                let info = killInfo.get(entry.killedUnit)
-                                info.push({
-                                    weapon: dcs.parseShort(entry.weapon),
-                                    time: dcs.parseTimeShort(entry.time)
-                                })
-                                killInfo.set(entry.killedUnit, info)
-                            }
-                            if (entry.event == "TAKEOFF") {
-                                if (entry.airfield == "Unknown") return
-                                if (!clusters.get(`takeoff-${entry.time}`)) clusters.set(`takeoff-${entry.time}`, 1)
-                                killInfo.set(`takeoff-${entry.time}`, {
-                                    airfield: entry.airfield,
-                                    time: dcs.parseTimeShort(entry.time)
-                                })
-                            }
-                            if (entry.event == "LANDING") {
-                                if (entry.airfield == "Unknown") return
-                                if (!clusters.get(`landing-${entry.time}`)) clusters.set(`landing-${entry.time}`, 1)
-                                killInfo.set(`landing-${entry.time}`, {
-                                    airfield: entry.airfield,
-                                    time: dcs.parseTimeShort(entry.time)
-                                })
-                            }
-                            if (entry.event == "CRASH") {
-                                if (!clusters.get(`crash-${entry.time}`)) clusters.set(`crash-${entry.time}`, 1)
-                                killInfo.set(`crash-${entry.time}`, {
-                                    time: dcs.parseTimeShort(entry.time)
-                                })
-                            }
-                        })
-                        Array.from(clusters.keys()).forEach(key => {
-                            entryID++
-                            if (key.startsWith("takeoff")) {
-                                let info = killInfo.get(key) %>
-                                <div class="kill-entry simple-entry">
-                                    <div class="unit">
-                                        <img src="/assets/takeoff.png" />
-                                        <p>Takeoff from <%= info.airfield %></p>
-                                    </div>
-                                    <span class="time"><%= info.time %></span>
-                                </div>
-                            <% } else if (key.startsWith("landing")) {
-                                let info = killInfo.get(key) %>
-                                <div class="kill-entry simple-entry">
-                                    <div class="unit">
-                                        <img src="/assets/landing.png" />
-                                        <p>Landing at <%= info.airfield %></p>
-                                    </div>
-                                    <span class="time"><%= info.time %></span>
-                                </div>
-                            <% } else if (key.startsWith("crash")) {
-                                let info = killInfo.get(key) %>
-                                <div class="kill-entry simple-entry">
-                                    <div class="unit">
-                                        <img src="/assets/crash.png" />
-                                        <p>Aircraft Crash</p>
-                                    </div>
-                                    <span class="time"><%= info.time %></span>
-                                </div>
-                            <% } else { %>
-                                <div class="kill-entry" data-entry-id="<%= entryID %>">
-                                    <div class="unit">
-                                        <img src="<%= dcs.unitIcon(key) %>" />
-                                        <p><span><%= clusters.get(key) %> x</span> <%= dcs.parseLong(key) %></p>
-                                    </div>
-                                    <span class="details" data-arrow-id="<%= entryID %>">&#9655;</span>
-                                </div>
-                                <div class="info-container" data-info-id="<%= entryID %>">
-                                    <% let number = 0
-                                    killInfo.get(key).forEach(info => {
-                                        number++ %>
-                                        <div class="info-entry">
-                                            <div class="weapon">
-                                                <div class="dot"></div>
-                                                <p><span><%= number %>. </span><%= info.weapon %></p>
-                                            </div>
-                                            <p class="time"><%= info.time %></p>
-                                        </div>
-                                    <% }) %>
-                                </div>
-                            <% } %>
-                        <% }) %>
+    <% if (info) { %>
+        <h2><%= mission.replace(/_/g, " ") %></h2>
+        <section id="main-mission-container">
+            <section id="main-kills-container">
+                <h3>KILL BOARD</h3>
+                <div id="kills-container">
+                    <div class="toggle-container">
+                        <p>Show All Events</p>
+                        <label class="toggle">
+                            <input id="toggle-events" type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
-                <% }) %>
-            </div>
+                    <% // Create a map for each user with their events.
+                    let users = new Map()
+                    events.forEach(event => {
+                        // All shown events filter.
+                        const events = ["KILL", "CRASH", "TAKEOFF", "LANDING"]
+                        if (!events.includes(event.event)) return
+
+                        // Create array with all events for each user.
+                        if (!users.get(event.data.playerUCID)) users.set(event.data.playerUCID, [])
+                        let data = event.data
+                        data.event = event.event
+                        users.get(event.data.playerUCID).push(data)
+                    })
+
+                    // Loop each user and create their header.
+                    let entryID = 0
+                    Array.from(users.keys()).forEach(user => {
+                        let entries = users.get(user)
+                        let clusters = new Map()
+                        let killInfo = new Map()
+
+                        // Set default user info / fetch unique user data.
+                        let aircraft = dcs.parseLong(entries[0].playerAircraft)
+                        let name = entries[0].playerName
+                        let avatar = "/assets/logo.png"
+                        userList.forEach(user2 => {
+                            if (user2.ucid != entries[0].playerUCID) return
+                            name = user2.nickname
+                            avatar = user2.avatar
+                        }) %>
+                        <div class="kill-container">
+                            <div class="kill-user-header">
+                                <img src="<%= avatar %>" />
+                                <h4><%= name %><br /><span><%= aircraft %></span></h4>
+                            </div>
+                            <% // Loop through user's events/kills.
+                            entries.forEach(entry => {
+                                if (entry.event == "KILL") {
+                                    if (!clusters.get(entry.killedUnit)) clusters.set(entry.killedUnit, 0)
+                                    if (!killInfo.get(entry.killedUnit)) killInfo.set(entry.killedUnit, [])
+                                    clusters.set(entry.killedUnit, clusters.get(entry.killedUnit) + 1)
+                                    let info = killInfo.get(entry.killedUnit)
+                                    info.push({
+                                        weapon: dcs.parseShort(entry.weapon),
+                                        time: dcs.parseTimeShort(entry.time)
+                                    })
+                                    killInfo.set(entry.killedUnit, info)
+                                }
+                                if (entry.event == "TAKEOFF") {
+                                    if (entry.airfield == "Unknown") return
+                                    if (!clusters.get(`takeoff-${entry.time}`)) clusters.set(`takeoff-${entry.time}`, 1)
+                                    killInfo.set(`takeoff-${entry.time}`, {
+                                        airfield: entry.airfield,
+                                        time: dcs.parseTimeShort(entry.time)
+                                    })
+                                }
+                                if (entry.event == "LANDING") {
+                                    if (entry.airfield == "Unknown") return
+                                    if (!clusters.get(`landing-${entry.time}`)) clusters.set(`landing-${entry.time}`, 1)
+                                    killInfo.set(`landing-${entry.time}`, {
+                                        airfield: entry.airfield,
+                                        time: dcs.parseTimeShort(entry.time)
+                                    })
+                                }
+                                if (entry.event == "CRASH") {
+                                    if (!clusters.get(`crash-${entry.time}`)) clusters.set(`crash-${entry.time}`, 1)
+                                    killInfo.set(`crash-${entry.time}`, {
+                                        time: dcs.parseTimeShort(entry.time)
+                                    })
+                                }
+                            })
+                            Array.from(clusters.keys()).forEach(key => {
+                                entryID++
+                                if (key.startsWith("takeoff")) {
+                                    let info = killInfo.get(key) %>
+                                    <div class="kill-entry simple-entry">
+                                        <div class="unit">
+                                            <img src="/assets/takeoff.png" />
+                                            <p>Takeoff from <%= info.airfield %></p>
+                                        </div>
+                                        <span class="time"><%= info.time %></span>
+                                    </div>
+                                <% } else if (key.startsWith("landing")) {
+                                    let info = killInfo.get(key) %>
+                                    <div class="kill-entry simple-entry">
+                                        <div class="unit">
+                                            <img src="/assets/landing.png" />
+                                            <p>Landing at <%= info.airfield %></p>
+                                        </div>
+                                        <span class="time"><%= info.time %></span>
+                                    </div>
+                                <% } else if (key.startsWith("crash")) {
+                                    let info = killInfo.get(key) %>
+                                    <div class="kill-entry simple-entry">
+                                        <div class="unit">
+                                            <img src="/assets/crash.png" />
+                                            <p>Aircraft Crash</p>
+                                        </div>
+                                        <span class="time"><%= info.time %></span>
+                                    </div>
+                                <% } else { %>
+                                    <div class="kill-entry" data-entry-id="<%= entryID %>">
+                                        <div class="unit">
+                                            <img src="<%= dcs.unitIcon(key) %>" />
+                                            <p><span><%= clusters.get(key) %> x</span> <%= dcs.parseLong(key) %></p>
+                                        </div>
+                                        <span class="details" data-arrow-id="<%= entryID %>">&#9655;</span>
+                                    </div>
+                                    <div class="info-container" data-info-id="<%= entryID %>">
+                                        <% let number = 0
+                                        killInfo.get(key).forEach(info => {
+                                            number++ %>
+                                            <div class="info-entry">
+                                                <div class="weapon">
+                                                    <div class="dot"></div>
+                                                    <p><span><%= number %>. </span><%= info.weapon %></p>
+                                                </div>
+                                                <p class="time"><%= info.time %></p>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                <% } %>
+                            <% }) %>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+            <section id="about-container">
+                <h3>MISSION STATS</h3>
+                <div class="stats">
+                    <ul>
+                        <li>
+                            <div class="label">
+                                <img class="rotate" src="/assets/FA18-blue.png" />
+                                <p>Participants</p>
+                            </div>
+                            <p class="value"><%= info.players.length %></p>
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img src="/assets/takeoff.png" />
+                                <p>Takeoffs</p>
+                            </div>
+                            <p class="value"><%= info.takeoffs %></p>
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img src="/assets/landing.png" />
+                                <p>Landings</p>
+                            </div>
+                            <p class="value"><%= info.landings %></p>
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img src="/assets/crash.png" />
+                                <p>Crashes</p>
+                            </div>
+                            <p class="value"><%= info.crashes %></p>
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img src="/assets/F14-blue.png" />
+                                <p>Ejections</p>
+                            </div>
+                            <p class="value"><%= info.ejects %></p>
+                        </li>
+                        <li>
+                            <hr />
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img class="rotate" src="/assets/KC130-blue.png" />
+                                <p>Return to Base Rate</p>
+                            </div>
+                            <p class="value"><%= (info.landings / info.takeoffs * 100).toFixed(0) %>%</p>
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img class="rotate" src="/assets/SU33-red.png" />
+                                <p>Aircraft Kills to Death Ratio</p>
+                            </div>
+                            <p class="value"><%= (info.aakills / info.crashes).toFixed(2) %></p>
+                        </li>
+                        <li>
+                            <div class="label">
+                                <img class="shrink" src="/assets/motorized-sam-icon-red.png" />
+                                <p>Ground Kills to Death Ratio</p>
+                            </div>
+                            <p class="value"><%= (info.agkills / info.crashes).toFixed(2) %></p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </section>
-        <section id="about-container">
-            <h3>MISSION STATS</h3>
-            <div class="stats">
-                <ul>
-                    <li>
-                        <div class="label">
-                            <img class="rotate" src="/assets/FA18-blue.png" />
-                            <p>Participants</p>
-                        </div>
-                        <p class="value"><%= info.players.length %></p>
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img src="/assets/takeoff.png" />
-                            <p>Takeoffs</p>
-                        </div>
-                        <p class="value"><%= info.takeoffs %></p>
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img src="/assets/landing.png" />
-                            <p>Landings</p>
-                        </div>
-                        <p class="value"><%= info.landings %></p>
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img src="/assets/crash.png" />
-                            <p>Crashes</p>
-                        </div>
-                        <p class="value"><%= info.crashes %></p>
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img src="/assets/F14-blue.png" />
-                            <p>Ejections</p>
-                        </div>
-                        <p class="value"><%= info.ejects %></p>
-                    </li>
-                    <li>
-                        <hr />
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img class="rotate" src="/assets/KC130-blue.png" />
-                            <p>Return to Base Rate</p>
-                        </div>
-                        <p class="value"><%= (info.landings / info.takeoffs * 100).toFixed(0) %>%</p>
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img class="rotate" src="/assets/SU33-red.png" />
-                            <p>Aircraft Kills to Death Ratio</p>
-                        </div>
-                        <p class="value"><%= (info.aakills / info.crashes).toFixed(2) %></p>
-                    </li>
-                    <li>
-                        <div class="label">
-                            <img class="shrink" src="/assets/motorized-sam-icon-red.png" />
-                            <p>Ground Kills to Death Ratio</p>
-                        </div>
-                        <p class="value"><%= (info.agkills / info.crashes).toFixed(2) %></p>
-                    </li>
-                </ul>
-            </div>
-        </section>
-    </section>
+    <% } %>
+
+    <% if (briefing) { %>
+        <section id="briefing"></section>
+        <div id="map"></div>
+        <script>
+            let miz = JSON.parse('<%- JSON.stringify(briefing.miz).replaceAll("\\", "\\\\") %>')
+            let briefing = JSON.parse('<%- JSON.stringify(briefing).replaceAll("\\", "\\\\") %>')
+            updateBriefing(briefing)
+            // let waitGoogle = setInterval(() => {
+            //     if (google) {
+            //         console.log("1")
+            //         console.log("2")
+            //         clearInterval(waitGoogle)
+            //         waitGoogle = undefined
+            //     }
+            // }, 100)
+        </script>
+    <% } %>
 
     <%- include("partials/footer") %>
 </body>

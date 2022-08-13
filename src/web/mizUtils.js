@@ -6,7 +6,7 @@ const { resolve } = require("path")
 const mapInfo = {}
 //mapInfo["Caucasus"] = { center: {lat: 45.746, lng: 34.1555}, deviation: 9.04, expand: 1.059 }
 mapInfo["Caucasus"] = { center: {lat: 45.746, lng: 34.1555}, deviation: 6.04, expand: 1.059 }
-mapInfo["PersianGulf"] = { center: {lat: 26.1018, lng: 56.1430}, deviation: 2, expand: 1.059 }
+mapInfo["PersianGulf"] = { center: {lat: 26.1018, lng: 56.1430}, deviation: 0, expand: 1.06 }
 
 // Convert .miz coords to lat, long.
 function convertMapCoords(map, x, y) {
@@ -81,6 +81,48 @@ async function getMissionData(data) {
                             y: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.y`),
                             hiddenOnMFD: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.hiddenOnMFD`),
                             lateActivation: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.lateActivation`),
+                            units: unitList,
+                            route: routeList
+                        })
+                    })
+                }
+                let ships = await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group`)
+                if (ships) {
+                    ships.forEach(async ship => {
+                        let unitList = []
+                        let routeList = []
+                        let units = await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units`)
+                        units.forEach(async unit => {
+                            unitList.push({
+                                id: unit.key.value,
+                                name: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.name`),
+                                type: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`),
+                                short: dcs.parseShort(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
+                                icon: dcs.unitIcon(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
+                                ring: dcs.unitThreatRing(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
+                                x: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.x`),
+                                y: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.y`),
+                            })
+                        })
+                        let routes = await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points`)
+                        routes.forEach(async route => {
+                            let routes = await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points.${route.key.value}`)
+                            routeList[route.key.value] = {
+                                id: route.key.value,
+                                loc: convertMapCoords(map, await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points.${route.key.value}.x`), await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points.${route.key.value}.y`)),
+                                x: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points.${route.key.value}.x`),
+                                y: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points.${route.key.value}.y`),
+                                alt: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.route.points.${route.key.value}.alt`)
+                            }
+                        })
+                        groups[coalition].push({
+                            type: "ship",
+                            name: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.name`),
+                            loc: convertMapCoords(map, await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.x`), await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.y`)),
+                            x: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.x`),
+                            y: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.y`),
+                            hiddenOnMFD: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.hiddenOnMFD`),
+                            lateActivation: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.lateActivation`),
                             units: unitList,
                             route: routeList
                         })

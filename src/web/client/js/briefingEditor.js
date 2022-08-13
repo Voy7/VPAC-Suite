@@ -6,6 +6,7 @@ const displayName = {
     text: "Text Block, #0062ff",
     waypointChart: "Waypoint Chart, #f6ff00",
     radioChart: "Radio Chart, #ff6a00",
+    weatherChart: "Weather Chart, #fff",
     image: "Image, #d400ff",
     rawHtml: "Raw HTML, #ff0000"
 }
@@ -79,11 +80,21 @@ function newElement(type) {
     else if (type == "waypointChart") { // Waypoint chart
         args.groupName = null
         args.chartName = "Waypoints - All Flights"
-        // args.labels = {
-        //     1: { loc: "Airport", task: "Takeoff & land." },
-        //     2: { loc: "Bullseye", task: "-" }
-        // }
         args.labels = "1 | Airport | Takeoff & land.\n2 | Bullseye | -"
+    }
+    else if (type == "radioChart") { // Radio chart
+        args.unitName = null
+        args.chartName = "Radio Channels & Presets"
+        args.labels = "245 | Mission Common\n264 | CTAF"
+    }
+    else if (type == "weatherChart") { // Weather Chart
+        args.wind = "090&deg; 10 kts"
+        args.clouds = "Scattered at 9,000"
+        args.qnh = "760 / 29.92"
+        args.temp = "75&deg; F"
+    }
+    else if (type == "rawHtml") { // Raw HTML
+        args.html = `<div>Raw HTML</div>`
     }
 
     briefing.elements.push({ type, order, args })
@@ -127,9 +138,30 @@ function selectElement(order) {
         addOption(element, "delete")
     }
     else if (element.type == "radioChart") { // Radio chart
+        let units = [{ value: `None`, label: `No unit selected` }]
+        miz.groups["blue"].forEach(group => {
+            if (group.type != "aircraft") return
+            group.units.forEach(unit => {
+                units.push({ value: unit.name, label: `${unit.name} (${unit.short})` })
+            })
+        })
+        addOption(element, "chartName", "Chart Name", "text")
+        addOption(element, "unitName", "Unit", "dropdown", units)
+        addOption(element, "labels", "Freq Labels", "textarea")
+        addOption(element, "delete")
+    }
+    else if (element.type == "weatherChart") { // Weather chart
+        addOption(element, "wind", "Wind", "text")
+        addOption(element, "clouds", "Clouds", "text")
+        addOption(element, "qnh", "QNH", "text")
+        addOption(element, "temp", "Tempature", "text")
+        addOption(element, "delete")
+    }
+    else if (element.type == "image") { // Image
         addOption(element, "delete")
     }
     else if (element.type == "rawHtml") { // RAW HTML
+        addOption(element, "html", "Raw HTML", "textarea")
         addOption(element, "delete")
     }
 }
@@ -219,7 +251,7 @@ function addOption(element, arg, label, input, extra) {
 // Update editor section & all it's components.
 function updateEditor() {
     updateBriefing(briefing)
-    console.log(briefing)
+    // console.log(briefing)
 
     // Add map element as first one.
     if (briefing.elements.length <= 0) newElement("map")

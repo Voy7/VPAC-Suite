@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    /* border: 1px solid white; */
+    margin: 10px 30px;
+    padding: 20px 0;
+    border-top: 3px solid var(--border-color-1);
 }
 
 body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
@@ -12,11 +14,11 @@ body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
 
 /* Element - Header */
 .header {
+    margin: 20px 40px 0 40px;
     text-align: center;
     font-weight: normal;
     font-size: 28px;
     letter-spacing: 1px;
-    margin: 0 40px;
 }
 
 /* Element - Paragraph */
@@ -116,6 +118,23 @@ hr {
 .waypoints-chart tr:nth-child(odd) { background-color: rgb(210, 210, 210); }
 
 /* Element - Weather info */
+.weather-chart { width: 600px; margin: 0 auto; }
+
+.weather-chart h4 {
+    padding: .4em;
+    text-align: center;
+    font-size: 20px;
+    background-color: rgb(24, 28, 39);
+}
+
+.weather-chart table {
+    width: 100%;
+    padding: 10px;
+    background: rgb(40, 50, 70);
+}
+
+.weather-chart tr { text-align: center; }
+
 .weather-container {
     position: relative;
     width: 900px;
@@ -218,14 +237,9 @@ hr {
     transform: translate(-50%, -50%);
 }
 
-.sam-ring {
-    /* background: none; */
-    background-color: rgba(255, 0, 0, 0.08);
-    border: 1px solid yellow;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: 300ms;
-}
+.sam-ring { border-radius: 50%; transform: translate(-50%, -50%); transition: 300ms; }
+.ring-blue { background-color: rgba(0, 0, 255, 0.05); border: 1px solid rgb(0, 255, 255); }
+.ring-red { background-color: rgba(255, 0, 0, 0.08); border: 1px solid rgb(255, 100, 100); }
 
 .sam-label {
     padding: 1px;
