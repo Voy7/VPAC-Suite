@@ -1,3 +1,4 @@
+const fse = require("fs-extra")
 const db = require("../database")
 
 function main(g, app, render, getLoginInfo) {
@@ -41,9 +42,27 @@ function main(g, app, render, getLoginInfo) {
 
     app.post("/briefing_create", async (req, res) => {
         if (!await authUser(req, res)) return
-        let id = Date.now().toString()
-        db.briefingGetInfo(id)
-        res.redirect(`/briefing-editor/${id}`)
+        const id = Date.now().toString()
+        await db.briefingGetInfo(id)
+        const briefings = await db.briefingGetInfo("*")
+        if (briefings.get(req.body.briefingClone)) {
+            const clone = await db.briefingGetInfo(req.body.briefingClone)
+            db.run(`UPDATE briefings SET name='${req.body.briefingName}', elements='${JSON.stringify(clone.elements)}', data='${JSON.stringify(clone.data)}' WHERE id = ${id}`)
+            if (!fse.existsSync(`miz/${req.body.briefingClone}/`)) return
+            fse.cp(`miz/${req.body.briefingClone}/`, `miz/${id}/`, { recursive: true }, err => {
+                res.redirect(`/briefing-editor/${id}`)
+            })
+        }
+        else {
+            db.run(`UPDATE briefings SET name='${req.body.briefingName}' WHERE id = ${id}`)
+            res.redirect(`/briefing-editor/${id}`)
+        }
+    })
+
+    app.post("/briefing_delete", async (req, res) => {
+        if (!await authUser(req, res)) return
+        db.run(`DELETE FROM briefings WHERE id = "${req.body.briefing}"`)
+        res.redirect("/admin")
     })
 }
 

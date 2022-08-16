@@ -127,7 +127,8 @@ function selectElement(order) {
         addOption(element, "delete")
     }
     else if (element.type == "waypointChart") { // Waypoint chart
-        let groups = []
+        if (!miz) return addOption(element, "no-miz")
+        let groups = [{ value: `None`, label: `No group selected` }]
         miz.groups["blue"].forEach(group => {
             if (group.type != "aircraft") return
             groups.push({ value: group.name, label: `${group.name} (${group.units[0].short})` })
@@ -138,6 +139,7 @@ function selectElement(order) {
         addOption(element, "delete")
     }
     else if (element.type == "radioChart") { // Radio chart
+        if (!miz) return addOption(element, "no-miz")
         let units = [{ value: `None`, label: `No unit selected` }]
         miz.groups["blue"].forEach(group => {
             if (group.type != "aircraft") return
@@ -201,6 +203,9 @@ function addOption(element, arg, label, input, extra) {
             <select id="options-${arg}" data-editor="${element.order}">
                 ${valuesHTML}
             </select>`
+    }
+    else if (arg == "no-miz") { // No .miz file included
+        optionsHTML = `<p class="no-miz">Error: You need to upload a .miz first.</p>`
     }
 
     // Adding option to HTML & stuff.

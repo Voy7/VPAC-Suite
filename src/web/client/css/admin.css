@@ -115,6 +115,15 @@ body { background-image: url("/assets/bg6.png"); }
 
 .options-text textarea::-webkit-scrollbar { display: none; }
 
+.options-text select {
+    display: block;
+    min-width: 20em;
+    padding: .2em;
+    font-size: 16px;
+    background-color: var(--bg-color-2);
+    border: 1px solid var(--border-color-1);
+}
+
 .options-text button {
     margin: 20px 0 5px 0;
     padding: .2em .5em;

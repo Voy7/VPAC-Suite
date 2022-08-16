@@ -219,7 +219,7 @@ body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
 
 #options .delete-element:hover { color: white; background-color: rgb(255, 125, 125); }
 
-
+#options .no-miz { color: rgb(255, 100, 100); }
 
 /* -- Modals -- */
 /* New element modal */

@@ -13,6 +13,7 @@
 <body>
     <%- include("partials/header", { selectedPage: "/squadrons" }) %>
     <h2>VPAC SQUADRONS</h2>
+    <h4 class="joining">Flying in VPAC missions requires the completion of a checkride flight with a designated instructor. Click "Checkride Info" for details.</h4>
     <section id="main-squadrons-container">
         <% squadrons.forEach(squadron => { %>
             <section>

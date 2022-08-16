@@ -31,12 +31,23 @@ $(() => {
     // Toggle all events slider.
     $("#toggle-events").change(() => {
         let option = document.querySelector("#toggle-events").checked
-        if (option) $(".simple-entry").fadeIn(200)
-        else $(".simple-entry").fadeOut(200)
+        if (option) {
+            $(".simple-entry").fadeIn(200)
+            $(".no-kills").fadeOut(0)
+        }
+        else {
+            $(".simple-entry").fadeOut(200)
+            setTimeout(() => {
+                $(".no-kills").fadeIn(100)
+            }, 250)
+        }
     })
 
     // On page load, if slider is off, hide the events.
     if (document.querySelector("#toggle-events").checked == false) {
         $(".simple-entry").fadeOut(0)
+    }
+    else {
+        $(".no-kills").fadeOut(0)
     }
 })

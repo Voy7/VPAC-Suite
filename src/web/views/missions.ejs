@@ -116,17 +116,31 @@
                     </li>
                     <li>
                         <div class="label">
-                            <img class="rotate" src="/assets/SU33-red.png" />
-                            <p>Aircraft Kills to Death Ratio</p>
+                            <img src="/assets/takeoff.png" />
+                            <p>Total Takeoffs</p>
                         </div>
-                        <p class="value"><%= aircraftKillRatio.toFixed(2) %></p>
+                        <p class="value"><%= takeoffs.toLocaleString("en-US") %></p>
+                    </li>
+                    <li>
+                        <div class="label">
+                            <img src="/assets/landing.png" />
+                            <p>Total Landings</p>
+                        </div>
+                        <p class="value"><%= landings.toLocaleString("en-US") %></p>
+                    </li>
+                    <li>
+                        <div class="label">
+                            <img src="/assets/MIG23-red.png" />
+                            <p>Total Aircraft Kills</p>
+                        </div>
+                        <p class="value"><%= aakills.toLocaleString("en-US") %></p>
                     </li>
                     <li>
                         <div class="label">
                             <img class="shrink" src="/assets/motorized-sam-icon-red.png" />
-                            <p>Ground Kills to Death Ratio</p>
+                            <p>Total Ground Kills</p>
                         </div>
-                        <p class="value"><%= groundKillRatio.toFixed(2) %></p>
+                        <p class="value"><%= agkills.toLocaleString("en-US") %></p>
                     </li>
                 </ul>
             </div>

@@ -31,6 +31,7 @@ function updateBriefing(briefing) {
             else addElement(`<p class="textblock">${parseOut(element.args.text)}</p>`)
         }
         else if (element.type == "waypointChart") {
+            if (!miz) return addElement(`<div class="no-miz-element">Could not load element, no .miz included.</div>`)
             let group = getGroupByName(element.args.groupName)
             if (!group) return
             let route = group.route
@@ -86,6 +87,7 @@ function updateBriefing(briefing) {
             }
         }
         else if (element.type == "radioChart") {
+            if (!miz) return addElement(`<div class="no-miz-element">Could not load element, no .miz included.</div>`)
             let unit = getUnitByName(element.args.unitName)
             if (!unit) return
             let radios = unit.radios

@@ -44,6 +44,9 @@
                         let clusters = new Map()
                         let killInfo = new Map()
 
+                        let aakills = 0
+                        let agkills = 0
+
                         // Set default user info / fetch unique user data.
                         let aircraft = dcs.parseLong(entries[0].playerAircraft)
                         let name = entries[0].playerName
@@ -61,6 +64,10 @@
                             <% // Loop through user's events/kills.
                             entries.forEach(entry => {
                                 if (entry.event == "KILL") {
+                                    const unitType = dcs.unitType(entry.killedUnit)
+                                    if (unitType == "A" || unitType == "H") aakills++
+                                    else agkills ++
+
                                     if (!clusters.get(entry.killedUnit)) clusters.set(entry.killedUnit, 0)
                                     if (!killInfo.get(entry.killedUnit)) killInfo.set(entry.killedUnit, [])
                                     clusters.set(entry.killedUnit, clusters.get(entry.killedUnit) + 1)
@@ -145,7 +152,20 @@
                                         <% }) %>
                                     </div>
                                 <% } %>
-                            <% }) %>
+                            <% })
+                            if (aakills == 0 && agkills == 0) { %>
+                                <p class="no-kills">No Recorded Kills</p>
+                            <% } %>
+                            <ul>
+                                <li>
+                                    <img src="/assets/MIG23-red.png" />
+                                    <p><%= aakills %> A/G Kills</p>
+                                </li>
+                                <li>
+                                    <img src="/assets/motorized-sam-icon-red.png" />
+                                    <p><%= agkills %> A/G Kills</p>
+                                </li>
+                            </ul>
                         </div>
                     <% }) %>
                 </div>

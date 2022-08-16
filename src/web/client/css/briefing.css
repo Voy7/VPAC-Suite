@@ -345,7 +345,17 @@ hr {
 #map ul li img { width: 16px; height: 16px; }
 #map ul li span { font-size: 11px; color: inherit; }
 
-
+/* No .miz error element */
+.no-miz-element {
+    min-width: 400px;
+    margin: 0 auto;
+    padding: .5em;
+    text-align: center;
+    font-size: 16px;
+    color: rgb(255, 100, 100);
+    background-color: rgba(255, 0, 0, 0.3);
+    border: 2px solid rgb(255, 100, 100);
+}
 
 
 a[href^="http://maps.google.com/maps"] { display: none !important }

@@ -1,5 +1,18 @@
 body { background-image: url("/assets/bg6.png"); }
 
+.joining {
+    display: block;
+    width: fit-content;
+    margin: 5px auto;
+    padding: .5em 1em;
+    text-align: center;
+    font-weight: normal;
+    font-size: 15px;
+    color: rgb(180, 180, 255);
+    background-color: rgba(180, 180, 255, 0.1);
+    border: 1px solid rgb(180, 180, 255);
+}
+
 #main-squadrons-container {
     display: flex;
     justify-content: center;

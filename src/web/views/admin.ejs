@@ -129,7 +129,6 @@
         </section>
 
         <!-- Briefings section -->
-        <% console.log(briefings) %>
         <section id="section-briefings" style="display: none;" data-is-section>
             <% const briefingList = []
             briefings.forEach(briefing => { briefingList.unshift(briefing) })
@@ -144,7 +143,7 @@
                             <% } else { %>
                                 <div class="public-false"></div>
                             <% } %>
-                            <%= briefing.name %>
+                            <%= briefing.name.replace(/_/g, " ") %>
                         </li>
                     <% }) %>
                 </ul>
@@ -153,18 +152,25 @@
             <div class="briefing-container" data-briefing-sec="create-new">
                 <h4>Create New Briefing</h4>
                 <form action="/briefing_create" method="POST" class="options-text">
-                    <label for="briefing-createnew-name">Resource Name</label>
+                    <label for="briefing-createnew-name">Briefing Name</label>
                     <input type="text" value="" id="briefing-createnew-name" name="briefingName" required>
+                    <label for="briefing-createnew-clone">Clone (Optional)</label>
+                    <select id="briefing-createnew-clone" name="briefingClone">
+                        <option value="None">No briefing selected</option>
+                        <% briefings.forEach(briefing => { %>
+                            <option value="<%= briefing.id %>"><%= briefing.name.replace(/_/g, " ") %></option>
+                        <% }) %>
+                    </select>
                     <button type="submit">Create</button>
                 </form>
             </div>
             <% briefings.forEach(briefing => { %>
                 <div class="briefing-container" data-briefing-sec="<%= briefing.id %>">
-                    <h4><%= briefing.name %></h4>
+                    <h4><%= briefing.name.replace(/_/g, " ") %></h4>
                     <p>Briefing is Public: <%= briefing.public.toUpperCase() %></p>
                     <a href="/briefing-editor/<%= briefing.id %>" class="options-open">Open Editor</a>
                     <form action="/briefing_delete" method="POST" class="options-delete">
-                        <input type="hidden" value="<%= briefing.name %>" name="briefing">
+                        <input type="hidden" value="<%= briefing.id %>" name="briefing">
                         <button type="submit">Delete</button>
                     </form>
                 </div>

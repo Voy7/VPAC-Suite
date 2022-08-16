@@ -29,15 +29,12 @@ body { background-image: url("/assets/bg2.png"); }
 }
 
 #kills-container .kill-container {
+    position: relative;
     width: 320px;
     min-height: 180px;
-    /* margin: 20px 15px 10px 15px; */
     margin: 10px 10px 20px 10px;
-    padding: 5px 5px 15px 5px;
-    /* background-color: rgb(15, 15, 25); */
+    padding: 5px 5px 40px 5px;
     border-bottom: 1px solid var(--border-color-2);
-    /* border-right: 1px solid var(--border-color-1); */
-    /* border-radius: 10px; */
 }
 
 .kill-container .kill-user-header {
@@ -165,6 +162,48 @@ body { background-image: url("/assets/bg2.png"); }
 .kill-container .info-entry .time {
     font-size: 12px;
     color: rgb(170, 170, 170);
+}
+
+.kill-container ul {
+    position: absolute;
+    left: 50%;
+    bottom: 5px;
+    transform: translate(-50%, 0);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* background: red; */
+    list-style: none;
+}
+
+.kill-container ul li {
+    display: inline-flex;
+    align-items: center;
+    gap: 1px;
+    padding: 3px 5px;
+    white-space: nowrap;
+    background-color: rgb(50, 50, 50);
+    border-radius: 10px;
+}
+
+.kill-container ul li img {
+    display: inline;
+    width: 15px;
+    height: 15px;
+}
+
+.kill-container ul li p {
+    display: inline;
+    font-size: 12px;
+}
+
+.kill-container .no-kills {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: rgb(100, 100, 100);
 }
 
 .toggle-container {
