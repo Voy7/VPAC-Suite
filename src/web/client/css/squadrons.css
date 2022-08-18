@@ -10,7 +10,7 @@ body { background-image: url("/assets/bg6.png"); }
     font-size: 15px;
     color: rgb(180, 180, 255);
     background-color: rgba(180, 180, 255, 0.1);
-    border: 1px solid rgb(180, 180, 255);
+    border: 1px solid rgba(180, 180, 255, 0.3);
 }
 
 #main-squadrons-container {

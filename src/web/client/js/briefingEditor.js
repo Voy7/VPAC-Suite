@@ -53,6 +53,37 @@ $(() => {
             closeModals()
         })
     })
+
+    // File drop logic.
+    const dropArea = document.querySelector("#file-drop")
+    dropArea.addEventListener('drop', handleDrop, false)
+
+    function handleDrop(e) {
+        const files = e.dataTransfer.files
+        uploadMiz(files)
+    }
+    ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        document.addEventListener(eventName, preventDefaults, false)
+    })
+    ;['dragenter', 'dragover'].forEach(eventName => {
+        document.addEventListener(eventName, highlight, false)
+    })
+    ;['dragleave', 'drop'].forEach(eventName => {
+        document.addEventListener(eventName, unhighlight, false)
+    })
+      
+    function highlight(e) {
+        dropArea.style.display = "block"
+    }
+      
+    function unhighlight(e) {
+        dropArea.style.display = "none"
+    }
+      
+    function preventDefaults (e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
 })
 
 // Upload miz file via socket.

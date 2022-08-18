@@ -15,6 +15,7 @@ function main(g) {
     
 
     g.bot.on("ready", async () => {
+        g.bot.user.setActivity(`vpac-dcs.com`, { type: 1 })
         g.bot.guilds.cache.forEach(guild => {
             if (guild.id == g.config.bot.server) g.guild = guild
         })

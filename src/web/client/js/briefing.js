@@ -235,6 +235,8 @@ function initMap() {
     function populateMap() {
         const coalitions = ["red", "blue"]
         const flightPath = {}
+        let waypointPath = null
+        let firstAircraft = null
 
         // Move to relavant area.
         map.panTo(miz.bullseyes.blue.loc)
@@ -260,12 +262,16 @@ function initMap() {
                     // ================
 
                     if (group.name.startsWith("AIRPORT")) {
-                        let airport = group.name.replace("AIRPORT ", "")
-                        let html = `<div class="airport airport-${coalition} map-item" data-airport="${airport}"></div>`
+                        const airport = group.name.replace("AIRPORT ", "")
+                        const html = `<div class="airport airport-${coalition} map-item" data-airport="${airport}"></div>`
+                        createHTMLMapMarker({ map, html, position: group.loc })
+                    }
+                    if (group.name.startsWith("MARKER")) {
+                        const marker = group.name.replace("MARKER ", "")
+                        const html = `<div class="marker marker-${coalition} map-item" data-marker="${marker}"></div>`
                         createHTMLMapMarker({ map, html, position: group.loc })
                     }
                     if (group.hiddenOnMFD == "true") return
-                    // if (group.hiddenOnMFD == "true") return
                     let ringUnit = null
                     group.units.forEach(unit => {
                         if (unit.ring != null) ringUnit = unit
@@ -279,35 +285,22 @@ function initMap() {
                 else if (group.type == "ship") {
                     if (group.hiddenOnMFD == "true") return
                     let ship = group.name
-                    let html = `<div class="airport airport-${coalition} map-item" data-airport="${ship}"></div>`
+                    let html = `<div class="ship icon-${coalition} map-item" data-ship="${ship}"></div>`
+                    // let html = `<div class="airport airport-${coalition} map-item" data-airport="${ship}"></div>`
                     createHTMLMapMarker({ map, html, position: group.loc })
                 }
                 else if (group.type == "aircraft") {
-                    if (group.name == "Falcon-1") {
-                        // console.log(group)
-                        let path = []
-                        group.route.forEach(waypoint => {
-                            if (!waypoint || waypoint.id <= 1) return
-                            path.push(waypoint.loc)
-                            let html = `<div class="waypoint map-item" data-label="${waypoint.id - 1}"></div>`
-                            createHTMLMapMarker({ map, html, position: waypoint.loc })
-                        })
-                        flightPath[group.name] = new google.maps.Polyline({
-                            path, strokeColor: "#FFF", strokeWeight: 0.7
-                        })
-                        flightPath[group.name].setMap(map)
-                    }
                     // Racetrack aircraft
                     if (group.task == "Refueling" || group.task == "AWACS") {
                         if (coalition != "blue") return
-                        // console.log(group)
                         let path = []
+                        let length = group.route.length - 1
+                        if (length < 2) return
                         group.route.forEach(waypoint => {
-                            if (!waypoint || waypoint.id <= 0) return
-                            if (!group.route[2]) return
+                            if (!waypoint || waypoint.id < length - 1) return
                             path.push(waypoint.loc)
-                            if (waypoint.id == 1) {
-                                let angle = google.maps.geometry.spherical.computeHeading(waypoint.loc, group.route[2].loc)
+                            if (waypoint.id == length - 1) {
+                                let angle = google.maps.geometry.spherical.computeHeading(waypoint.loc, group.route[length].loc)
                                 let html = `<img src="${group.units[0].icon}" class="aircraft icon-${coalition} map-item" style="transform: translate(-50%, -50%) rotate(${angle}deg);" /><div class="aircraft-label map-item aircraft-${coalition}">${group.units[0].short} (${group.name.split('-')[0]})</div>`
                                 createHTMLMapMarker({ map, html, position: waypoint.loc })
                             }
@@ -331,11 +324,48 @@ function initMap() {
         miz.groups["blue"].forEach(group => {
             if (group.type != "aircraft") return
             if (group.units[0].skill != "Client") return
-            aircraftHTML += `<li><img class="icon-blue" src="${group.units[0].icon}" /><span>${group.units[0].name.split("-")[0]}</span></li>`
+            if (!firstAircraft) firstAircraft = group.name
+            aircraftHTML += `<li data-aircraft="${group.name}"><img class="icon-blue" src="${group.units[0].icon}" /><span>${group.name} (${group.units[0].short})</span></li>`
         })
         aircraftHTML += `</ul>`
         aircraftElement.innerHTML = aircraftHTML.trim()
         document.querySelector("#map").appendChild(aircraftElement)
+
+        const aircraftElements = document.querySelectorAll("[data-aircraft]")
+        aircraftElements.forEach(element => {
+            element.addEventListener("click", () => {
+                showWaypoints(element.dataset.aircraft)
+            })
+        })
+
+        // Show waypoints on map for specified group.
+        function showWaypoints(name) {
+            aircraftElements.forEach(element => { element.classList.remove("aircraft-selected") })
+            document.querySelector(`[data-aircraft="${name}"]`).classList.add("aircraft-selected")
+
+            if (waypointPath) waypointPath.setMap(null)
+            document.querySelectorAll(".waypoint").forEach(waypoint => {
+                waypoint.remove()
+            })
+
+            const group = getGroupByName(name)
+            if (!group) return
+
+            const path = []
+            group.route.forEach(waypoint => {
+                if (!waypoint || waypoint.id <= 1) return
+                path.push(waypoint.loc)
+                let html = `<div class="waypoint map-item" data-label="${waypoint.id - 1}"></div>`
+                createHTMLMapMarker({ map, html, position: waypoint.loc })
+            })
+            waypointPath = new google.maps.Polyline({
+                path, strokeColor: "#FFF", strokeWeight: 0.7
+            })
+            waypointPath.setMap(map)
+            
+        }
+
+        if (firstAircraft) showWaypoints(firstAircraft)
     }
 
 

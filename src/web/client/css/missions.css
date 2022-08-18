@@ -1,3 +1,5 @@
+body { background-image: url("/assets/bg9.png"); }
+
 #main-missions-container {
     display: flex;
     justify-content: center;

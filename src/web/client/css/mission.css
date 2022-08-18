@@ -172,7 +172,6 @@ body { background-image: url("/assets/bg2.png"); }
     display: flex;
     align-items: center;
     gap: 5px;
-    /* background: red; */
     list-style: none;
 }
 
@@ -182,7 +181,7 @@ body { background-image: url("/assets/bg2.png"); }
     gap: 1px;
     padding: 3px 5px;
     white-space: nowrap;
-    background-color: rgb(50, 50, 50);
+    background-color: rgb(40, 40, 40);
     border-radius: 10px;
 }
 
