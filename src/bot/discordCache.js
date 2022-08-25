@@ -2,14 +2,14 @@ const db = require("../database")
 
 // Every 5 minutes fetch members, roles, etc from Discord.
 function discordCacheLoop(g) {
-    let members = []
-    let roles = []
+    const members = []
+    const roles = []
 
     // Fetch members.
     g.guild.members.cache.forEach(member => {
         members.push({
             id: member.user.id,
-            name: member.user.username,
+            name: member.user.username.replace(/'/g, ""),
             nickname: member.nickname,
             avatar: member.user.avatarURL(),
             roles: member._roles

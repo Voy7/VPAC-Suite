@@ -177,11 +177,48 @@ hr {
 /* Element - Image */
 .image {
     position: relative;
-    left: 50%;
-    width: 95vw;
-    margin: 10px auto;
-    transform: translate(-50%, 0);
+    width: 90vw;
+    margin: 0 auto;
+    border: 1px solid var(--border-color-1);
 }
+
+.image img { width: 100%; height: 100%; }
+.image .sat-filter { filter: grayscale(1) brightness(0.5); }
+
+.image .sat-overlay .corner {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    margin: 50px;
+    border-top: 3px solid rgba(255, 255, 255, 0.5);;
+    border-left: 3px solid rgba(255, 255, 255, 0.5);;
+}
+
+.image .sat-overlay .cross {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.image .sat-overlay .text { position: absolute; font-size: 20px; color: rgba(255, 255, 255, 0.5); }
+
+.image .sat-overlay .corner-1 { top: 0; left: 0; transform: rotate(0deg); }
+.image .sat-overlay .corner-2 { top: 0; right: 0; transform: rotate(90deg); }
+.image .sat-overlay .corner-3 { bottom: 0; right: 0; transform: rotate(180deg); }
+.image .sat-overlay .corner-4 { bottom: 0; left: 0; transform: rotate(270deg); }
+
+.image .sat-overlay .cross-1 { transform: translate(0, 100px) rotate(0deg); }
+.image .sat-overlay .cross-2 { transform: translate(100px, 0) rotate(90deg); }
+.image .sat-overlay .cross-3 { transform: translate(0, -100px) rotate(180deg); }
+.image .sat-overlay .cross-4 { transform: translate(-100px, 0) rotate(270deg); }
+
+.image .sat-overlay .text-1 { top: 60px; left: 70px; }
+.image .sat-overlay .text-2 { top: 60px; right: 80px; }
+.image .sat-overlay .text-3 { bottom: 60px; left: 70px; }
+.image .sat-overlay .text-4 { bottom: 60px; right: 80px; }
 
 /* Element - Map & it's child element / markers */
 #map {

@@ -237,50 +237,6 @@ function main(g) {
                 })
             })
         })
-        // socket.on("request-events", async () => {
-        //     let events = await db.get("events")
-        //     socket.emit("event-list", { data: events })
-
-        //     setInterval(async () => {
-        //         let events = await db.get("events")
-        //         socket.emit("event-list", { data: events })
-        //     }, 3000)
-        // })
-        
-        // socket.on("request-squadrons-and-members", async () => {
-        //     squadronsAndMembers(socket, g.config.web.squadrons)
-        // })
-
-        // socket.on("request-missions", async () => {
-        //     let missions = await db.getMissions()
-        //     socket.emit("missions", { missions })
-        // })
-
-        // socket.on("request-mission", async mission => {
-        //     let events = await db.missionGetEvent(mission, null)
-        //     let users = await db.getUser("*")
-        //     let guild = await db.get("guild")
-        //     let userList = []
-
-        //     guild.members.forEach(member => {
-        //         users.forEach(user => {
-        //             if (member.id != user.id) return
-        //             let nickname = member.nickname
-        //             if (!nickname) nickname = member.name
-        //             userList.push({
-        //                 ucid: user.ucid,
-        //                 name: member.name,
-        //                 nickname: nickname,
-        //                 avatar: member.avatar
-        //             })
-        //         })
-        //     })
-        //     socket.emit("mission", { events, userList })
-        // })
-    })
-
-    // Update squadrons & members for sockets every 5 seconds.
-    // setInterval(() => { squadronsAndMembers(io, g.config.web.squadrons) }, 5000999)
 
     // Fetch user name / profile login info.
     async function getLoginInfo(key) {

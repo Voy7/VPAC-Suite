@@ -1,3 +1,4 @@
+const debugUnits = true
 const coalitions = ["blue", "red"]
 
 function updateBriefing(briefing) {
@@ -27,7 +28,7 @@ function updateBriefing(briefing) {
             addElement(`<h4 class="header">${parseOut(element.args.text)}</h4>`)
         }
         else if (element.type == "text") {
-            if (element.args.centered) addElement(`<p class="textblock centered">${element.args.text}</p>`)
+            if (element.args.centered) addElement(`<p class="textblock centered">${parseOut(element.args.text)}</p>`)
             else addElement(`<p class="textblock">${parseOut(element.args.text)}</p>`)
         }
         else if (element.type == "waypointChart") {
@@ -151,6 +152,29 @@ function updateBriefing(briefing) {
                 </div>
             `)
         }
+        else if (element.type == "image") {
+            let filterClass = ``
+            let filterHTML = ``
+            if (element.args.filter == "Satellite") {
+                filterClass = "sat-filter"
+                filterHTML = `
+                    <div class="sat-overlay">
+                        <div class="cross cross-1"></div>
+                        <div class="cross cross-2"></div>
+                        <div class="cross cross-3"></div>
+                        <div class="cross cross-4"></div>
+                        <div class="corner corner-1"></div>
+                        <div class="corner corner-2"></div>
+                        <div class="corner corner-3"></div>
+                        <div class="corner corner-4"></div>
+                        <div class="text text-1">M: SAT</div>
+                        <div class="text text-2">D: 23.8</div>
+                        <div class="text text-3">02:06:10</div>
+                        <div class="text text-4">11:03:22</div>
+                    </div>`
+            }
+            addElement(`<div class="image"><img src="${element.args.link}" class="${filterClass}" />${filterHTML}</div>`)
+        }
         else if (element.type == "rawHtml") {
             addElement(`${element.args.html}`)
         }
@@ -167,7 +191,7 @@ function addElement(text) {
 function initMap() {
     const map = new google.maps.Map(document.querySelector("#map"), {
         zoom: 7,
-        maxZoom: 9,
+        // maxZoom: 9,
         minZoom: 6,
         center: { lat: 45.746, lng: 34.1555 },
         disableDefaultUI: true,
@@ -254,13 +278,13 @@ function initMap() {
         // Groups / aircraft.
         coalitions.forEach(coalition => {
             miz.groups[coalition].forEach(group => {
-                if (group.type == "ground") {
-                    // Get name for dev stuff.
+                if (debugUnits) {
+                    // Get name of all units
                     group.units.forEach(unit => {
-                        console.log(`${unit.name} - ${unit.type}`)
+                        console.log(`%c[${unit.name}]: ${unit.type}`, "color: aqua;")
                     })
-                    // ================
-
+                }
+                if (group.type == "ground") {
                     if (group.name.startsWith("AIRPORT")) {
                         const airport = group.name.replace("AIRPORT ", "")
                         const html = `<div class="airport airport-${coalition} map-item" data-airport="${airport}"></div>`

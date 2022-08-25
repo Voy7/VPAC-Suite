@@ -55,35 +55,35 @@ $(() => {
     })
 
     // File drop logic.
-    const dropArea = document.querySelector("#file-drop")
-    dropArea.addEventListener('drop', handleDrop, false)
+    // const dropArea = document.querySelector("#file-drop")
+    // dropArea.addEventListener('drop', handleDrop, false)
 
-    function handleDrop(e) {
-        const files = e.dataTransfer.files
-        uploadMiz(files)
-    }
-    ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        document.addEventListener(eventName, preventDefaults, false)
-    })
-    ;['dragenter', 'dragover'].forEach(eventName => {
-        document.addEventListener(eventName, highlight, false)
-    })
-    ;['dragleave', 'drop'].forEach(eventName => {
-        document.addEventListener(eventName, unhighlight, false)
-    })
+    // function handleDrop(e) {
+    //     const files = e.dataTransfer.files
+    //     uploadMiz(files)
+    // }
+    // ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    //     document.addEventListener(eventName, preventDefaults, false)
+    // })
+    // ;['dragenter', 'dragover'].forEach(eventName => {
+    //     document.addEventListener(eventName, highlight, false)
+    // })
+    // ;['dragleave', 'drop'].forEach(eventName => {
+    //     document.addEventListener(eventName, unhighlight, false)
+    // })
       
-    function highlight(e) {
-        dropArea.style.display = "block"
-    }
+    // function highlight(e) {
+    //     dropArea.style.display = "block"
+    // }
       
-    function unhighlight(e) {
-        dropArea.style.display = "none"
-    }
+    // function unhighlight(e) {
+    //     dropArea.style.display = "none"
+    // }
       
-    function preventDefaults (e) {
-        e.preventDefault()
-        e.stopPropagation()
-    }
+    // function preventDefaults (e) {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    // }
 })
 
 // Upload miz file via socket.
@@ -123,6 +123,10 @@ function newElement(type) {
         args.clouds = "Scattered at 9,000"
         args.qnh = "760 / 29.92"
         args.temp = "75&deg; F"
+    }
+    else if (type == "image") { // Image
+        args.link = ""
+        args.filter = null
     }
     else if (type == "rawHtml") { // Raw HTML
         args.html = `<div>Raw HTML</div>`
@@ -191,6 +195,12 @@ function selectElement(order) {
         addOption(element, "delete")
     }
     else if (element.type == "image") { // Image
+        let filters = [
+            { value: `None`, label: `No Filter` },
+            { value: `Satellite`, label: `Satellite Filter` }
+        ]
+        addOption(element, "link", "Image Link", "text")
+        addOption(element, "filter", "Image Filter", "dropdown", filters)
         addOption(element, "delete")
     }
     else if (element.type == "rawHtml") { // RAW HTML
@@ -234,6 +244,11 @@ function addOption(element, arg, label, input, extra) {
             <select id="options-${arg}" data-editor="${element.order}">
                 ${valuesHTML}
             </select>`
+    }
+    else if (input == "radio") { // Radio button input
+        optionsHTML = `
+            <label for="options-${extra}">${label}</label>
+            <input type="radio" id="options-${extra}" data-editor="${element.order}" value="${extra}">`
     }
     else if (arg == "no-miz") { // No .miz file included
         optionsHTML = `<p class="no-miz">Error: You need to upload a .miz first.</p>`

@@ -38,8 +38,8 @@ const unitList = [
     ["FA-18C", "F/A-18C", "F/A-18C Hornet", "A", "FA18-red"],
     ["F-117", "F-117A", "F-117A Nighthawk", "A"],
     ["KC130", "KC-130", "KC-130 Tanker", "A", "KC130-red"],
+    ["KC-135", "KC-135", "KC-135 Tanker", "A", "KC130-red"],
     ["KC135MPRS", "KC-135MPRS", "KC-135MPRS Tanker", "A", "KC130-red"],
-    ["KC135", "KC-135", "KC-135 Tanker", "A", "KC130-red"],
     ["Mirage-F1", "F1", "Mirage F1", "A", "MIG21-red"],
     ["M-2000", "M-2000C", "Mirage 2000C", "A", "MIG21-red"],
     ["A-50", "A-50", "A-50 Mainstay", "A", "KC130-red"],
@@ -97,8 +97,8 @@ const unitList = [
     ["S-300PMU1 40B6MD sr", "SA-20", "SA-20 Grumble CS Radar", "EW"],
     ["S-300PMU1 30N6E tr", "SA-20", "SA-20 Grumble Track Radar", "EW"],
     ["S-300PMU1 54K6 cp", "SA-20", "SA-20 Grumble Cmd Post", "LS"],
-    ["S-300PMU1 5P85CE ln", "SA-20", "SA-20 Grumble Launcher-C", "LS; 50"],
-    ["S-300PMU1 5P85DE", "SA-20", "SA-20 Grumble Launcher-D", "LS; 50"],
+    ["S-300PMU1 5P85CE ln", "SA-20", "SA-20 Grumble Launcher-C", "LS; 60"],
+    ["S-300PMU1 5P85DE", "SA-20", "SA-20 Grumble Launcher-D", "LS; 65"],
     ["Strela-1", "SA-13", "SA-13 Strela", "MS; 5"],
     ["Tor", "SA-15", "SA-15 Tor", "MS; 7"],
     ["2S6", "SA-19", "SA-19 Tunguska", "MS; 5"],
@@ -116,6 +116,7 @@ const unitList = [
     ["Patriot AMG", "Patriot", "Patriot AMS", "LS"],
     ["Patriot cp", "Patriot", "Patriot Cmd Post", "LS"],
     ["Patriot ln", "Patriot", "Patriot Launcher", "LS; 25"],
+    ["Roland", "Roland", "Roland ADS", "MS; 3.5"],
 
     // AAA Guns
     ["ZSU-23-4", "AAA", "ZSU-23-4 23mm Shilka", "AAA"],
@@ -125,6 +126,7 @@ const unitList = [
     
     // EW Radars
     ["EWR 1L119", "EWR", "EWR 1L119", "EW"],
+    ["1L13", "EWR", "EWR 1L13", "EW"],
     ["55G6", "EWR", "EWR 55G6", "EW"],
 
     // Infantry
@@ -136,6 +138,7 @@ const unitList = [
     ["Infantry AK-74", "Infantry", "Infantry AK-74", "IF"],
     ["Soldier RPG", "Infantry", "Infantry RPG", "IF"],
     ["Soldier M4", "Infantry", "Infantry M4", "IF"],
+    ["Soldier M249", "Infantry", "Infantry M249", "IF"],
     ["Paratrooper RPG", "Infantry", "Paratrooper RPG", "IF"],
 
     // Sea/Land Missiles
@@ -143,11 +146,14 @@ const unitList = [
     ["hy_launcher", "Silkworm", "HY-2 Silkworm Launcher", "ARL"],
 
     // Support Utlity
-    ["Ural-375 PBU", "Ural-375", "Ural-375 PBU Truck", "ARW"],
-    ["Ural-375", "Ural-375", "Ural-375 Truck", "ARW"],
-    ["Ural-4320T", "Ural-4320T", "Ural-4320T Truck", "ARW"],
-    ["ZIL-135", "ZIL-135", "ZIL-135 Truck", "ARW"],
+    ["Ural-375 PBU", "Ural-375", "Ural-375 PBU Truck", "S"],
+    ["Ural-375", "Ural-375", "Ural-375 Truck", "S"],
+    ["Ural-4320T", "Ural-4320T", "Ural-4320T Truck", "S"],
+    ["ZIL-135", "ZIL-135", "ZIL-135 Truck", "S"],
     ["ERO_Tent", "Tent", "Tent", "S"],
+
+    // Ships
+    ["La_Combattante_II", "Ship", "La Combattante II F.A.C", "SH"],
 
     // Munition Weapons
     ["AIM-120B", "AIM-120B", "AIM-120B AMRAAM", "W"],
@@ -194,7 +200,8 @@ function unitIcon(name) {
         else if (type == "LS") icon = `/assets/motorized-sam-icon-red.png` // Long Range SAM
         else if (type == "EW") icon = `/assets/radar-icon-red.png` // Radar
         else if (type == "IF") icon = `/assets/infantry-icon-red.png` // Infantry
-        else if (type == "S") icon = `/assets/armor-tracked-icon-red.png` // Support Utility
+        else if (type == "S") icon = `/assets/truck-icon-red.png` // Support Utility
+        else if (type == "SH") icon = `/assets/cruiser-icon-red.svg` // Ships
     })
     return icon
 }
