@@ -1,21 +1,20 @@
 const dcs = require("./dcsUtils")
 
-const { group } = require("console")
-const { resolve } = require("path")
+// To get center of map, click neutral bullseye.
+// Convert from Degrees Minutes Seconds to Decimal Degree here:
+// Converter: https://coordinates-converter.com/
 
 const mapInfo = {}
-//mapInfo["Caucasus"] = { center: {lat: 45.746, lng: 34.1555}, deviation: 9.04, expand: 1.059 }
-mapInfo["Caucasus"] = { center: {lat: 45.746, lng: 34.1555}, deviation: 6.04, expand: 1.059 }
-mapInfo["PersianGulf"] = { center: {lat: 26.1018, lng: 56.1430}, deviation: 0, expand: 1.06 }
+mapInfo["Caucasus"] = { center: { lat: 45.746, lng: 34.1555 }}
+mapInfo["PersianGulf"] = { center: { lat: 26.171819, lng: 56.241925 }}
+mapInfo["Falklands"] = { center: { lat: -52.280247, lng: -59.102165 }}
 
 // Convert .miz coords to lat, long.
 function convertMapCoords(map, x, y) {
     if (!mapInfo[map]) return null
-    x = x * mapInfo[map].expand
-    y = y * mapInfo[map].expand
     let R = 6378.1
     let dr = Math.PI / 180
-    let bearing = (Math.atan2(y, x) * (180 / Math.PI) + mapInfo[map].deviation) * dr
+    let bearing = (Math.atan2(y, x) * (180 / Math.PI)) * dr
     // console.log(Math.atan2(y, x) * (180 / Math.PI))
     let range = Math.sqrt(x * x + y * y)
     let lat = mapInfo[map].center.lat * dr

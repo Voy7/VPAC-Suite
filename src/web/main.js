@@ -237,6 +237,7 @@ function main(g) {
                 })
             })
         })
+    })
 
     // Fetch user name / profile login info.
     async function getLoginInfo(key) {

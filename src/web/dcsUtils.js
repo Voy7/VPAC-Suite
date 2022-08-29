@@ -71,6 +71,10 @@ const unitList = [
     ["Su-34", "Su-34", "Su-34 Fullback", "A", "SU27-red"],
     ["J-11", "J-11A", "J-11A Flanker-L", "A", "SU27-red"],
     ["JF-17", "JF-17", "JF-17 Thunder", "A", "JF17-red"],
+    ["P-47", "P-47D", "P-47D Thunderbolt", "A", "TF51-red"],
+    ["P-51", "P-51D", "P-51D Mustang", "A", "TF51-red"],
+    ["Mosquito", "Mosquito FB", "Mosquito FB", "A", "TF51-red"],
+    ["FW-190A8", "PFW-190", "FW-190 A8", "A", "TF51-red"],
 
     // SAM Site Vehicles
     ["p-19 s-125 sr", "P-19", "SA-2/3 P-19 SR", "EW"],
@@ -101,6 +105,7 @@ const unitList = [
     ["S-300PMU1 5P85DE", "SA-20", "SA-20 Grumble Launcher-D", "LS; 65"],
     ["Strela-1", "SA-13", "SA-13 Strela", "MS; 5"],
     ["Tor", "SA-15", "SA-15 Tor", "MS; 7"],
+    ["Igla manpad", "SA-18", "SA-18 Igla", "MS; 3"],
     ["2S6", "SA-19", "SA-19 Tunguska", "MS; 5"],
     ["rapier_fsa_blindfire", "Rapier", "Rapier ST Radar", "EW"],
     ["rapier_fsa_optical", "Rapier", "Rapier Optical TR", "EW"],
@@ -145,12 +150,20 @@ const unitList = [
     ["Silkworm_SR", "Silkworm", "HY-2 Silkworm Radar", "ARL"],
     ["hy_launcher", "Silkworm", "HY-2 Silkworm Launcher", "ARL"],
 
+    // Armor
+    ["BMP-1", "BMP-1", "BMP-1 IFV", "ART"],
+    ["BMP-2", "BMP-2", "BMP-2 IFV", "ART"],
+    ["BMP-3", "BMP-3", "BMP-3 IFV", "ART"],
+    ["M-113", "APC", "M113 APC", "ART"],
+    ["tt_DSHK", "Scout LC", "Scout LC 12.7mm MG", "ARW"],
+
     // Support Utlity
     ["Ural-375 PBU", "Ural-375", "Ural-375 PBU Truck", "S"],
     ["Ural-375", "Ural-375", "Ural-375 Truck", "S"],
     ["Ural-4320T", "Ural-4320T", "Ural-4320T Truck", "S"],
     ["ZIL-135", "ZIL-135", "ZIL-135 Truck", "S"],
     ["ERO_Tent", "Tent", "Tent", "S"],
+    ["Small Warehouse", "Warehouse", "Warehouse", "S"],
 
     // Ships
     ["La_Combattante_II", "Ship", "La Combattante II F.A.C", "SH"],

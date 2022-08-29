@@ -409,11 +409,12 @@ hr {
 /* WIP Aircraft Select */
 #map ul {
     position: absolute;
-    top: 5px;
-    right: 5px;
     list-style: none;
     border: 1px solid var(--border-color-1);
 }
+
+#map .aircrafts { top: 5px; right: 5px; }
+#map .options { top: 5px; left: 5px; }
 
 #map ul li {
     display: flex;
@@ -429,8 +430,8 @@ hr {
 #map ul li img { width: 16px; height: 16px; }
 #map ul li span { font-size: 11px; color: inherit; }
 #map ul li:hover { background-color: rgb(40, 40, 40); }
-#map ul .aircraft-selected { background: rgb(70, 70, 70); }
-#map ul .aircraft-selected:hover { background: rgb(70, 70, 70); }
+#map ul .item-selected { background-color: rgb(70, 70, 70); }
+#map ul .item-selected:hover { background-color: rgb(70, 70, 70); }
 
 /* No .miz error element */
 .no-miz-element {

@@ -191,7 +191,7 @@ function addElement(text) {
 function initMap() {
     const map = new google.maps.Map(document.querySelector("#map"), {
         zoom: 7,
-        // maxZoom: 9,
+        maxZoom: 11,
         minZoom: 6,
         center: { lat: 45.746, lng: 34.1555 },
         disableDefaultUI: true,
@@ -200,6 +200,7 @@ function initMap() {
         zoomControl: false,
         clickableIcons: false,
         mapTypeId: "terrain",
+        // tilt: 45,
         styles: mapStyles
     })
 
@@ -248,7 +249,7 @@ function initMap() {
 
 
 
-
+    // Only populate map once miz is loaded.
     const waitMiz = setInterval(() => {
         if (miz) {
             clearInterval(waitMiz)
@@ -256,6 +257,7 @@ function initMap() {
         }
     }, 500)
 
+    // Update/put all the elements on the map.
     function populateMap() {
         const coalitions = ["red", "blue"]
         const flightPath = {}
@@ -263,7 +265,8 @@ function initMap() {
         let firstAircraft = null
 
         // Move to relavant area.
-        map.panTo(miz.bullseyes.blue.loc)
+        map.setCenter(miz.bullseyes.blue.loc)
+        // map.setBounds(null)
 
         // Bullseyes, blue & red.
         createHTMLMapMarker({
@@ -343,7 +346,7 @@ function initMap() {
         })
 
         // Select which aircraft to get info about.
-        let aircraftHTML = `<ul>`
+        let aircraftHTML = `<ul class="aircrafts">`
         let aircraftElement = document.createElement("aircrafts")
         miz.groups["blue"].forEach(group => {
             if (group.type != "aircraft") return
@@ -364,8 +367,8 @@ function initMap() {
 
         // Show waypoints on map for specified group.
         function showWaypoints(name) {
-            aircraftElements.forEach(element => { element.classList.remove("aircraft-selected") })
-            document.querySelector(`[data-aircraft="${name}"]`).classList.add("aircraft-selected")
+            aircraftElements.forEach(element => { element.classList.remove("item-selected") })
+            document.querySelector(`[data-aircraft="${name}"]`).classList.add("item-selected")
 
             if (waypointPath) waypointPath.setMap(null)
             document.querySelectorAll(".waypoint").forEach(waypoint => {
@@ -390,6 +393,47 @@ function initMap() {
         }
 
         if (firstAircraft) showWaypoints(firstAircraft)
+
+        // Map options sidebar selection.
+        let optionsHTML = `<ul class="options">`
+        let optionsElement = document.createElement("options")
+        optionsHTML += `<li data-option="terrain" class="item-selected"><img class="icon-blue" src="/assets/infantry-icon-red.png" /><span>Terrain</span></li>`
+        optionsHTML += `<li data-option="sams" class="item-selected"><img class="icon-blue" src="/assets/motorized-sam-icon-red.png" /><span>SAM Rings</span></li>`
+        optionsHTML += `<li data-option="airports" class="item-selected"><img class="icon-blue" src="/assets/truck-icon-red.png" /><span>Airfields</span></li>`
+        optionsHTML += `</ul>`
+        optionsElement.innerHTML = optionsHTML.trim()
+        document.querySelector("#map").appendChild(optionsElement)
+
+        const optionElements = document.querySelectorAll("[data-option]")
+        optionElements.forEach(element => {
+            element.addEventListener("click", () => {
+                toggleOption(element.dataset.option)
+            })
+        })
+
+        const options = {}
+
+        function toggleOption(option) {
+            if (options[option] == undefined) options[option] = false
+            else if (options[option]) options[option] = false
+            else options[option] = true
+
+            if (options[option]) document.querySelector(`[data-option="${option}"]`).classList.add("item-selected")
+            else document.querySelector(`[data-option="${option}"]`).classList.remove("item-selected")
+
+            if (option == "terrain") {
+                if (options[option]) map.setMapTypeId("terrain")
+                else map.setMapTypeId("satellite")
+            }
+            if (option == "sams") {
+                if (options[option]) $(".sam-ring").fadeIn(300)
+                else $(".sam-ring").fadeOut(0)
+            }
+            if (option == "airports") {
+                if (options[option]) $(".airport").fadeIn(300)
+                else $(".airport").fadeOut(0)
+            }
+        }
     }
 
 

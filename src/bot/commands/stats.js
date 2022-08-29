@@ -35,8 +35,8 @@ async function commandStats(g, message) {
         // Send them message with all the info.
         message.author.send({
             embeds: [{
-                title: "VPAC Stats",
-                description: "Download the mod above and place the `Mods` and `Scripts` folders into your DCS saved games folder. Once you've done this, all your VPAC stats will be associated with your account [on our website](http://vpac-dcs.com).",
+                title: "VPAC Stats Mod",
+                description: "Download the mod above and place the `Mods` and `Scripts` folders into your DCS saved games folder. Once you've done this, all your VPAC stats will be associated with your account [on our website](https://vpac-dcs.com).",
                 thumbnail: { url: "https://cdn.discordapp.com/attachments/692211326503616594/966893877988581396/logo.png" },
                 color: "00b3ad",
                 // fields: [{

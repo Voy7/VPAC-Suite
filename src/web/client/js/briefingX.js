@@ -293,7 +293,7 @@ function initMap() {
     })
 
     // Select which aircraft to get info about.
-    let aircraftHTML = `<ul>`
+    let aircraftHTML = `<ul class="aircrafts">`
     let aircraftElement = document.createElement("aircrafts")
     miz.groups["blue"].forEach(group => {
         if (group.type != "aircraft") return
@@ -303,6 +303,14 @@ function initMap() {
     aircraftHTML += `</ul>`
     aircraftElement.innerHTML = aircraftHTML.trim()
     document.querySelector("#map").appendChild(aircraftElement)
+
+    // Map options sidebar selection.
+    let optionsHTML = `<ul class="options">`
+    let optionsElement = document.createElement("options")
+    optionsHTML += `<li><img class="icon-blue" src="/assets/motorized-sam-icon-red.png" /><span>SAM Rings</span></li>`
+    optionsHTML += `</ul>`
+    optionsElement.innerHTML = optionsHTML.trim()
+    document.querySelector("#map").appendChild(optionsElement)
 
     // 2 markers 1nm or 1,852m apart for measuring pixels.
     const ruler1 = new google.maps.Marker({ map, position: {lat: 45.746, lng: 34.1555}, icon: "/assets/blank.png" })
@@ -339,44 +347,23 @@ function initMap() {
         }
     })
 
-
-
-    // new google.maps.Marker({
-    //     map, position: {lat: 41.5429, lng: 41.4943}, title: "Blue patriot 2",
-    // })
-    // new google.maps.Marker({
-    //     map, position: {lat: 43.67610931117853, lng: 39.652110177202104}, title: "OA 1",
-    // })
-    // new google.maps.Marker({
-    //     map, position: {lat: 41.555558, lng: 41.523534}, title: "OA 1",
-    // })
-
     // Runs every time map view is moved.
     function updateMap() {
-        let distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
-            ruler1.getPosition(),
-            ruler2.getPosition()
-        )
-        
-        let mileInPixels = distanceInPixels(map, ruler1, ruler2)
-
-        let samRings = document.querySelectorAll(".sam-ring")
+        const mileInPixels = distanceInPixels(map, ruler1, ruler2)
+        const samRings = document.querySelectorAll(".sam-ring")
         samRings.forEach(sam => {
-            let size = parseInt(sam.dataset.size)
+            const size = parseInt(sam.dataset.size)
             sam.style.width = `${size * 2 * mileInPixels}px`
             sam.style.height = `${size * 2 * mileInPixels}px`
         })
     }
 
+    // Get distance in pixels from 2 points.
     function distanceInPixels(map, marker1, marker2) {
-        var p1 = map.getProjection().fromLatLngToPoint(marker1.getPosition());
-        var p2 = map.getProjection().fromLatLngToPoint(marker2.getPosition());
-
-        var pixelSize = Math.pow(2, -map.getZoom());
-
-        var d = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y))/pixelSize;
-
-        return d
+        const p1 = map.getProjection().fromLatLngToPoint(marker1.getPosition());
+        const p2 = map.getProjection().fromLatLngToPoint(marker2.getPosition());
+        const pixelSize = Math.pow(2, -map.getZoom());
+        return Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y))/pixelSize;
     }
 
     // Load elements after everything is loaded.
