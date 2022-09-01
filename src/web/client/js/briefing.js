@@ -152,7 +152,7 @@ function updateBriefing(briefing) {
                             </td>
                             <td>
                                 QNH: ${Math.round(miz.weather.qnh)}<br />
-                                inHg: ${Math.round(miz.weather.qnh / 25.368 * 100) / 100}<br /><br />
+                                inHg: ${Math.round(miz.weather.qnh / 25.4 * 100) / 100}<br /><br />
                             </td>
                             <td>
                                 ${Math.round(miz.weather.temp * 9/5 + 32)}&deg; F<br />
@@ -171,6 +171,7 @@ function updateBriefing(briefing) {
                 return dir
             }
             function parseClouds(name) {
+                if (!name) return "Scattered"
                 let preset = name.split("Preset")[1]
                 if (name.startsWith("Rainy")) return "Overcast & Rain"
                 else if (["1", "2", "3", "4", "8"].includes(preset)) return "Few Scattered"
