@@ -132,3 +132,5 @@ database.sqlite
 ssl/
 miz/
 mission
+src/lua/*
+!src/lua/VPAC-Stats/
