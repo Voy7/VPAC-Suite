@@ -127,7 +127,7 @@ function updateBriefing(briefing) {
                 })
                 return { channel, label }
             }
-        } // 2
+        }
         else if (element.type == "weatherChart") {
             if (!miz) return addElement(`<div class="no-miz-element">Could not load element, no .miz included.</div>`)
             addElement(`
