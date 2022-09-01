@@ -1,4 +1,4 @@
-const debugUnits = true
+const debugUnits = false
 const coalitions = ["blue", "red"]
 
 function updateBriefing(briefing) {
@@ -10,9 +10,6 @@ function updateBriefing(briefing) {
         setTimeout(() => { updateBriefing(briefing) }, 100)
     }
     if (!good) return
-    // console.log("briefing!")
-    // console.log(briefing)
-
     const mapElem = document.querySelector("#map")
     document.body.append(mapElem)
     const brief = document.querySelector("#briefing")
@@ -132,6 +129,7 @@ function updateBriefing(briefing) {
             }
         }
         else if (element.type == "weatherChart") {
+            if (!miz) return addElement(`<div class="no-miz-element">Could not load element, no .miz included.</div>`)
             addElement(`
                 <div class="weather-chart">
                     <h4>Weather Information</h4>
@@ -139,18 +137,48 @@ function updateBriefing(briefing) {
                         <tr>
                             <th>Wind</th>
                             <th>Clouds</th>
-                            <th>QNH</th>
-                            <th>Tempature</th>
+                            <th>Pressure</th>
+                            <th>Temperature</th>
                         </tr>
                         <tr>
-                            <td>${element.args.wind}</td>
-                            <td>${element.args.clouds}</td>
-                            <td>${element.args.qnh}</td>
-                            <td>${element.args.temp}</td>
+                            <td>
+                                At Ground: ${parseDir(miz.weather.wind.at0.dir)}&deg; ${Math.round(miz.weather.wind.at0.speed * 1.94)} kts<br />
+                                At 6,000 ft: ${parseDir(miz.weather.wind.at2000.dir)}&deg; ${Math.round(miz.weather.wind.at2000.speed * 1.94)} kts<br />
+                                At 26,000 ft: ${parseDir(miz.weather.wind.at8000.dir)}&deg; ${Math.round(miz.weather.wind.at8000.speed * 1.94)} kts
+                            </td>
+                            <td>
+                                ${parseClouds(miz.weather.clouds.preset)}<br />
+                                Base: ${(Math.round(miz.weather.clouds.base * 3.28 / 100) * 100).toLocaleString("en-US")} ft<br /><br />
+                            </td>
+                            <td>
+                                QNH: ${Math.round(miz.weather.qnh)}<br />
+                                inHg: ${Math.round(miz.weather.qnh / 25.368 * 100) / 100}<br /><br />
+                            </td>
+                            <td>
+                                ${Math.round(miz.weather.temp * 9/5 + 32)}&deg; F<br />
+                                ${miz.weather.temp}&deg; C<br /><br />
+                            </td>
                         </tr>
                     </table>
                 </div>
             `)
+
+            function parseDir(dir) {
+                dir = parseInt(dir) + 180
+                if (dir > 360) dir = dir - 360
+                if (dir < 10) dir = `00${dir}`
+                else if (dir < 100) dir = `0${dir}`
+                return dir
+            }
+            function parseClouds(name) {
+                let preset = name.split("Preset")[1]
+                if (name.startsWith("Rainy")) return "Overcast & Rain"
+                else if (["1", "2", "3", "4", "8"].includes(preset)) return "Few Scattered"
+                else if (["5", "6", "7", "9", "10", "11", "12"].includes(preset)) return "Scattered Clouds"
+                else if (["13", "14", "15", "16", "17", "18", "19", "20"].includes(preset)) return "Broken Clouds"
+                else if (["21", "22", "23", "24", "25", "26", "27"].includes(preset)) return "Overcast Clouds"
+                else return "Scattered"
+            }
         }
         else if (element.type == "image") {
             let filterClass = ``

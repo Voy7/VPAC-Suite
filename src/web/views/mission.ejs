@@ -241,19 +241,14 @@
 
     <% if (briefing) { %>
         <section id="briefing"></section>
-        <div id="map"></div>
+        <div id="map">
+            <img class="map-loading-img" src="/assets/loading.svg" />
+            <p class="map-loading-text">If the map doesn't load in a few seconds, try refreshing the page.</p>
+        </div>
         <script>
             let miz = JSON.parse('<%- JSON.stringify(briefing.miz).replaceAll("\\", "\\\\") %>')
             let briefing = JSON.parse('<%- JSON.stringify(briefing).replaceAll("\\", "\\\\") %>')
             updateBriefing(briefing)
-            // let waitGoogle = setInterval(() => {
-            //     if (google) {
-            //         console.log("1")
-            //         console.log("2")
-            //         clearInterval(waitGoogle)
-            //         waitGoogle = undefined
-            //     }
-            // }, 100)
         </script>
     <% } %>
 

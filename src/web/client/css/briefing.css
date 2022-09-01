@@ -129,50 +129,13 @@ hr {
 
 .weather-chart table {
     width: 100%;
-    padding: 10px;
-    background: rgb(40, 50, 70);
+    padding: 15px;
+    font-size: 18px;
+    background-color: rgb(40, 50, 70);
 }
 
-.weather-chart tr { text-align: center; }
-
-.weather-container {
-    position: relative;
-    width: 900px;
-    margin: 10px auto;
-    background-color: rgb(24, 28, 39);
-}
-
-.weather-container h4 {
-    padding: 0.5em;
-    font-size: 30px;
-    text-align: center;
-    background-color: rgb(3, 43, 60);
-}
-
-.weather-container img {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
-}
-
-.weather-container section { display: flex; justify-content: space-between; }
-.weather-container section div { margin: 50px 80px; text-align: center; }
-
-.weather-container section div h5 {
-    font-weight: normal;
-    font-size: 26px;
-    letter-spacing: 2px;
-    color: rgb(118, 166, 255);
-}
-
-.weather-container section div p {
-    margin-top: 20px;
-    font-size: 22px;
-    letter-spacing: 2px;
-    color: rgb(193, 193, 193);
-}
+.weather-chart th { padding-bottom: 5px; letter-spacing: 1px; color: rgb(95, 190, 190); }
+.weather-chart td { text-align: center; font-size: 16px; color: rgb(230, 230, 255); }
 
 /* Element - Image */
 .image {
@@ -222,13 +185,31 @@ hr {
 
 /* Element - Map & it's child element / markers */
 #map {
-    background: green;
     width: auto;
     height: 92vh;
-    /* margin: 15px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 0 10px;
     border: 1px solid var(--border-color-1);
     border-radius: 10px;
     caret-color: transparent;
+    animation: 'map-loading-bg' 1s alternate infinite;
+}
+
+#map .map-loading-img { width: 50px; height: 50px; animation: 'map-loading-image' 800ms infinite; }
+#map .map-loading-text { font-size: 16px; color: rgb(150, 150, 150); }
+
+@keyframes map-loading-bg {
+    from { background-color: rgb(40, 40, 50); }
+    to { background-color: rgb(60, 60, 60); }
+}
+
+@keyframes map-loading-image {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .bullseye-blue { background-color: blue; border-color: blue; }

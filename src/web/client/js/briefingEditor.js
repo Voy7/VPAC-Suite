@@ -55,35 +55,38 @@ $(() => {
     })
 
     // File drop logic.
-    // const dropArea = document.querySelector("#file-drop")
-    // dropArea.addEventListener('drop', handleDrop, false)
+    const dropArea = document.querySelector("#file-drop")
+    dropArea.addEventListener('drop', handleDrop, false)
 
-    // function handleDrop(e) {
-    //     const files = e.dataTransfer.files
-    //     uploadMiz(files)
-    // }
-    // ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    //     document.addEventListener(eventName, preventDefaults, false)
-    // })
-    // ;['dragenter', 'dragover'].forEach(eventName => {
-    //     document.addEventListener(eventName, highlight, false)
-    // })
-    // ;['dragleave', 'drop'].forEach(eventName => {
-    //     document.addEventListener(eventName, unhighlight, false)
-    // })
+    function handleDrop(e) {
+        const files = e.dataTransfer.files
+        uploadMiz(files)
+    }
+    ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        document.addEventListener(eventName, preventDefaults, false)
+    })
+    ;['dragenter', 'dragover'].forEach(eventName => {
+        document.addEventListener(eventName, highlight, false)
+    })
+    ;['dragleave', 'drop'].forEach(eventName => {
+        document.addEventListener(eventName, unhighlight, false)
+    })
       
-    // function highlight(e) {
-    //     dropArea.style.display = "block"
-    // }
+    function highlight(e) {
+        const dt = e.dataTransfer;
+        if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))) {
+            dropArea.style.display = "block"
+        }
+    }
       
-    // function unhighlight(e) {
-    //     dropArea.style.display = "none"
-    // }
+    function unhighlight(e) {
+        dropArea.style.display = "none"
+    }
       
-    // function preventDefaults (e) {
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    // }
+    function preventDefaults (e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
 })
 
 // Upload miz file via socket.
@@ -152,7 +155,20 @@ function selectElement(order) {
     // --------------------------------------------
     // Options for all different types of elements.
     // --------------------------------------------
-    if (element.type == "header") { // Header
+    if (element.type == "map") { // Map
+        addOption(element, "note", "There are no options for this element.")
+        if (!miz) return addOption(element, "no-miz")
+        let units = []
+        ;["blue", "red"].forEach(coalition => {
+            miz.groups[coalition].forEach(group => {
+                group.units.forEach(unit => {
+                    units.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
+                })
+            })
+        })
+        addOption(element, "dev1", "Unit List Data (For Developer Debug)", "dropdown", units)
+    }
+    else if (element.type == "header") { // Header
         addOption(element, "text", "Header Text", "text")
         addOption(element, "delete")
     }
@@ -188,10 +204,7 @@ function selectElement(order) {
         addOption(element, "delete")
     }
     else if (element.type == "weatherChart") { // Weather chart
-        addOption(element, "wind", "Wind", "text")
-        addOption(element, "clouds", "Clouds", "text")
-        addOption(element, "qnh", "QNH", "text")
-        addOption(element, "temp", "Tempature", "text")
+        addOption(element, "note", "There are no options for this element.")
         addOption(element, "delete")
     }
     else if (element.type == "image") { // Image
@@ -215,6 +228,10 @@ function addOption(element, arg, label, input, extra) {
     if (arg == "delete") { // Delete button
         optionsHTML = `
             <button id="options-${arg}" data-editor="${element.order}" class="delete-element">Delete Element</textarea>`
+    }
+    else if (arg == "note") { // Note/just text
+        optionsHTML = `
+            <p class="note">${label}</p>`
     }
     else if (input == "text") { // Small text input
         optionsHTML = `

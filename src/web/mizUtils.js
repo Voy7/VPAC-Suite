@@ -5,8 +5,10 @@ const dcs = require("./dcsUtils")
 // Converter: https://coordinates-converter.com/
 
 const mapInfo = {}
-mapInfo["Caucasus"] = { center: { lat: 45.746, lng: 34.1555 }}
+mapInfo["Caucasus"] = { center: { lat: 45.129444, lng: 34.265278 }}
+mapInfo["Marianas"] = { center: { lat: 13.484722, lng: 144.7975 }}
 mapInfo["PersianGulf"] = { center: { lat: 26.171819, lng: 56.241925 }}
+mapInfo["Syria"] = { center: { lat: 35.021667, lng: 35.900556 }}
 mapInfo["Falklands"] = { center: { lat: -52.280247, lng: -59.102165 }}
 
 // Convert .miz coords to lat, long.
@@ -15,7 +17,6 @@ function convertMapCoords(map, x, y) {
     let R = 6378.1
     let dr = Math.PI / 180
     let bearing = (Math.atan2(y, x) * (180 / Math.PI)) * dr
-    // console.log(Math.atan2(y, x) * (180 / Math.PI))
     let range = Math.sqrt(x * x + y * y)
     let lat = mapInfo[map].center.lat * dr
     let lng = mapInfo[map].center.lng * dr
@@ -25,11 +26,6 @@ function convertMapCoords(map, x, y) {
         Math.cos((range / 1000) / R) - Math.sin(lat) * Math.sin(lat)
     )
     return { lat: lat /= dr, lng: lng /= dr }
-}
-
-function test() {
-    let res = convertMapCoords("Caucasus", -168058, 461921)
-    console.log(res)
 }
 
 async function getMissionData(data) {
@@ -249,6 +245,30 @@ async function getMissionData(data) {
                 day: await get(data, "date.Day"),
                 month: await get(data, "date.Month"),
                 year: await get(data, "date.Year"),
+                time: await get(data, "start_time")
+            },
+            weather: {
+                name: await get(data, "weather.name"),
+                qnh: await get(data, "weather.qnh"),
+                temp: await get(data, "weather.season.temperature"),
+                dust: await get(data, "weather.dust_density"),
+                turbulence: await get(data, "weather.groundTurbulence"),
+                visibility: await get(data, "weather.visibility.distance"),
+                wind: {
+                    at0: { speed: await get(data, "weather.wind.atGround.speed"), dir: await get(data, "weather.wind.atGround.dir") },
+                    at2000: { speed: await get(data, "weather.wind.at2000.speed"), dir: await get(data, "weather.wind.at2000.dir") },
+                    at8000: { speed: await get(data, "weather.wind.at8000.speed"), dir: await get(data, "weather.wind.at8000.dir") }
+                },
+                clouds: {
+                    base: await get(data, "weather.clouds.base"),
+                    thickness: await get(data, "weather.clouds.thickness"),
+                    density: await get(data, "weather.clouds.density"),
+                    preset: await get(data, "weather.clouds.preset")
+                },
+                fog: {
+                    thickness: await get(data, "weather.fog.thickness"),
+                    visibility: await get(data, "weather.fog.visibility")
+                }
             }
         }
 
