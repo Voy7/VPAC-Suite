@@ -18,7 +18,7 @@ $(() => {
     // Static header briefing options.
     const name = document.querySelector("#briefing-name")
     name.addEventListener("input", () => {
-        briefing.name = parseIn(name.value.replaceAll(" ", "_"))
+        briefing.name = name.value.replaceAll(" ", "_")
         updateEditor()
     })
 
@@ -236,12 +236,12 @@ function addOption(element, arg, label, input, extra) {
     else if (input == "text") { // Small text input
         optionsHTML = `
             <label for="options-${arg}">${label}</label>
-            <input type="text" id="options-${arg}" data-editor="${element.order}" value="${parseOut(element.args[arg])}">`
+            <input type="text" id="options-${arg}" data-editor="${element.order}" value="Loading...">`
     }
     else if (input == "textarea") { // Big text block
         optionsHTML = `
             <label for="options-${arg}">${label}</label>
-            <textarea id="options-${arg}" data-editor="${element.order}">${parseOut(element.args[arg])}</textarea>`
+            <textarea id="options-${arg}" data-editor="${element.order}">${element.args[arg]}</textarea>`
     }
     else if (input == "checkbox") { // Checkbox toggle
         let checked = ''
@@ -291,14 +291,15 @@ function addOption(element, arg, label, input, extra) {
         })
     }
     else if (input == "text") { // Input texts
+        option.value = element.args[arg]
         option.addEventListener("input", event => {
-            briefElement.args[option.id.split("-")[1]] = parseIn(option.value)
+            briefElement.args[option.id.split("-")[1]] = option.value
             updateEditor()
         })
     }
     else if (input == "textarea") { // Textareas
         option.addEventListener("input", event => {
-            briefElement.args[option.id.split("-")[1]] = parseIn(option.value)
+            briefElement.args[option.id.split("-")[1]] = option.value
             updateEditor()
         })
     }
@@ -407,13 +408,4 @@ function getDragAfterElement(container, y) {
         }
         else return closest
     }, { offset: Number.NEGATIVE_INFINITY }).element
-}
-
-// Parsing before going into database functions.
-function parseIn(text) {
-    return text.replaceAll(`'`, `@1;`)
-}
-
-function parseOut(text) {
-    return text.replaceAll(`@1;`, `'`)
 }

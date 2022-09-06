@@ -22,11 +22,11 @@ function updateBriefing(briefing) {
             mapHere.parentNode.insertBefore(mapElem, mapHere.nextSibling)
         }
         else if (element.type == "header") {
-            addElement(`<h4 class="header">${parseOut(element.args.text)}</h4>`)
+            addElement(`<h4 class="header">${element.args.text}</h4>`)
         }
         else if (element.type == "text") {
-            if (element.args.centered) addElement(`<p class="textblock centered">${parseOut(element.args.text)}</p>`)
-            else addElement(`<p class="textblock">${parseOut(element.args.text)}</p>`)
+            if (element.args.centered) addElement(`<p class="textblock centered">${element.args.text}</p>`)
+            else addElement(`<p class="textblock">${element.args.text}</p>`)
         }
         else if (element.type == "waypointChart") {
             if (!miz) return addElement(`<div class="no-miz-element">Could not load element, no .miz included.</div>`)
@@ -567,10 +567,6 @@ function getUnitByName(name) {
         })
     })
     return returnUnit
-}
-
-function parseOut(text) {
-    return text.replaceAll(`@1;`, `'`)
 }
 
 // Set custom  map styles.

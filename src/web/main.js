@@ -99,7 +99,7 @@ function main(g) {
         // Custom dynamic URLs with arguments.
         if (req.url.startsWith("/mission/")) {
             wasCustom = true
-            let mission = req.url.split("/")[2]
+            let mission = decodeURI(req.url.split("/")[2])
             let info = await db.missionGetInfo(mission)
             let briefings = await db.briefingGetInfo("*")
             let briefing = null
@@ -108,7 +108,6 @@ function main(g) {
                 if (brief.name == mission) briefing = brief
             })
             if (briefing) briefing = await db.briefingGetInfo(briefing.id)
-            // console.log(briefing)
             if (info.get(mission) || briefing) {
                 info = info.get(mission)
                 let events = await db.missionGetEvent(mission, null)
@@ -128,6 +127,7 @@ function main(g) {
                         })
                     })
                 })
+                // console.log(JSON.stringify(briefing))
                 render(req, res, "mission", { mission, info, events, userList, briefing, dcs })
             }
             else render(req, res, "unknown")
@@ -205,7 +205,7 @@ function main(g) {
     io.sockets.on("connection", socket => {
         socket.on("briefing-update", async briefing => {
             console.log(briefing)
-            db.run(`UPDATE briefings SET name='${briefing.name}', public='${briefing.public}', elements='${JSON.stringify(briefing.elements)}', data='${JSON.stringify(briefing.data)}' WHERE id = ${briefing.id}`)
+            db.run(`UPDATE briefings SET name=?1, public=?2, elements=?3, data=?4 WHERE id=?5`, { 1: briefing.name, 2: briefing.public, 3: JSON.stringify(briefing.elements), 4: JSON.stringify(briefing.data), 5: briefing.id })
         })
 
         socket.on("upload-miz", async ({ id, file }) => {

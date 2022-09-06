@@ -6,11 +6,12 @@ const miz = require("./web/mizUtils")
 const luaJson = require("luaparse")
 
 // Run given query/queries.
-function run(queries) {
+function run(queries, values) {
     if (!Array.isArray(queries)) queries = [queries]
     db.serialize(() => {
         queries.forEach(query => {
-            db.run(query)
+            if (!values) db.run(query)
+            else db.run(query, values)
         })
     })
 }
@@ -20,7 +21,7 @@ function set(table, data) {
     db.serialize(() => {
         db.run(`DROP TABLE IF EXISTS ${table}`)
         db.run(`CREATE TABLE IF NOT EXISTS ${table} (data TEXT)`)
-        db.run(`REPLACE INTO ${table} VALUES ('${JSON.stringify(data)}')`)
+        db.run(`REPLACE INTO ${table} VALUES (?1)`, { 1: JSON.stringify(data) })
     })
 }
 
@@ -39,22 +40,21 @@ function get(table) {
 
 // Set data for user & create new users.
 function setUser(id, ucid, key, data) {
-    let where = `WHERE id = '${id}' OR ucid = '${ucid}' OR key = '${key}'`
     db.serialize(() => {
         db.run(`CREATE TABLE IF NOT EXISTS users (id TEXT, ucid TEXT, key TEXT, data TEXT)`)
-        db.get(`SELECT * FROM users ${where}`, (err, row) => {
+        db.get(`SELECT * FROM users WHERE id=?1 OR ucid=?2 OR key=?3`, { 1: id, 2: ucid, 3: key }, (err, row) => {
             if (!row) {
                 if (id != null && ucid != null && key != null) {
-                    db.run(`INSERT INTO users (id, ucid, key, data) VALUES ('${id}', '${ucid}', '${key}', '${JSON.stringify(data)}')`)
+                    db.run(`INSERT INTO users (id, ucid, key, data) VALUES (?1, ?2, ?3, ?4)`, { 1: id, 2: ucid, 3: key, 4: JSON.stringify(data) })
                 }
             }
             else {
                 if (key != null) {
-                    if (ucid != null) db.run(`UPDATE users SET ucid = '${ucid}', data = '${JSON.stringify(data)}' WHERE key = '${key}'`)
-                    else db.run(`UPDATE users SET data = '${JSON.stringify(data)}' WHERE key = '${key}'`)
+                    if (ucid != null) db.run(`UPDATE users SET ucid=?1, data=?2 WHERE key=?3`, { 1: ucid, 2: JSON.stringify(data), 3: key })
+                    else db.run(`UPDATE users SET data=?1 WHERE key=?2`, { 1: JSON.stringify(data), 2: key })
                 }
-                else if (id != null) db.run(`UPDATE users SET data = '${JSON.stringify(data)}' WHERE id = '${id}'`)
-                else if (ucid != null) db.run(`UPDATE users SET data = '${JSON.stringify(data)}' WHERE ucid = '${ucid}'`)
+                else if (id != null) db.run(`UPDATE users SET data=?1 WHERE id=?2`, { 1: JSON.stringify(data), 2: id })
+                else if (ucid != null) db.run(`UPDATE users SET data=?1 WHERE ucid=?2`, { 1: JSON.stringify(data), 2: ucid })
             }
         })
     })
@@ -76,7 +76,7 @@ function getUser(id, ucid, key) {
             })
         }
         else {
-            db.get(`SELECT * FROM users WHERE id ='${id}' OR ucid = '${ucid}' OR key = '${key}'`, (err, row) => {
+            db.get(`SELECT * FROM users WHERE id=?1 OR ucid=?2 OR key=?3`, { 1: id, 2: ucid, 3: key }, (err, row) => {
                 if (err) {
                     console.log(`Caught error in db fetch 'users': ${err}`.red)
                     resolve([])
@@ -98,18 +98,24 @@ function parseUserRow(row) {
     }
 }
 
+// Add an event with a mission name to the database.
 function missionAddEvent(mission, event, data) {
     db.serialize(() => {
         db.run(`CREATE TABLE IF NOT EXISTS missions (mission TEXT, event TEXT, data TEXT)`)
-        db.run(`INSERT INTO missions (mission, event, data) VALUES ('${mission}', '${event}', '${JSON.stringify(data)}')`)
+        db.run(`INSERT INTO missions (mission, event, data) VALUES (?1, ?2, ?3)`, { 1: mission, 2: event, 3: JSON.stringify(data) })
     })
 }
 
+// Get all, or specific events from a mission.
 function missionGetEvent(mission, event) {
     return p = new Promise((resolve, reject) => {
-        let where = ` WHERE mission = "${mission}"`
-        if (event != null) where += ` AND event = "${event}"`
-        db.all(`SELECT * FROM missions${where}`, (err, rows) => {
+        let query = `SELECT * FROM missions WHERE mission=?1`
+        let values = { 1: mission }
+        if (event != null) {
+            query += ` AND event=?2`
+            values = { 1: mission, 2: event }
+        }
+        db.all(query, values, (err, rows) => {
             if (!rows) resolve([])
             else {
                 let events = []
@@ -126,12 +132,17 @@ function missionGetEvent(mission, event) {
     })
 }
 
+// Get only stats of all/or specific mission.
 function missionGetInfo(mission) {
     return p = new Promise((resolve, reject) => {
         const missions = new Map()
-        let where = ""
-        if (mission != "*") where = `WHERE mission = "${mission}"`
-        db.all(`SELECT * FROM missions ${where}`, (err, rows) => {
+        let query = `SELECT * FROM missions`
+        let values = {}
+        if (mission != "*") {
+            query += ` WHERE mission=?1`
+            values = { 1: mission }
+        }
+        db.all(query, values, (err, rows) => {
             if (!rows) resolve([])
             else {
                 rows.forEach(row => {
@@ -171,14 +182,15 @@ function missionGetInfo(mission) {
     })
 }
 
+// Get info of squadron, and generate it if it didn't exist.
 function squadronGetInfo(id, role) {
     return p = new Promise((resolve, reject) => {
         let data = { description: "description.", callsigns: "C1,C2,C3", airframes: "A1,A2,A3", checkride: "No checkride info" }
         db.serialize(() => {
             db.run(`CREATE TABLE IF NOT EXISTS squadrons (id TEXT, role TEXT, data TEXT)`)
-            db.get(`SELECT * FROM squadrons WHERE id = "${id}"`, (err, row) => {
+            db.get(`SELECT * FROM squadrons WHERE id=?1`, { 1: id }, (err, row) => {
                 if (!row) {
-                    db.run(`INSERT INTO squadrons (id, role, data) VALUES ("${id}", "${role}", '${JSON.stringify(data)}')`)
+                    db.run(`INSERT INTO squadrons (id, role, data) VALUES (?1, ?2, ?3)`, { 1: id, 2: role, 3: JSON.stringify(data) })
                     resolve(data)
                 }
                 else resolve(JSON.parse(row.data))
@@ -187,12 +199,17 @@ function squadronGetInfo(id, role) {
     })
 }
 
+// Get info of all/of specific resource (WIP).
 function resourceGetInfo(resource) {
     return p = new Promise((resolve, reject) => {
         const resources = new Map()
-        let where = ""
-        if (resource != "*") where = `WHERE resource = "${resource}"`
-        db.all(`SELECT * FROM resources ${where}`, (err, rows) => {
+        let query = `SELECT * FROM resources`
+        let values = {}
+        if (resource != "*") {
+            query = `SELECT * FROM resources WHERE resource=?1`
+            values = { 1: resource }
+        }
+        db.all(query, values, (err, rows) => {
             if (!rows) resolve([])
             else {
                 rows.forEach(row => {
@@ -209,9 +226,9 @@ function resourceGetInfo(resource) {
     })
 }
 
+// Get basic info on all briefings, or all data on specific briefing.
 function briefingGetInfo(id, name) {
     return p = new Promise((resolve, reject) => {
-        // let data = { description: "description.", callsigns: "C1,C2,C3", airframes: "A1,A2,A3" }
         db.serialize(() => {
             db.run(`CREATE TABLE IF NOT EXISTS briefings (id TEXT, name TEXT, public TEXT, elements TEXT, data TEXT)`)
             if (id == "*") {
@@ -234,16 +251,19 @@ function briefingGetInfo(id, name) {
                 })
             }
             else {
-                let select = `SELECT * FROM briefings WHERE id = "${id}"`
-                if (name) `SELECT * FROM briefings WHERE name = "${name}"`
-                db.get(select, (err, row) => {
+                let query = `SELECT * FROM briefings WHERE id=?1`
+                let values = { 1: id }
+                if (name) {
+                    query = `SELECT * FROM briefings WHERE name=?1`
+                    values = { 1: name }
+                }
+                db.get(query, values, (err, row) => {
                     if (!row) {
                         if (!id) return
                         db.run(`INSERT INTO briefings (id, name, public, elements, data) VALUES ("${id}", "Untitled Briefing", "false", '[]', '[]')`)
                         resolve([])
                     }
                     else {
-                        // const mizRaw = await fs.readFileSync(`miz/${id}/mission`)
                         fs.readFile(`miz/${id}/mission`, "utf8", async (err, mizRaw) => {
                             let mizRawData = null
                             if (!err) mizRawData = await miz.getMissionData(luaJson.parse(mizRaw.toString()))
@@ -261,6 +281,17 @@ function briefingGetInfo(id, name) {
             }
         })
     })
+}
+
+// Parsing illegal charecters.
+function In(text) {
+    if (!text) return text
+    return text.replaceAll(`'`, `&1;`)
+}
+
+function Out(text) {
+    if (!text) return text
+    else return text.replaceAll(`&1;`, `'`)
 }
 
 // Export modules.

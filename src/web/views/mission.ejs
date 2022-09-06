@@ -68,15 +68,17 @@
                                     if (unitType == "A" || unitType == "H") aakills++
                                     else agkills ++
 
-                                    if (!clusters.get(entry.killedUnit)) clusters.set(entry.killedUnit, 0)
-                                    if (!killInfo.get(entry.killedUnit)) killInfo.set(entry.killedUnit, [])
-                                    clusters.set(entry.killedUnit, clusters.get(entry.killedUnit) + 1)
-                                    let info = killInfo.get(entry.killedUnit)
+                                    if (!clusters.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)) clusters.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, 0)
+                                    if (!killInfo.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)) killInfo.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, [])
+                                    clusters.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, clusters.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`) + 1)
+                                    let info = killInfo.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)
                                     info.push({
+                                        unit: entry.killedUnit,
+                                        side: entry.killedSide,
                                         weapon: dcs.parseShort(entry.weapon),
                                         time: dcs.parseTimeShort(entry.time)
                                     })
-                                    killInfo.set(entry.killedUnit, info)
+                                    killInfo.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, info)
                                 }
                                 if (entry.event == "TAKEOFF") {
                                     if (entry.airfield == "Unknown") return
@@ -130,11 +132,16 @@
                                         </div>
                                         <span class="time"><%= info.time %></span>
                                     </div>
-                                <% } else { %>
+                                <% } else {
+                                    let unitInfo = killInfo.get(key)[0] %>
                                     <div class="kill-entry" data-entry-id="<%= entryID %>">
                                         <div class="unit">
-                                            <img src="<%= dcs.unitIcon(key) %>" />
-                                            <p><span><%= clusters.get(key) %> x</span> <%= dcs.parseLong(key) %></p>
+                                            <% if (unitInfo.side == "1" || unitInfo.side == "-1") { %>
+                                                <img src="<%= dcs.unitIcon(unitInfo.unit) %>" />
+                                            <% } else { %>
+                                                <img src="<%= dcs.unitIcon(unitInfo.unit) %>" class="icon-blue" />
+                                            <% } %>
+                                            <p><span><%= clusters.get(key) %> x</span> <%= dcs.parseLong(unitInfo.unit) %></p>
                                         </div>
                                         <span class="details" data-arrow-id="<%= entryID %>">&#9655;</span>
                                     </div>
@@ -144,7 +151,11 @@
                                             number++ %>
                                             <div class="info-entry">
                                                 <div class="weapon">
-                                                    <div class="dot"></div>
+                                                    <% if (info.side == "1" || info.side == "-1") { %>
+                                                        <div class="dot"></div>
+                                                    <% } else { %>
+                                                        <div class="dot icon-blue"></div>
+                                                    <% } %>
                                                     <p><span><%= number %>. </span><%= info.weapon %></p>
                                                 </div>
                                                 <p class="time"><%= info.time %></p>
@@ -246,8 +257,8 @@
             <p class="map-loading-text">If the map doesn't load in a few seconds, try refreshing the page.</p>
         </div>
         <script>
-            let miz = JSON.parse('<%- JSON.stringify(briefing.miz).replaceAll("\\", "\\\\") %>')
-            let briefing = JSON.parse('<%- JSON.stringify(briefing).replaceAll("\\", "\\\\") %>')
+            let miz = JSON.parse(JSON.stringify(JSON.parse('<%- JSON.stringify(briefing.miz).replaceAll(/\'/g, "&1;").replaceAll("\\", "\\\\") %>')).replaceAll("&1;", "'"))
+            let briefing = JSON.parse(JSON.stringify(JSON.parse('<%- JSON.stringify(briefing).replaceAll(/\'/g, "&1;").replaceAll("\\", "\\\\") %>')).replaceAll("&1;", "'"))
             updateBriefing(briefing)
         </script>
     <% } %>

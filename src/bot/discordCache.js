@@ -9,7 +9,7 @@ function discordCacheLoop(g) {
     g.guild.members.cache.forEach(member => {
         members.push({
             id: member.user.id,
-            name: member.user.username.replace(/'/g, ""),
+            name: member.user.username,
             nickname: member.nickname,
             avatar: member.user.avatarURL(),
             roles: member._roles

@@ -90,6 +90,8 @@ body { background-image: url("/assets/bg2.png"); }
     margin-right: 5px;
 }
 
+.kill-entry .unit .icon-blue { filter: hue-rotate(180deg); }
+
 .kill-entry .unit p {
     font-size: 16px;
     color: rgb(220, 220, 220);
@@ -258,7 +260,7 @@ body { background-image: url("/assets/bg2.png"); }
 .toggle-container input:checked + .toggle-slider:before { transform: translateX(14px); }
 
 #about-container .stats {
-    width: 400px;
+    width: 320px;
     margin: 20px;
     padding: 5px 10px;
     background-color: var(--bg-color-1);
@@ -291,6 +293,7 @@ body { background-image: url("/assets/bg2.png"); }
     width: 100%;
     margin: 5px;
     color: var(--border-color-1);
+    background-color: var(--border-color-1);
 }
 
 @media screen and (max-width: 900px) {

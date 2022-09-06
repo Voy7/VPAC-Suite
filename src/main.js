@@ -1,4 +1,4 @@
-﻿// Import node modules & initialize express app.
+﻿// Import node modules.
 require("colors")
 
 // Main global variable.

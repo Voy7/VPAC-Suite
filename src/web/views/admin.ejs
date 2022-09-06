@@ -22,13 +22,13 @@
             <div id="select-squadrons" class="select-list">
                 <h4>All Squadrons</h4>
                 <ul>
-                    <% squadrons.forEach(squadron => { %>
-                        <li data-squadron="<%= squadron.squadron.abbreviation %>"><%= squadron.squadron.name %></li>
+                    <% squadrons.forEach((squadron, index) => { %>
+                        <li data-squadron="<%= index %>"><%= squadron.squadron.name %></li>
                     <% }) %>
                 </ul>
             </div>
-            <% squadrons.forEach(squadron => { %>
-                <div class="squadron-container" data-squadron-sec="<%= squadron.squadron.abbreviation %>">
+            <% squadrons.forEach((squadron, index) => { %>
+                <div class="squadron-container" data-squadron-sec="<%= index %>">
                     <h4><%= squadron.squadron.name %></h4>
                     <p>Note: Squadron name and members are tied to the Discord role ID: <%= squadron.squadron.id %></p>
                     <form action="/squadron_update" method="POST" class="options-text">
@@ -49,7 +49,7 @@
                 </div>
             <% })
             if (squadrons.length > 0) { %>
-                <script>openList("squadron", "<%- squadrons[0].squadron.abbreviation %>")</script>
+                <script>openList("squadron", 0)</script>
             <% } %>
         </section>
 
@@ -61,13 +61,13 @@
             <div id="select-missions" class="select-list">
                 <h4>All Missions</h4>
                 <ul>
-                    <% missions.forEach(mission => { %>
-                        <li data-mission="<%= mission.name %>"><%= mission.name.replace(/_/g, " ") %></li>
+                    <% missions.forEach((mission, index) => { %>
+                        <li data-mission="<%= index %>"><%= mission.name.replace(/_/g, " ") %></li>
                     <% }) %>
                 </ul>
             </div>
-            <% missions.forEach(mission => { %>
-                <div class="mission-container" data-mission-sec="<%= mission.name %>">
+            <% missions.forEach((mission, index) => { %>
+                <div class="mission-container" data-mission-sec="<%= index %>">
                     <h4><%= mission.name.replace(/_/g, " ") %></h4>
                     <form action="/mission_update" method="POST" class="options-text">
                         <input type="hidden" value="<%= mission.name %>" name="mission">
@@ -82,7 +82,7 @@
                 </div>
             <% })
             if (missions.length > 0) { %>
-                <script>openList("mission", "<%- missions[0].name %>")</script>
+                <script>openList("mission", 0)</script>
             <% } %>
         </section>
 
@@ -94,8 +94,8 @@
             <div id="select-resources" class="select-list">
                 <h4>All Resources</h4>
                 <ul>
-                    <% resources.forEach(resource => { %>
-                        <li data-resource="<%= resource.name %>"><%= resource.name %></li>
+                    <% resources.forEach((resource, index) => { %>
+                        <li data-resource="<%= index %>"><%= resource.name %></li>
                     <% }) %>
                 </ul>
                 <button class="create-new">Create Resource</button>
@@ -108,8 +108,8 @@
                     <button type="submit">Update</button>
                 </form>
             </div>
-            <% resources.forEach(resource => { %>
-                <div class="resource-container" data-resource-sec="<%= resource.name %>">
+            <% resources.forEach((resource, index) => { %>
+                <div class="resource-container" data-resource-sec="<%= index %>">
                     <h4><%= resource.name %></h4>
                     <form action="/resource_update" method="POST" class="options-text">
                         <input type="hidden" value="<%= resource.name %>" name="resource">
@@ -122,7 +122,7 @@
                 </div>
             <% })
             if (resources.length > 0) { %>
-                <script>openList("resource", "<%- resources[0].name %>")</script>
+                <script>openList("resource", 0)</script>
             <% } %>
 
 
@@ -136,8 +136,8 @@
             <div id="select-briefings" class="select-list">
                 <h4>All Briefings</h4>
                 <ul>
-                    <% briefings.forEach(briefing => { %>
-                        <li data-briefing="<%= briefing.id %>">
+                    <% briefings.forEach((briefing, index) => { %>
+                        <li data-briefing="<%= index %>">
                             <% if (briefing.public == "true") { %>
                                 <div class="public-true"></div>
                             <% } else { %>
@@ -164,8 +164,8 @@
                     <button type="submit">Create</button>
                 </form>
             </div>
-            <% briefings.forEach(briefing => { %>
-                <div class="briefing-container" data-briefing-sec="<%= briefing.id %>">
+            <% briefings.forEach((briefing, index) => { %>
+                <div class="briefing-container" data-briefing-sec="<%= index %>">
                     <h4><%= briefing.name.replace(/_/g, " ") %></h4>
                     <p>Briefing is Public: <%= briefing.public.toUpperCase() %></p>
                     <a href="/briefing-editor/<%= briefing.id %>" class="options-open">Open Editor</a>
@@ -176,7 +176,7 @@
                 </div>
             <% })
             if (briefings.length > 0) { %>
-                <script>openList("briefing", "<%- briefings[0].id %>")</script>
+                <script>openList("briefing", 0)</script>
             <% } %>
 
             

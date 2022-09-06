@@ -177,6 +177,9 @@ const unitList = [
     ["AGM-65H", "AGM-65H", "AGM-65H Maverick", "W"],
     ["AGM-65K", "AGM-65K", "AGM-65K Maverick", "W"],
     ["AGM-65L", "AGM-65L", "AGM-65L Maverick", "W"],
+
+    // Misc
+    ["Unknown", "Unknown", "Unknown", "S"],
 ]
 
 function parseShort(name) {
