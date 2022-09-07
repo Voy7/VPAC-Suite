@@ -51,29 +51,42 @@
                 </div>
             </section>
         </section>
-        <section id="main-members-container">
-            <h3>Group Members</h3>
-            <% let members = []
-            squadrons.forEach(squadron => {
-                squadron.members.forEach(member => {
-                    let duplicate = false
-                    members.forEach(member2 => {
-                        if (member.id == member2.id) duplicate = true
+        <div id="right-column">
+            <section id="main-discord-container">
+                <div id="top">
+                    <img src="/assets/logo.gif" />
+                    <div id="text">
+                        <h3>Virtual Pacific Air Command</h3>
+                        <p><%= memberCount %> Discord Members</p>
+                    </div>
+                </div>
+                <a href="https://discord.gg/pGauzjDVNs">Join Discord Server</a>
+            </section>
+
+            <section id="main-members-container">
+                <h3>Group Members</h3>
+                <% let members = []
+                squadrons.forEach(squadron => {
+                    squadron.members.forEach(member => {
+                        let duplicate = false
+                        members.forEach(member2 => {
+                            if (member.id == member2.id) duplicate = true
+                        })
+                        if (!duplicate) members.push(member)
                     })
-                    if (!duplicate) members.push(member)
                 })
-            })
-            let activeUsers = []
-            let otherUsers = []
-            members.forEach(user => {
-                if (user.data.status) activeUsers.push(user)
-                else otherUsers.push(user)
-            })
-            let users = [...activeUsers, ...otherUsers]
-            users.forEach(user => { %>
-                <%- include("partials/user", { user, group: "none" }) %>
-            <% }) %>
-        </section>
+                let activeUsers = []
+                let otherUsers = []
+                members.forEach(user => {
+                    if (user.data.status) activeUsers.push(user)
+                    else otherUsers.push(user)
+                })
+                let users = [...activeUsers, ...otherUsers]
+                users.forEach(user => { %>
+                    <%- include("partials/user", { user, group: "none" }) %>
+                <% }) %>
+            </section>
+        </div>
     </section>
 
     <%- include("partials/footer") %>

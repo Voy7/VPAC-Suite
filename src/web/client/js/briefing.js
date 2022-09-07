@@ -77,10 +77,10 @@ function updateBriefing(briefing) {
                 if (waypoint && prevWaypoint) {
                     let dist = google.maps.geometry.spherical.computeDistanceBetween (waypoint.loc, prevWaypoint.loc)
                     if (waypoint.id == 2 && dist < 1852) distance = "-"
-                    else if (dist < 3704) distance = `${(dist * 3.28).toFixed(0)} ft`
-                    else distance = `${(dist / 1852).toFixed(0)} nm`
+                    else if (dist < 3704) distance = `${Math.round(dist * 3.28).toLocaleString("en-US")} ft`
+                    else distance = `${Math.round(dist / 1852).toLocaleString("en-US")} nm`
                 }
-                if (waypoint) alt = `${(waypoint.alt * 3.28).toFixed(0)} ft`
+                if (waypoint) alt = `${Math.round(waypoint.alt * 3.28).toLocaleString("en-US")} ft`
                 return { loc, task, distance, alt }
             }
         }
@@ -229,7 +229,6 @@ function initMap() {
         zoomControl: false,
         clickableIcons: false,
         mapTypeId: "terrain",
-        // tilt: 45,
         styles: mapStyles
     })
 
@@ -252,32 +251,6 @@ function initMap() {
         $(".sam-label").fadeOut(0)
     }, 1000)
 
-    // Toggle map elements
-    // let showOrbits = true
-    // document.addEventListener("keydown", event => {
-    //     if (event.key.toLowerCase() == "o") {
-    //         coalitions.forEach(coalition => {
-    //             miz.groups[coalition].forEach(group => {
-    //                 if (group.task != "AWACS" && group.task != "Refueling") return
-    //                 if (showOrbits == true) {
-    //                     flightPath[group.name].setMap(undefined)
-    //                     $(".aircraft").fadeOut(300)
-    //                     $(".aircraft-label").fadeOut(300)
-    //                 }
-    //                 else {
-    //                     flightPath[group.name].setMap(map)
-    //                     $(".aircraft").fadeIn(300)
-    //                     $(".aircraft-label").fadeIn(300)
-    //                 }
-    //             })
-    //         })
-    //         if (showOrbits) showOrbits = false
-    //         else showOrbits = true
-    //     }
-    // })
-
-
-
     // Only populate map once miz is loaded.
     const waitMiz = setInterval(() => {
         if (miz) {
@@ -299,12 +272,12 @@ function initMap() {
 
         // Bullseyes, blue & red.
         createHTMLMapMarker({
-            map, position: miz.bullseyes.blue.loc,
-            html: `<div class="bullseye-1 bullseye-blue map-item"></div><div class="bullseye-2 bullseye-blue map-item"></div><div class="bullseye-3 bullseye-blue map-item"></div>`
-        })
-        createHTMLMapMarker({
             map, position: miz.bullseyes.red.loc,
             html: `<div class="bullseye-1 bullseye-red map-item"></div><div class="bullseye-2 bullseye-red map-item"></div><div class="bullseye-3 bullseye-red map-item"></div>`
+        })
+        createHTMLMapMarker({
+            map, position: miz.bullseyes.blue.loc,
+            html: `<div class="bullseye-1 bullseye-blue map-item"></div><div class="bullseye-2 bullseye-blue map-item"></div><div class="bullseye-3 bullseye-blue map-item"></div>`
         })
 
         // Groups / aircraft.
@@ -511,9 +484,6 @@ function createHTMLMapMarker({ OverlayView = google.maps.OverlayView,  ...args }
             if (this.html) {
                 this.div.innerHTML = this.html
             }
-            // google.maps.event.addDomListener(this.div, 'click', event => {
-            //     google.maps.event.trigger(this, 'click')
-            // })
         }
         appendDivToOverlay() {
             const panes = this.getPanes()
@@ -573,9 +543,6 @@ function getUnitByName(name) {
 const mapStyles = [
     { elementType: "geometry", stylers: [{ color: "#050c17" }] },
     { elementType: "labels", stylers: [{ visibility: "off" }] },
-    // { elementType: "labels.icon", stylers: [{ color: "#050c17" }] },
-    // { elementType: "labels.text", stylers: [{ color: "#050c17" }] },
-    // { elementType: "labels.text.fill", stylers: [{ color: "#505050" }] },
     { featureType: "poi", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
     { featureType: "road", stylers: [{ visibility: "off" }] },
     { featureType: "transit", stylers: [{ visibility: "off" }] },

@@ -30,7 +30,9 @@ function main(g) {
     // Custom URL requests with more info.
     app.get("/", async (req, res) => {
         let squadrons = await squadronsAndMembers(g.config.web.squadrons)
-        render(req, res, "home", { squadrons, dcs })
+        let guild = await db.get("guild")
+        let memberCount = guild.members.length
+        render(req, res, "home", { squadrons, memberCount, dcs })
     })
 
     app.get("/squadrons", async (req, res) => {
