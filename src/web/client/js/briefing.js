@@ -240,14 +240,10 @@ function initMap() {
 
     // Wait a second to let the map finish loading.
     setTimeout(() => {
-        map.addListener("center_changed", () => { updateMap() })
         map.addListener("zoom_changed", () => {
-            updateMap()
-            console.log(map.zoom)
             if (map.zoom <= 7) $(".sam-label").fadeOut(500)
             else $(".sam-label").fadeIn(500)
         })
-        updateMap()
         $(".sam-label").fadeOut(0)
     }, 1000)
 
@@ -262,7 +258,8 @@ function initMap() {
     // Update/put all the elements on the map.
     function populateMap() {
         const coalitions = ["red", "blue"]
-        const flightPath = {}
+        const flightPath = []
+        const threatRings = []
         let waypointPath = null
         let firstAircraft = null
 
@@ -303,13 +300,23 @@ function initMap() {
                     if (group.hiddenOnMFD == "true") return
                     let ringUnit = null
                     group.units.forEach(unit => {
-                        if (unit.ring != null) ringUnit = unit
+                        if (unit.ring) ringUnit = unit
                     })
 
-                    let html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${group.units[0].short}</div>`
-                    if (ringUnit != null) html = `<img src="${ringUnit.icon}" class="sam icon-${coalition} map-item" /><div class="sam-ring ring-${coalition} map-item" data-size="${ringUnit.ring}"></div><div class="sam-label map-item" style="z-index: ${ringUnit.ring};">${ringUnit.short}</div>`
-                    
+                    let html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${group.units[0].short}</div>`                    
+                    if (ringUnit) html = `<img src="${ringUnit.icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${ringUnit.short}</div>`                    
                     createHTMLMapMarker({ map, html, position: group.loc })
+
+                    if (ringUnit) {
+                        let color = "#ffffff"
+                        if (coalition == "blue") color = "#00ffff"
+                        if (coalition == "red") color = "#ff6464"
+                        let threatRing = new google.maps.Circle({
+                            center: group.loc, strokeColor: color, strokeWeight: 0.75, fillColor: color, fillOpacity: 0.04, radius: ringUnit.ring * 2350//1852
+                        })
+                        threatRing.setMap(map)
+                        threatRings.push(threatRing)
+                    }
                 }
                 else if (group.type == "ship") {
                     if (group.hiddenOnMFD == "true") return
@@ -322,26 +329,31 @@ function initMap() {
                     // Racetrack aircraft
                     if (group.task == "Refueling" || group.task == "AWACS") {
                         if (coalition != "blue") return
-                        let path = []
-                        let length = group.route.length - 1
-                        if (length < 2) return
                         group.route.forEach(waypoint => {
-                            if (!waypoint || waypoint.id < length - 1) return
-                            path.push(waypoint.loc)
-                            if (waypoint.id == length - 1) {
-                                let angle = google.maps.geometry.spherical.computeHeading(waypoint.loc, group.route[length].loc)
+                            if (!waypoint) return
+                            if (waypoint.orbit == "Circle") {
+                                let html = `<img src="${group.units[0].icon}" class="aircraft icon-${coalition} map-item" style="transform: translate(-50%, -50%) rotate(0deg);" /><div class="aircraft-label map-item aircraft-${coalition}">${group.units[0].short} (${group.name.split('-')[0]})</div>`
+                                createHTMLMapMarker({ map, html, position: waypoint.loc })
+                                let orbit = new google.maps.Circle({
+                                    center: waypoint.loc, strokeColor: "#326973", strokeWeight: 1.5, radius: 10000
+                                })
+                                orbit.setMap(map)
+                            }
+                            if (waypoint.orbit == "Race-Track") {
+                                let flyTo = group.route[waypoint.id + 1]
+                                if (!flyTo) return
+                                let angle = google.maps.geometry.spherical.computeHeading(waypoint.loc, flyTo.loc)
                                 let html = `<img src="${group.units[0].icon}" class="aircraft icon-${coalition} map-item" style="transform: translate(-50%, -50%) rotate(${angle}deg);" /><div class="aircraft-label map-item aircraft-${coalition}">${group.units[0].short} (${group.name.split('-')[0]})</div>`
                                 createHTMLMapMarker({ map, html, position: waypoint.loc })
-                            }
-                            else {
-                                let html = `<div class="aircraft-orbit map-item" style="background-color: #326973;"></div>`
-                                createHTMLMapMarker({ map, html, position: waypoint.loc })
+                                html = `<div class="aircraft-orbit map-item" style="background-color: #326973;"></div>`
+                                createHTMLMapMarker({ map, html, position: flyTo.loc })
+                                let path = [waypoint.loc, flyTo.loc]
+                                flightPath[group.name] = new google.maps.Polyline({
+                                    path, strokeColor: "#326973", strokeWeight: 2.5, strikeStyle: "Dashed"
+                                })
+                                flightPath[group.name].setMap(map)
                             }
                         })
-                        flightPath[group.name] = new google.maps.Polyline({
-                            path, strokeColor: "#326973", strokeWeight: 2.5
-                        })
-                        flightPath[group.name].setMap(map)
                     }
                 }
             })
@@ -428,44 +440,14 @@ function initMap() {
                 else map.setMapTypeId("satellite")
             }
             if (option == "sams") {
-                if (options[option]) $(".sam-ring").fadeIn(300)
-                else $(".sam-ring").fadeOut(0)
+                if (options[option]) threatRings.forEach(ring => { ring.setMap(map) })
+                else threatRings.forEach(ring => { ring.setMap(null) })
             }
             if (option == "airports") {
                 if (options[option]) $(".airport").fadeIn(300)
                 else $(".airport").fadeOut(0)
             }
         }
-    }
-
-
-
-    // Runs every time map view is moved.
-    function updateMap() {
-        let distanceInMeters = google.maps.geometry.spherical.computeDistanceBetween(
-            ruler1.getPosition(),
-            ruler2.getPosition()
-        )
-        
-        let mileInPixels = distanceInPixels(map, ruler1, ruler2)
-
-        let samRings = document.querySelectorAll(".sam-ring")
-        samRings.forEach(sam => {
-            let size = parseInt(sam.dataset.size)
-            sam.style.width = `${size * 2 * mileInPixels}px`
-            sam.style.height = `${size * 2 * mileInPixels}px`
-        })
-    }
-
-    function distanceInPixels(map, marker1, marker2) {
-        var p1 = map.getProjection().fromLatLngToPoint(marker1.getPosition());
-        var p2 = map.getProjection().fromLatLngToPoint(marker2.getPosition());
-
-        var pixelSize = Math.pow(2, -map.getZoom());
-
-        var d = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y))/pixelSize;
-
-        return d
     }
 }
 

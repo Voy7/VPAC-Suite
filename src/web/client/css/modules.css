@@ -1,0 +1,71 @@
+body { background-image: url("/assets/bg1.png"); }
+
+#main-developers-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0 10px 50px 10px;
+}
+
+.developer-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 350px;
+    min-height: 150px;
+    background-color: var(--bg-color-1);
+    border: 1px solid var(--border-color-1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.developer-container .header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    padding: 3px;
+    border-bottom: 1px solid var(--border-color-1);
+    background-color: rgb(40, 40, 60);
+}
+
+.developer-container .header img {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid gray;
+    border-radius: 50%;
+}
+
+.developer-container .header h3 {
+    font-size: 18px;
+}
+
+.developer-container .body { width: 100%; padding: 0 10px 10px 10px; }
+
+.developer-container .body h4 {
+    margin: 10px 0 3px 0;
+    font-weight: normal;
+    font-size: 16px;
+    color: rgb(128, 128, 128);
+}
+
+.developer-container .module {
+    margin: 1px 0;
+    font-size: 15px;
+    color: rgb(170, 170, 170);
+}
+
+.developer-container .Released { color: rgb(180, 255, 180); }
+.developer-container .Early { color: rgb(180, 255, 180); }
+.developer-container .In { color: rgb(180, 255, 255); }
+
+.developer-container table { width: 100%; }
+.developer-container td { padding: 0 3px; }
+.developer-container tr:hover { background-color: var(--bg-color-2); cursor: pointer; }
+.developer-container tr, .developer-container td { color: inherit; }
+.developer-container .name { min-width: 120px; padding-right: 10px; }

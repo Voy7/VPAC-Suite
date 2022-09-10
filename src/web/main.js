@@ -48,10 +48,9 @@ function main(g) {
 
     app.get("/resources", async (req, res) => render(req, res, "resources"))
 
-    app.get("/briefing", async (req, res) => {
-        let data = await fs.readFileSync(`./mission`)
-        data = await miz.getMissionData(luaJson.parse(data.toString()))
-        render(req, res, "briefing", { data, dcs })
+    app.get("/modules", async (req, res) => {
+        let developers = await db.developerGetInfo("*")
+        render(req, res, "modules", { developers })
     })
 
     app.get("/admin", async (req, res) => {
@@ -59,7 +58,8 @@ function main(g) {
         let missions = await db.missionGetInfo("*")
         let resources = await db.resourceGetInfo("*")
         let briefings = await db.briefingGetInfo("*")
-        render(req, res, "admin", { squadrons, missions, resources, briefings }, { adminOnly: true })
+        let developers = await db.developerGetInfo("*")
+        render(req, res, "admin", { squadrons, missions, resources, briefings, developers }, { adminOnly: true })
     })
 
     app.get("/database", async (req, res) => {

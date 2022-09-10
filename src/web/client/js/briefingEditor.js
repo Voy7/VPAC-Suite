@@ -24,7 +24,7 @@ $(() => {
 
     const public = document.querySelector("#briefing-public")
     public.addEventListener("input", () => {
-        briefing.public = public.checked
+        briefing.public = `${public.checked}`
         updateEditor()
     })
 
@@ -158,15 +158,18 @@ function selectElement(order) {
     if (element.type == "map") { // Map
         addOption(element, "note", "There are no options for this element.")
         if (!miz) return addOption(element, "no-miz")
-        let units = []
+        let unitsInfo = []
+        let unitsUnknown = []
         ;["blue", "red"].forEach(coalition => {
             miz.groups[coalition].forEach(group => {
                 group.units.forEach(unit => {
-                    units.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
+                    unitsInfo.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
+                    if (unit.type == unit.long) unitsUnknown.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
                 })
             })
         })
-        addOption(element, "dev1", "Unit List Data (For Developer Debug)", "dropdown", units)
+        addOption(element, "dev1", "Unit List Data (For Developer Debug)", "dropdown", unitsInfo)
+        addOption(element, "dev1", "Unit Uncategorized (For Developer Debug)", "dropdown", unitsUnknown)
     }
     else if (element.type == "header") { // Header
         addOption(element, "text", "Header Text", "text")

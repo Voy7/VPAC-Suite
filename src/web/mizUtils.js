@@ -6,7 +6,7 @@ const dcs = require("./dcsUtils")
 
 const mapInfo = {}
 mapInfo["Caucasus"] = { center: { lat: 45.129444, lng: 34.265278 }}
-mapInfo["Marianas"] = { center: { lat: 13.484722, lng: 144.7975 }}
+mapInfo["MarianaIslands"] = { center: { lat: 13.484722, lng: 144.7975 }}
 mapInfo["PersianGulf"] = { center: { lat: 26.171819, lng: 56.241925 }}
 mapInfo["Syria"] = { center: { lat: 35.021667, lng: 35.900556 }}
 mapInfo["Falklands"] = { center: { lat: -52.280247, lng: -59.102165 }}
@@ -51,6 +51,7 @@ async function getMissionData(data) {
                                 name: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.name`),
                                 type: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`),
                                 short: dcs.parseShort(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
+                                long: dcs.parseLong(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
                                 icon: dcs.unitIcon(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
                                 ring: dcs.unitThreatRing(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.x`),
@@ -93,6 +94,7 @@ async function getMissionData(data) {
                                 name: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.name`),
                                 type: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`),
                                 short: dcs.parseShort(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
+                                long: dcs.parseLong(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
                                 icon: dcs.unitIcon(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
                                 ring: dcs.unitThreatRing(await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.type`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.ship.group.${ship.key.value}.units.${unit.key.value}.x`),
@@ -146,6 +148,7 @@ async function getMissionData(data) {
                                 name: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.name`),
                                 type: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.type`),
                                 short: dcs.parseShort(await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.type`)),
+                                long: dcs.parseLong(await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.type`)),
                                 icon: dcs.unitIcon(await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.type`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.x`),
                                 y: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.units.${unit.key.value}.y`),
@@ -155,13 +158,20 @@ async function getMissionData(data) {
                         })
                         let routes = await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points`)
                         routes.forEach(async route => {
-                            let routes = await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}`)
+                            let tasks = await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.task.params.tasks`)
+                            let orbit = "None"
+                            tasks.forEach(async task => {
+                                let taskID = await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.task.params.tasks.${task.key.value}.id`)
+                                if (taskID == "Orbit" && await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.task.params.tasks.${task.key.value}.params.pattern`) == "Circle") orbit = "Circle"
+                                if (taskID == "Orbit" && await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.task.params.tasks.${task.key.value}.params.pattern`) == "Race-Track") orbit = "Race-Track"
+                            })
                             routeList[route.key.value] = {
                                 id: route.key.value,
                                 loc: convertMapCoords(map, await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.x`), await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.y`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.x`),
                                 y: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.y`),
-                                alt: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.alt`)
+                                alt: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.alt`),
+                                orbit: orbit
                             }
                         })
                         groups[coalition].push({
@@ -200,6 +210,7 @@ async function getMissionData(data) {
                                 name: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.name`),
                                 type: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.type`),
                                 short: dcs.parseShort(await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.type`)),
+                                long: dcs.parseLong(await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.type`)),
                                 icon: dcs.unitIcon(await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.type`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.x`),
                                 y: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.units.${unit.key.value}.y`),

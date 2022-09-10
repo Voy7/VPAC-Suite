@@ -16,18 +16,20 @@ function main(g, app, render, getLoginInfo) {
         return text.replace(/"/g, `'`)
     }
 
+    // Missions
     app.post("/mission_update", async (req, res) => {
         if (!await authUser(req, res)) return
         db.run(`UPDATE missions SET mission=?1 WHERE mission=?2`, { 1: req.body.missionName.replace(/ /g, '_'), 2: req.body.mission })
-        res.redirect("/admin")
+        res.redirect(`/admin?s=missions&i=${req.body.index}`)
     })
 
     app.post("/mission_delete", async (req, res) => {
         if (!await authUser(req, res)) return
         db.run(`DELETE FROM missions WHERE mission=?1`, { 1: req.body.mission })
-        res.redirect("/admin")
+        res.redirect(`/admin?s=missions`)
     })
 
+    // Squadrons
     app.post("/squadron_update", async (req, res) => {
         if (!await authUser(req, res)) return
         let data = {
@@ -37,9 +39,10 @@ function main(g, app, render, getLoginInfo) {
             checkride: req.body.squadronCheckride
         }
         db.run(`UPDATE squadrons SET data=?1 WHERE id=?2`, { 1: JSON.stringify(data), 2: req.body.squadron })
-        res.redirect("/admin")
+        res.redirect(`/admin?s=squadrons&i=${req.body.index}`)
     })
 
+    // Briefings
     app.post("/briefing_create", async (req, res) => {
         if (!await authUser(req, res)) return
         const id = Date.now().toString()
@@ -62,7 +65,27 @@ function main(g, app, render, getLoginInfo) {
     app.post("/briefing_delete", async (req, res) => {
         if (!await authUser(req, res)) return
         db.run(`DELETE FROM briefings WHERE id=?1`, { 1: req.body.briefing })
-        res.redirect("/admin")
+        res.redirect(`/admin?s=briefings`)
+    })
+
+    // DCS Developers
+    app.post("/developer_create", async (req, res) => {
+        if (!await authUser(req, res)) return
+        const name = req.body.developerName
+        await db.developerGetInfo(name)
+        res.redirect(`/admin?s=developers`)
+    })
+
+    app.post("/developer_update", async (req, res) => {
+        if (!await authUser(req, res)) return
+        db.run(`UPDATE developers SET name=?1, image=?2, modules=?3 WHERE name=?4`, { 1: req.body.developerName, 2: req.body.developerImage, 3: req.body.developerModules, 4: req.body.developer })
+        res.redirect(`/admin?s=developers&i=${req.body.index}`)
+    })
+
+    app.post("/developer_delete", async (req, res) => {
+        if (!await authUser(req, res)) return
+        db.run(`DELETE FROM developers WHERE name=?1`, { 1: req.body.developer })
+        res.redirect(`/admin?s=developers`)
     })
 }
 

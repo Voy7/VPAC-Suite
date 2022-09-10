@@ -283,16 +283,47 @@ function briefingGetInfo(id, name) {
     })
 }
 
-// Parsing illegal charecters.
-function In(text) {
-    if (!text) return text
-    return text.replaceAll(`'`, `&1;`)
-}
-
-function Out(text) {
-    if (!text) return text
-    else return text.replaceAll(`&1;`, `'`)
+// Get info on all DCS developers & modules, or for specified developer.
+function developerGetInfo(name) {
+    return p = new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.run(`CREATE TABLE IF NOT EXISTS developers (name TEXT, image TEXT, link TEXT, modules TEXT, extra TEXT)`)
+            if (name == "*") {
+                let developers = new Map()
+                db.all(`SELECT * FROM developers`, (err, rows) => {
+                    if (!rows) resolve([])
+                    else {
+                        rows.forEach(row => {
+                            let info = {
+                                name: row.name,
+                                image: row.image,
+                                link: row.link,
+                                modules: row.modules,
+                                extra: JSON.parse(row.extra)
+                            }
+                            developers.set(row.name, info)
+                        })
+                        resolve(developers)
+                    }
+                })
+            }
+            else {
+                let query = `SELECT * FROM developers WHERE name=?1`
+                let values = { 1: name }
+                db.get(query, values, (err, row) => {
+                    if (!row) {
+                        if (!name) return
+                        db.run(`INSERT INTO developers (name, image, link, modules, extra) VALUES (?1, ?2, ?3, ?4, ?5)`, { 1: name, 2: "", 3: "", 4: "A, Module Name, Status", 5: "{}" })
+                        resolve([])
+                    }
+                    else { // For now, don't do anything, might change later.
+                        resolve([])
+                    }
+                })
+            }
+        })
+    })
 }
 
 // Export modules.
-module.exports = { run, set, get, setUser, getUser, missionAddEvent, missionGetEvent, missionGetInfo, squadronGetInfo, resourceGetInfo, briefingGetInfo }
+module.exports = { run, set, get, setUser, getUser, missionAddEvent, missionGetEvent, missionGetInfo, squadronGetInfo, resourceGetInfo, briefingGetInfo, developerGetInfo }

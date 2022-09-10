@@ -15,6 +15,7 @@
             <li data-section="missions">Missions</li>
             <li data-section="resources">Resources</li>
             <li data-section="briefings">Briefings</li>
+            <li data-section="developers">DCS Modules</li>
         </ul>
 
         <!-- Squadrons section -->
@@ -23,12 +24,12 @@
                 <h4>All Squadrons</h4>
                 <ul>
                     <% squadrons.forEach((squadron, index) => { %>
-                        <li data-squadron="<%= index %>"><%= squadron.squadron.name %></li>
+                        <li data-squadrons="<%= index %>"><%= squadron.squadron.name %></li>
                     <% }) %>
                 </ul>
             </div>
             <% squadrons.forEach((squadron, index) => { %>
-                <div class="squadron-container" data-squadron-sec="<%= index %>">
+                <div class="squadron-container" data-squadrons-sec="<%= index %>">
                     <h4><%= squadron.squadron.name %></h4>
                     <p>Note: Squadron name and members are tied to the Discord role ID: <%= squadron.squadron.id %></p>
                     <form action="/squadron_update" method="POST" class="options-text">
@@ -44,12 +45,13 @@
                             <textarea id="squadron-<%= squadron.squadron.abbreviation %>-checkride" name="squadronCheckride" required><%= squadron.squadron.checkride %></textarea>
                             <div id="squadron-<%= squadron.squadron.abbreviation %>-checkride-preview" class="checkride-preview checkride"></div>
                         </div>
+                        <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Update</button>
                     </form>
                 </div>
             <% })
             if (squadrons.length > 0) { %>
-                <script>openList("squadron", 0)</script>
+                <script>openList("squadrons", 0)</script>
             <% } %>
         </section>
 
@@ -62,27 +64,29 @@
                 <h4>All Missions</h4>
                 <ul>
                     <% missions.forEach((mission, index) => { %>
-                        <li data-mission="<%= index %>"><%= mission.name.replace(/_/g, " ") %></li>
+                        <li data-missions="<%= index %>"><%= mission.name.replace(/_/g, " ") %></li>
                     <% }) %>
                 </ul>
             </div>
             <% missions.forEach((mission, index) => { %>
-                <div class="mission-container" data-mission-sec="<%= index %>">
+                <div class="mission-container" data-missions-sec="<%= index %>">
                     <h4><%= mission.name.replace(/_/g, " ") %></h4>
                     <form action="/mission_update" method="POST" class="options-text">
                         <input type="hidden" value="<%= mission.name %>" name="mission">
                         <label for="mission-<%= mission.name %>-name">Mission Name</label>
                         <input type="text" value="<%= mission.name.replace(/_/g, " ") %>" id="mission-<%= mission.name %>-name" name="missionName" required>
+                        <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Update</button>
                     </form>
                     <form action="/mission_delete" method="POST" class="options-delete">
                         <input type="hidden" value="<%= mission.name %>" name="mission">
+                        <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Delete</button>
                     </form>
                 </div>
             <% })
             if (missions.length > 0) { %>
-                <script>openList("mission", 0)</script>
+                <script>openList("missions", 0)</script>
             <% } %>
         </section>
 
@@ -95,12 +99,12 @@
                 <h4>All Resources</h4>
                 <ul>
                     <% resources.forEach((resource, index) => { %>
-                        <li data-resource="<%= index %>"><%= resource.name %></li>
+                        <li data-resources="<%= index %>"><%= resource.name %></li>
                     <% }) %>
                 </ul>
-                <button class="create-new">Create Resource</button>
+                <button class="create-new">+ Create Resource</button>
             </div>
-            <div class="resource-container" data-resource-sec="create-new">
+            <div class="resource-container" data-resources-sec="create-new">
                 <h4>Create New Resource</h4>
                 <form action="/resource_create" method="POST" class="options-text">
                     <label for="resource-createnew-name">Resource Name</label>
@@ -109,20 +113,22 @@
                 </form>
             </div>
             <% resources.forEach((resource, index) => { %>
-                <div class="resource-container" data-resource-sec="<%= index %>">
+                <div class="resource-container" data-resources-sec="<%= index %>">
                     <h4><%= resource.name %></h4>
                     <form action="/resource_update" method="POST" class="options-text">
                         <input type="hidden" value="<%= resource.name %>" name="resource">
+                        <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Update</button>
                     </form>
                     <form action="/resource_delete" method="POST" class="options-delete">
                         <input type="hidden" value="<%= resource.name %>" name="resource">
+                        <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Delete</button>
                     </form>
                 </div>
             <% })
             if (resources.length > 0) { %>
-                <script>openList("resource", 0)</script>
+                <script>openList("resources", 0)</script>
             <% } %>
 
 
@@ -137,7 +143,7 @@
                 <h4>All Briefings</h4>
                 <ul>
                     <% briefings.forEach((briefing, index) => { %>
-                        <li data-briefing="<%= index %>">
+                        <li data-briefings="<%= index %>">
                             <% if (briefing.public == "true") { %>
                                 <div class="public-true"></div>
                             <% } else { %>
@@ -147,9 +153,9 @@
                         </li>
                     <% }) %>
                 </ul>
-                <button class="create-new">Create Briefing</button>
+                <button class="create-new">+ Create Briefing</button>
             </div>
-            <div class="briefing-container" data-briefing-sec="create-new">
+            <div class="briefing-container" data-briefings-sec="create-new">
                 <h4>Create New Briefing</h4>
                 <form action="/briefing_create" method="POST" class="options-text">
                     <label for="briefing-createnew-name">Briefing Name</label>
@@ -165,18 +171,72 @@
                 </form>
             </div>
             <% briefings.forEach((briefing, index) => { %>
-                <div class="briefing-container" data-briefing-sec="<%= index %>">
+                <div class="briefing-container" data-briefings-sec="<%= index %>">
                     <h4><%= briefing.name.replace(/_/g, " ") %></h4>
                     <p>Briefing is Public: <%= briefing.public.toUpperCase() %></p>
                     <a href="/briefing-editor/<%= briefing.id %>" class="options-open">Open Editor</a>
                     <form action="/briefing_delete" method="POST" class="options-delete">
                         <input type="hidden" value="<%= briefing.id %>" name="briefing">
+                        <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Delete</button>
                     </form>
                 </div>
             <% })
             if (briefings.length > 0) { %>
-                <script>openList("briefing", 0)</script>
+                <script>openList("briefings", 0)</script>
+            <% } %>
+
+            
+        </section>
+
+        <!-- DCS Modules section -->
+        <section id="section-developers" style="display: none;" data-is-section>
+            <% const developerList = []
+            developers.forEach(developer => { developerList.push(developer) })
+            developers = developerList %>
+            <div id="select-developers" class="select-list">
+                <h4>DCS Developers</h4>
+                <ul>
+                    <% developers.forEach((developer, index) => { %>
+                        <li data-developers="<%= index %>"><%= developer.name %></li>
+                    <% }) %>
+                </ul>
+                <button class="create-new">+ Add Developer</button>
+            </div>
+            <div class="developer-container" data-developers-sec="create-new">
+                <h4>Add new Developer</h4>
+                <form action="/developer_create" method="POST" class="options-text">
+                    <label for="developer-createnew-name">Developer Name</label>
+                    <input type="text" value="" id="developer-createnew-name" name="developerName" required>
+                    <button type="submit">Create</button>
+                </form>
+            </div>
+            <% developers.forEach((developer, index) => { %>
+                <div class="developer-container" data-developers-sec="<%= index %>">
+                    <h4><%= developer.name %></h4>
+                    <form action="/developer_update" method="POST" class="options-text">
+                        <input type="hidden" value="<%= developer.name %>" name="developer">
+                        <label for="developer-<%= index %>-name">Developer Name</label>
+                        <input type="text" value="<%= developer.name %>" id="developer-<%= index %>-name" name="developerName" required>
+                        <label for="developer-<%= index %>-image">Image URL</label>
+                        <input type="text" value="<%= developer.image %>" id="developer-<%= index %>-image" name="developerImage" required>
+                        <label for="developer-<%= index %>-color">Header Color</label>
+                        <input type="color" value="" id="developer-<%= index %>-color" name="developerColor" required>
+                        <label for="developer-<%= index %>-modules">Modules</label>
+                        <textarea id="developer-<%= index %>-modules" name="developerModules" required><%= developer.modules %></textarea>
+                        <p class="note">Type | Module Name | Status | Link<br />Types: A = Airplane, H = Helo, M = Map</p>
+                        <input type="hidden" value="<%= index %>" name="index">
+                        <button type="submit">Update</button>
+                    </form>
+                    <form action="/developer_delete" method="POST" class="options-delete">
+                        <input type="hidden" value="<%= developer.name %>" name="developer">
+                        <input type="hidden" value="<%= index %>" name="index">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            <% })
+            if (developers.length > 0) { %>
+                <script>openList("developers", 0)</script>
             <% } %>
 
             

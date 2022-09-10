@@ -274,3 +274,20 @@ body { background-image: url("/assets/bg6.png"); }
     background-color: rgb(255, 79, 79);
     border-radius: 50%;
 }
+
+/* DCS Modules / Developers */
+#section-developers {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+#section-developers .developer-container {
+    display: none;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color-2);
+}
+
+#section-developers .developer-container h4 { font-size: 20px; margin-bottom: 15px; }
+#section-developers .developer-container p { margin: 5px 0 0 0; font-size: 14px; color: rgb(100, 100, 100); }

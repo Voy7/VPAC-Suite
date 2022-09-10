@@ -255,10 +255,6 @@ hr {
     transform: translate(-50%, -50%);
 }
 
-.sam-ring { border-radius: 50%; transform: translate(-50%, -50%); transition: 300ms; }
-.ring-blue { background-color: rgba(0, 0, 255, 0.05); border: 1px solid rgb(0, 255, 255); }
-.ring-red { background-color: rgba(255, 0, 0, 0.08); border: 1px solid rgb(255, 100, 100); }
-
 .sam-label {
     padding: 1px;
     font-size: 14px;

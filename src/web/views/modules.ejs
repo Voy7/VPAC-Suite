@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head", { title: "DCS Modules List" }) %>
+    <link rel="stylesheet" href="/css/modules.css" />
+</head>
+<body>
+    <%- include("partials/header", { selectedPage: "/modules" }) %>
+    <h2 style="text-align: center; margin: 20px;">DCS MODULES (WIP)</h2>
+
+    <section id="main-developers-container">
+        <% developers.forEach(developer => {
+            let aircraft = []
+            let maps = []
+            let misc = []
+            const modules = developer.modules.split("\r\n")
+            modules.forEach(module => {
+                const args = module.split(", ")
+                if (args[0] == "A") aircraft.push(module)
+                else if (args[0] == "M") maps.push(module)
+                else misc.push(module)
+            }) %>
+            <section class="developer-container">
+                <div class="header">
+                    <img src="<%= developer.image %>" />
+                    <h3><%= developer.name %></h3>
+                </div>
+                <div class="body">
+                    <% if (aircraft.length > 0) { %> <h4>AIRCRAFT (<%= aircraft.length %>):</h4> <% } %>
+                    <table cellspacing="0">
+                        <% aircraft.forEach(module => {
+                            const args = module.split(", ") %>
+                            <tr class="module <%= args[2].split(" ")[0] %>">
+                                <td class="name"><%= args[1] %></td>
+                                <td class="status"><%= args[2] %></td>
+                            </tr>
+                        <% }) %>
+                    </table>
+
+                    <% if (maps.length > 0) { %> <h4>MAPS (<%= maps.length %>):</h4> <% } %>
+                    <table cellspacing="0">
+                        <% maps.forEach(module => {
+                            const args = module.split(", ") %>
+                            <tr class="module <%= args[2].split(" ")[0] %>">
+                                <td class="name"><%= args[1] %></td>
+                                <td class="status"><%= args[2] %></td>
+                            </tr>
+                        <% }) %>
+                    </table>
+
+                    <% if (misc.length > 0) { %> <h4>MISC (<%= misc.length %>):</h4> <% } %>
+                    <table cellspacing="0">
+                        <% misc.forEach(module => {
+                            const args = module.split(", ") %>
+                            <tr class="module <%= args[2].split(" ")[0] %>">
+                                <td class="name"><%= args[1] %></td>
+                                <td class="status"><%= args[2] %></td>
+                            </tr>
+                        <% }) %>
+                    </table>
+                </div>
+            </section>
+        <% }) %>
+    </section>
+
+    <%- include("partials/footer") %>
+</body>
+</html>

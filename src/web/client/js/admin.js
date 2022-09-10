@@ -14,19 +14,24 @@ $(() => {
         $(`[data-section="${name}"]`).css("border-bottom", "1px inset white")
     }
 
-    openSection("squadrons")
+    // Decide which section to open based on link.
+    const url = new URL(location.href)
+    const params = new URLSearchParams(url.search)
+    if (params.get("s")) openSection(params.get("s"))
+    else openSection("squadrons") // Default
+    if (params.get("i")) openList(params.get("s"), params.get("i"))
 
     // Missions section.
-    document.querySelectorAll("[data-mission]").forEach(button => {
+    document.querySelectorAll("[data-missions]").forEach(button => {
         button.addEventListener("click", event => {
-            openList("mission", button.dataset.mission)
+            openList("missions", button.dataset.missions)
         })
     })
 
     // Squadrons Section.
-    document.querySelectorAll("[data-squadron]").forEach(button => {
+    document.querySelectorAll("[data-squadrons]").forEach(button => {
         button.addEventListener("click", event => {
-            openList("squadron", button.dataset.squadron)
+            openList("squadrons", button.dataset.squadrons)
         })
     })
 
@@ -44,25 +49,36 @@ $(() => {
     })
 
     // Resources section.
-    document.querySelectorAll("[data-resource]").forEach(button => {
+    document.querySelectorAll("[data-resources]").forEach(button => {
         button.addEventListener("click", event => {
-            openList("resource", button.dataset.resource)
+            openList("resources", button.dataset.resources)
         })
     })
 
     document.querySelector("#section-resources .create-new").addEventListener("click", event => {
-        openList("resource", "create-new")
+        openList("resources", "create-new")
     })
 
     // Briefings section.
-    document.querySelectorAll("[data-briefing]").forEach(button => {
+    document.querySelectorAll("[data-briefings]").forEach(button => {
         button.addEventListener("click", event => {
-            openList("briefing", button.dataset.briefing)
+            openList("briefings", button.dataset.briefings)
         })
     })
 
     document.querySelector("#section-briefings .create-new").addEventListener("click", event => {
-        openList("briefing", "create-new")
+        openList("briefings", "create-new")
+    })
+
+    // DCS Modules section.
+    document.querySelectorAll("[data-developers]").forEach(button => {
+        button.addEventListener("click", event => {
+            openList("developers", button.dataset.developers)
+        })
+    })
+
+    document.querySelector("#section-developers .create-new").addEventListener("click", event => {
+        openList("developers", "create-new")
     })
 })
 
