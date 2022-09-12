@@ -1,4 +1,4 @@
-body { background-image: url("/assets/bg6.png"); }
+.bg { background-image: url("/assets/bg6.png"); }
 
 #main-section-container {
     width: 95vw;

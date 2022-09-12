@@ -1,4 +1,4 @@
-body { background-image: url("/assets/bg3.png"); }
+.bg { background-image: url("/assets/bg3.png"); }
 
 #error-container {
     display: flex;

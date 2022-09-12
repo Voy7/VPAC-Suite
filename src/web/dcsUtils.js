@@ -71,6 +71,7 @@ const unitList = [
     ["Su-34", "Su-34", "Su-34 Fullback", "A", "SU27-red"],
     ["J-11", "J-11A", "J-11A Flanker-L", "A", "SU27-red"],
     ["JF-17", "JF-17", "JF-17 Thunder", "A", "JF17-red"],
+    ["KJ-2000", "KJ-2000", "KJ-2000 Mainring", "A", "E3A-red"],
     ["P-47", "P-47D", "P-47D Thunderbolt", "A", "TF51-red"],
     ["P-51", "P-51D", "P-51D Mustang", "A", "TF51-red"],
     ["Mosquito", "Mosquito FB", "Mosquito FB", "A", "TF51-red"],
@@ -105,6 +106,7 @@ const unitList = [
     ["S-300PMU1 5P85DE", "SA-20", "SA-20 Grumble Launcher-D", "LS; 65"],
     ["Strela-1", "SA-13", "SA-13 Strela", "MS; 5"],
     ["Tor", "SA-15", "SA-15 Tor", "MS; 7"],
+    ["SA-18", "SA-18", "SA-18 Igla", "MS; 3"],
     ["Igla manpad", "SA-18", "SA-18 Igla", "MS; 3"],
     ["2S6", "SA-19", "SA-19 Tunguska", "MS; 5"],
     ["rapier_fsa_blindfire", "Rapier", "Rapier ST Radar", "EW"],
@@ -122,12 +124,14 @@ const unitList = [
     ["Patriot cp", "Patriot", "Patriot Cmd Post", "LS"],
     ["Patriot ln", "Patriot", "Patriot Launcher", "LS; 25"],
     ["Roland", "Roland", "Roland ADS", "MS; 3.5"],
+    ["HQ-7_LN_SP", "HQ-7", "HQ-7 Banner", "MS; 8"],
 
     // AAA Guns
     ["ZSU-23-4", "AAA", "ZSU-23-4 23mm Shilka", "AAA"],
     ["ZU-23 Closed", "AAA", "ZU-23 23mm AAA Closed", "AAA"],
     ["ZU-23 Emplacement", "AAA", "ZU-23 23mm AAA Emplacement", "AAA"],
     ["S-60", "AAA", "S-60 57mm AAA", "AAA"],
+    ["ZSU_57", "AAA", "ZSU-57 57mm AAA", "AAA"],
     
     // EW Radars
     ["EWR 1L119", "EWR", "EWR 1L119", "EW"],
@@ -156,17 +160,45 @@ const unitList = [
     ["BMP-3", "BMP-3", "BMP-3 IFV", "ART"],
     ["M-113", "APC", "M113 APC", "ART"],
     ["tt_DSHK", "Scout LC", "Scout LC 12.7mm MG", "ARW"],
+    ["tt_KORD", "Scout LC", "Scout LC 12.7mm MG", "ARW"],
+    ["ZBD04", "ZBD-04", "ZBD-04 LAV", "ARW"],
+    ["ZTZ96", "ZTZ-96B", "ZTZ-96B MBT", "ART"],
+    ["T-55", "T-55", "T-55 MBT", "ART"],
+    ["T-72B", "T-72B", "T-72B MBT", "ART"],
+    ["T-72B3", "T-72B3", "T-72B3 MBT", "ART"],
+    ["T-80U", "T-80U", "T-80U MBT", "ART"],
+    ["T-90", "T-90", "T-90 MBT", "ART"],
+    ["Chieftain_mk3", "MBT", "Chieftain Mk.3 MBT", "ART"],
+    ["Smerch_HE", "Artillery", "Smerch 300mm Artillery", "ARL"],
+    ["Grad-URAL", "Artillery", "MLRS Grad 122mm", "ARL"],
+
 
     // Support Utlity
     ["Ural-375 PBU", "Ural-375", "Ural-375 PBU Truck", "S"],
     ["Ural-375", "Ural-375", "Ural-375 Truck", "S"],
     ["Ural-4320T", "Ural-4320T", "Ural-4320T Truck", "S"],
     ["ZIL-135", "ZIL-135", "ZIL-135 Truck", "S"],
+    ["M 818", "M 818", "M-818 Truck", "S"],
+    ["KAMAZ", "KAMAZ", "KAMAZ Truck", "S"],
+    ["UAZ-469", "UAZ-469", "UAZ-469 Jeep", "S"],
     ["ERO_Tent", "Tent", "Tent", "S"],
     ["Small Warehouse", "Warehouse", "Warehouse", "S"],
 
     // Ships
     ["La_Combattante_II", "Ship", "La Combattante II F.A.C", "SH"],
+    ["CVN_59", "CVN-59", "CVN-59", "SH"],
+    ["CVN_71", "CVN-71", "CVN-71", "SH"],
+    ["CVN_72", "CVN-72", "CVN-72", "SH"],
+    ["CVN_73", "CVN-73", "CVN-73", "SH"],
+    ["CVN_74", "CVN-74", "CVN-74", "SH"],
+    ["CVN_75", "CVN-75", "CVN-75", "SH"],
+    ["LHA_Tarawa", "LHA-1", "LHA-1", "SH"],
+    ["USS_Arleigh", "Arleigh Burke", "Arleigh Burke", "SH"],
+    ["Type_052B", "Type 052B", "Type 052B", "SH"],
+    ["Type_052C", "Type 052C", "Type 052C", "SH"],
+    ["Type_054A", "Type 054A", "Type 054A", "SH"],
+    ["Type_071", "Type 071", "Type 071", "SH"],
+    ["CV_1143", "CV-1143", "CV-1143", "SH"],
 
     // Munition Weapons
     ["AIM-120B", "AIM-120B", "AIM-120B AMRAAM", "W"],

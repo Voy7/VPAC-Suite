@@ -15,14 +15,19 @@
     --border-color-2: rgb(70, 70, 70);
 }
 
-body {
-    background-color: rgba(0, 0, 0, 0.9);
+.bg {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.8);
     background-image: url("/assets/bg1.png");
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
     background-blend-mode: soft-light;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    z-index: -1;
 }
 
 h2 { margin: 20px; text-align: center; font-size: 26px; }

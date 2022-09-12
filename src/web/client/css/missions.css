@@ -1,4 +1,4 @@
-body { background-image: url("/assets/bg9.png"); }
+.bg { background-image: url("/assets/bg2.png"); }
 
 #main-missions-container {
     display: flex;

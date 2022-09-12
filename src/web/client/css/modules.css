@@ -1,13 +1,31 @@
-body { background-image: url("/assets/bg1.png"); }
+.bg { background-image: url("/assets/bg8.png"); }
+
+.description {
+    display: block;
+    width: fit-content;
+    margin: 5px auto;
+    padding: .5em 1em;
+    text-align: center;
+    font-weight: normal;
+    font-size: 15px;
+    color: rgb(180, 180, 255);
+    background-color: rgba(180, 180, 255, 0.1);
+    border: 1px solid rgba(180, 180, 255, 0.3);
+}
 
 #main-developers-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin: 0 10px 50px 10px;
+    width: 90vw;
+    margin: 0 auto;
+    background: blue;
 }
+
+/* Kind of hacky way, but only way I could find to keep the containers centered. */
+@media screen and ( max-width: calc(370px * 7) ) { #main-developers-container { width: calc(370px * 6); } }
+@media screen and ( max-width: calc(370px * 6) ) { #main-developers-container { width: calc(370px * 5); } }
+@media screen and ( max-width: calc(370px * 5) ) { #main-developers-container { width: calc(370px * 4); } }
+@media screen and ( max-width: calc(370px * 4) ) { #main-developers-container { width: calc(370px * 3); } }
+@media screen and ( max-width: calc(370px * 3) ) { #main-developers-container { width: calc(370px * 2); } }
+@media screen and ( max-width: calc(370px * 2) ) { #main-developers-container { width: calc(370px * 1); } }
 
 .developer-container {
     display: flex;
@@ -15,8 +33,10 @@ body { background-image: url("/assets/bg1.png"); }
     align-items: flex-start;
     flex-direction: column;
     gap: 5px;
-    min-width: 350px;
-    min-height: 150px;
+    width: 350px;
+    min-height: 140px;
+    margin: 10px;
+    float: left;
     background-color: var(--bg-color-1);
     border: 1px solid var(--border-color-1);
     border-radius: 10px;
@@ -37,14 +57,10 @@ body { background-image: url("/assets/bg1.png"); }
     width: 40px;
     height: 40px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid gray;
     border-radius: 50%;
 }
 
-.developer-container .header h3 {
-    font-size: 18px;
-}
-
+.developer-container .header h3 { font-size: 18px; }
 .developer-container .body { width: 100%; padding: 0 10px 10px 10px; }
 
 .developer-container .body h4 {
@@ -60,12 +76,33 @@ body { background-image: url("/assets/bg1.png"); }
     color: rgb(170, 170, 170);
 }
 
+.developer-container .name {
+    max-width: 180px;
+    min-width: 180px;
+    padding-right: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.developer-container .name:hover { white-space: unset; }
+.developer-container .status:hover { white-space: unset; }
+
+.developer-container .status {
+    max-width: 160px;
+    min-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .developer-container .Released { color: rgb(180, 255, 180); }
 .developer-container .Early { color: rgb(180, 255, 180); }
 .developer-container .In { color: rgb(180, 255, 255); }
 
 .developer-container table { width: 100%; }
 .developer-container td { padding: 0 3px; }
-.developer-container tr:hover { background-color: var(--bg-color-2); cursor: pointer; }
+.developer-container tr:hover { background-color: var(--bg-color-2); cursor: default; }
 .developer-container tr, .developer-container td { color: inherit; }
-.developer-container .name { min-width: 120px; padding-right: 10px; }
+.developer-container tr a { color: inherit; }
+.developer-container .source:hover { color: rgb(0, 0, 255); }

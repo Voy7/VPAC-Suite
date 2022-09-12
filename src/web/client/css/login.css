@@ -1,4 +1,4 @@
-body { background-image: url("/assets/bg4.png"); }
+.bg { background-image: url("/assets/bg4.png"); }
 
 #login-container {
     display: flex;

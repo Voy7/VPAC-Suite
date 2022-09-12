@@ -221,10 +221,10 @@
                         <label for="developer-<%= index %>-image">Image URL</label>
                         <input type="text" value="<%= developer.image %>" id="developer-<%= index %>-image" name="developerImage" required>
                         <label for="developer-<%= index %>-color">Header Color</label>
-                        <input type="color" value="" id="developer-<%= index %>-color" name="developerColor" required>
+                        <input type="color" value="<%= developer.color %>" id="developer-<%= index %>-color" name="developerColor" required>
                         <label for="developer-<%= index %>-modules">Modules</label>
                         <textarea id="developer-<%= index %>-modules" name="developerModules" required><%= developer.modules %></textarea>
-                        <p class="note">Type | Module Name | Status | Link<br />Types: A = Airplane, H = Helo, M = Map</p>
+                        <p class="note">Type, Module Name, Status, Link<br />Types: A = Aircraft, M = Map, O = Other</p>
                         <input type="hidden" value="<%= index %>" name="index">
                         <button type="submit">Update</button>
                     </form>

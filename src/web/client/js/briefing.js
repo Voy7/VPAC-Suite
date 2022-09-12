@@ -220,7 +220,7 @@ function addElement(text) {
 function initMap() {
     const map = new google.maps.Map(document.querySelector("#map"), {
         zoom: 7,
-        maxZoom: 11,
+        maxZoom: 16,
         minZoom: 6,
         center: { lat: 45.746, lng: 34.1555 },
         disableDefaultUI: true,
@@ -320,7 +320,7 @@ function initMap() {
                 }
                 else if (group.type == "ship") {
                     if (group.hiddenOnMFD == "true") return
-                    let ship = group.name
+                    let ship = group.units[0].short //group.name
                     let html = `<div class="ship icon-${coalition} map-item" data-ship="${ship}"></div>`
                     // let html = `<div class="airport airport-${coalition} map-item" data-airport="${ship}"></div>`
                     createHTMLMapMarker({ map, html, position: group.loc })

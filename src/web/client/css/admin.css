@@ -1,4 +1,4 @@
-body { background-image: url("/assets/bg6.png"); }
+.bg { background-image: url("/assets/bg6.png"); }
 
 #main-section-container {
     width: 95vw;
@@ -91,7 +91,7 @@ body { background-image: url("/assets/bg6.png"); }
     font-size: 18px;
 }
 
-.options-text input {
+.options-text input[type="text"] {
     display: block;
     width: 300px;
     padding: .3em;
@@ -99,6 +99,13 @@ body { background-image: url("/assets/bg6.png"); }
     background-color: rgb(50, 50, 50);
     border: 1px solid var(--border-color-2);
     border-radius: 5px;
+}
+
+.options-text input[type="color"] {
+    width: 120px;
+    height: 25px;
+    border: 2px solid var(--border-color-1);
+    cursor: pointer;
 }
 
 .options-text textarea {

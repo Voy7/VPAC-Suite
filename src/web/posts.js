@@ -78,7 +78,8 @@ function main(g, app, render, getLoginInfo) {
 
     app.post("/developer_update", async (req, res) => {
         if (!await authUser(req, res)) return
-        db.run(`UPDATE developers SET name=?1, image=?2, modules=?3 WHERE name=?4`, { 1: req.body.developerName, 2: req.body.developerImage, 3: req.body.developerModules, 4: req.body.developer })
+        console.log(req.body)
+        db.run(`UPDATE developers SET name=?1, image=?2, color=?3, modules=?4 WHERE name=?5`, { 1: req.body.developerName, 2: req.body.developerImage, 3: req.body.developerColor, 4: req.body.developerModules, 5: req.body.developer })
         res.redirect(`/admin?s=developers&i=${req.body.index}`)
     })
 

@@ -1,4 +1,4 @@
-body { background-image: url("/assets/bg3.png"); padding-bottom: 50px; }
+.bg { background-image: url("/assets/bg9.png"); padding-bottom: 50px; }
 
 #editor-container {
     margin: 30px;

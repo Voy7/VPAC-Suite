@@ -287,7 +287,7 @@ function briefingGetInfo(id, name) {
 function developerGetInfo(name) {
     return p = new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.run(`CREATE TABLE IF NOT EXISTS developers (name TEXT, image TEXT, link TEXT, modules TEXT, extra TEXT)`)
+            db.run(`CREATE TABLE IF NOT EXISTS developers (name TEXT, image TEXT, link TEXT, color TEXT, modules TEXT, extra TEXT)`)
             if (name == "*") {
                 let developers = new Map()
                 db.all(`SELECT * FROM developers`, (err, rows) => {
@@ -298,6 +298,7 @@ function developerGetInfo(name) {
                                 name: row.name,
                                 image: row.image,
                                 link: row.link,
+                                color: row.color,
                                 modules: row.modules,
                                 extra: JSON.parse(row.extra)
                             }
@@ -313,7 +314,7 @@ function developerGetInfo(name) {
                 db.get(query, values, (err, row) => {
                     if (!row) {
                         if (!name) return
-                        db.run(`INSERT INTO developers (name, image, link, modules, extra) VALUES (?1, ?2, ?3, ?4, ?5)`, { 1: name, 2: "", 3: "", 4: "A, Module Name, Status", 5: "{}" })
+                        db.run(`INSERT INTO developers (name, image, link, color, modules, extra) VALUES (?1, ?2, ?3, ?4, ?5, ?6)`, { 1: name, 2: "", 3: "", 4: "#fcba03", 5: "A, Module Name, Status", 6: "{}" })
                         resolve([])
                     }
                     else { // For now, don't do anything, might change later.
