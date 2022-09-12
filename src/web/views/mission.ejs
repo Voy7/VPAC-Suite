@@ -66,7 +66,7 @@
                                 if (entry.event == "KILL") {
                                     const unitType = dcs.unitType(entry.killedUnit)
                                     if (unitType == "A" || unitType == "H") aakills++
-                                    else agkills ++
+                                    else if (entry.killedUnit != "Unknown") agkills ++
 
                                     if (!clusters.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)) clusters.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, 0)
                                     if (!killInfo.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)) killInfo.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, [])

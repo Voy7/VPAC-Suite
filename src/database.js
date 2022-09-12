@@ -168,7 +168,7 @@ function missionGetInfo(mission) {
                     if (row.event == "KILL") {
                         let type = dcsUtils.unitType(data.killedUnit)
                         if (type == "A" || type == "H") info.aakills++
-                        else info.agkills++
+                        else if (data.killedUnit != "Unknown") info.agkills++
                     }
                     if (row.event == "TAKEOFF") info.takeoffs++
                     if (row.event == "LANDING") info.landings++
