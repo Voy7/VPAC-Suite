@@ -1,4 +1,5 @@
 let dragLast = null
+let firstSave = true
 
 const displayName = {
     map: "Map, #00ff37",
@@ -12,6 +13,11 @@ const displayName = {
 }
 
 $(() => {
+    // Repair element order, if it broke
+    briefing.elements.forEach((element, index) => {
+        element.order = index + 1
+    })
+
     updateEditor()
     selectElement(1)
 
@@ -32,10 +38,17 @@ $(() => {
     socket.on("miz-data", ({ data }) => {
         miz = data
         updateEditor()
+        $("#miz-uploaded").fadeIn(100)
+        $("#file-uploading-container").fadeOut(100)
     })
 
     socket.on("miz-upload-failed", () => {
-        $("#upload-failed").fadeIn(100)
+        $("#upload-failed").fadeIn(0)
+        $("#file-uploading-container").fadeOut(100)
+    })
+
+    socket.on("briefing-editing", () => {
+        $("#editing-conflict").fadeIn(100)
     })
 
     document.querySelectorAll(".error-modal button").forEach(button => {
@@ -92,6 +105,7 @@ $(() => {
 // Upload miz file via socket.
 function uploadMiz(files) {
     socket.emit("upload-miz", { id: briefing.id, file: files[0] })
+    $("#file-uploading-container").fadeIn(100)
 }
 
 // Creating new briefing element.
@@ -328,7 +342,8 @@ function updateEditor() {
     // Add map element as first one.
     if (briefing.elements.length <= 0) newElement("map")
 
-    socket.emit("briefing-update", briefing)
+    if (firstSave) firstSave = false
+    else socket.emit("briefing-update", briefing)
 
     document.querySelector("#elements").innerHTML = ``
     let elementsHTML = ``
@@ -356,6 +371,7 @@ function updateEditor() {
                     // Change the order of elements JSON and re-render.
                     const newOrder = []
                     const current = element.dataset.elementOrder
+                    if (current <= dragLast) dragLast--
                     for(let i = 1; i <= briefing.elements.length; i++) {
                         if (i != current) {
                             const item = briefing.elements.find(e => e.order == i)

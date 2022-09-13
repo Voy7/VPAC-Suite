@@ -243,6 +243,8 @@ function initMap() {
         map.addListener("zoom_changed", () => {
             if (map.zoom <= 7) $(".sam-label").fadeOut(500)
             else $(".sam-label").fadeIn(500)
+            if (map.zoom <= 9) $(".map-item-extra").fadeOut(500)
+            else $(".map-item-extra").fadeIn(500)
         })
         $(".sam-label").fadeOut(0)
     }, 1000)
@@ -320,10 +322,26 @@ function initMap() {
                 }
                 else if (group.type == "ship") {
                     if (group.hiddenOnMFD == "true") return
-                    let ship = group.units[0].short //group.name
-                    let html = `<div class="ship icon-${coalition} map-item" data-ship="${ship}"></div>`
-                    // let html = `<div class="airport airport-${coalition} map-item" data-airport="${ship}"></div>`
-                    createHTMLMapMarker({ map, html, position: group.loc })
+                    console.log(group.units)
+                    group.units.forEach(ship => {
+                        if (ship.id == 1) {
+                            let html = `<img src="${ship.icon}" class="ship icon-${coalition} map-item" /></div><div class="ship-label marker-${coalition}">${ship.short}</div>`
+                            createHTMLMapMarker({ map, html, position: ship.loc })
+                        }
+                        else {
+                            let html = `<img src="${ship.icon}" class="ship icon-${coalition} map-item-extra map-item" /></div><div class="ship-label marker-${coalition} map-item-extra">${ship.short}</div>`
+                            createHTMLMapMarker({ map, html, position: ship.loc })
+                        }
+                        if (!ship.ring) return
+                        let color = "#ffffff"
+                        if (coalition == "blue") color = "#00ffff"
+                        if (coalition == "red") color = "#ff6464"
+                        let threatRing = new google.maps.Circle({
+                            center: ship.loc, strokeColor: color, strokeWeight: 0.75, strokeOpacity: 0.5, fillColor: color, fillOpacity: 0.01, radius: ship.ring * 2350//1852
+                        })
+                        threatRing.setMap(map)
+                        threatRings.push(threatRing)
+                    })
                 }
                 else if (group.type == "aircraft") {
                     // Racetrack aircraft

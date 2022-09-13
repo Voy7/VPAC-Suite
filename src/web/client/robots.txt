@@ -1,0 +1,15 @@
+User-Agent: *
+Host: https://vpac-dcs.com
+
+Allow: /
+Allow: /squadrons
+Allow: /missions
+Allow: /resources
+Allow: /modules
+
+Disallow: /login
+Disallow: /admin
+Disallow: /mission/*
+Disallow: /briefing-editor/*
+
+Sitemap: https://vpac-dcs.com/sitemap.xml

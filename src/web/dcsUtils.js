@@ -185,20 +185,22 @@ const unitList = [
     ["Small Warehouse", "Warehouse", "Warehouse", "S"],
 
     // Ships
+    ["CVN_59", "CVN-59", "CVN-59", "CV; 16"],
+    ["CVN_70", "CVN-70", "CVN-70", "CV; 8"],
+    ["CVN_71", "CVN-71", "CVN-71", "CV; 8"],
+    ["CVN_72", "CVN-72", "CVN-72", "CV; 8"],
+    ["CVN_73", "CVN-73", "CVN-73", "CV; 8"],
+    ["CVN_74", "CVN-74", "CVN-74", "CV; 8"],
+    ["CVN_75", "CVN-75", "CVN-75", "CV; 8"],
+    ["LHA_Tarawa", "LHA-1", "LHA-1", "CV; 16"],
+    ["USS_Arleigh", "Arleigh Burke", "Arleigh Burke", "DD; 54"],
+    ["PERRY", "Oliver Hazard Perry", "Oliver Hazard Perry", "FF; 54"],
+    ["CV_1143", "CV-1143", "CV-1143", "CV; 7"],
+    ["Type_052B", "Type 052B", "Type 052B", "DD; 82"],
+    ["Type_052C", "Type 052C", "Type 052C", "DD; 54"],
+    ["Type_054A", "Type 054A", "Type 054A", "FF; 24"],
+    ["Type_071", "Type 071", "Type 071", "CC"],
     ["La_Combattante_II", "Ship", "La Combattante II F.A.C", "SH"],
-    ["CVN_59", "CVN-59", "CVN-59", "SH"],
-    ["CVN_71", "CVN-71", "CVN-71", "SH"],
-    ["CVN_72", "CVN-72", "CVN-72", "SH"],
-    ["CVN_73", "CVN-73", "CVN-73", "SH"],
-    ["CVN_74", "CVN-74", "CVN-74", "SH"],
-    ["CVN_75", "CVN-75", "CVN-75", "SH"],
-    ["LHA_Tarawa", "LHA-1", "LHA-1", "SH"],
-    ["USS_Arleigh", "Arleigh Burke", "Arleigh Burke", "SH"],
-    ["Type_052B", "Type 052B", "Type 052B", "SH"],
-    ["Type_052C", "Type 052C", "Type 052C", "SH"],
-    ["Type_054A", "Type 054A", "Type 054A", "SH"],
-    ["Type_071", "Type 071", "Type 071", "SH"],
-    ["CV_1143", "CV-1143", "CV-1143", "SH"],
 
     // Munition Weapons
     ["AIM-120B", "AIM-120B", "AIM-120B AMRAAM", "W"],
@@ -249,7 +251,11 @@ function unitIcon(name) {
         else if (type == "EW") icon = `/assets/radar-icon-red.png` // Radar
         else if (type == "IF") icon = `/assets/infantry-icon-red.png` // Infantry
         else if (type == "S") icon = `/assets/truck-icon-red.png` // Support Utility
-        else if (type == "SH") icon = `/assets/cruiser-icon-red.svg` // Ships
+        else if (type == "SH") icon = `/assets/truck-icon-red.svg` // Generic Ships
+        else if (type == "CV") icon = `/assets/carrier-icon-red.svg` // Generic Ships
+        else if (type == "CC") icon = `/assets/cruiser-icon-red.svg` // Generic Ships
+        else if (type == "DD") icon = `/assets/destroyer-icon-red.svg` // Generic Ships
+        else if (type == "FF") icon = `/assets/frigate-icon-red.svg` // Generic Ships
     })
     return icon
 }

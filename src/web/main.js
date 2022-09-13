@@ -207,11 +207,11 @@ function main(g) {
     io.sockets.on("connection", socket => {
         socket.on("briefing-update", async briefing => {
             console.log(briefing)
+            socket.broadcast.emit("briefing-editing")
             db.run(`UPDATE briefings SET name=?1, public=?2, elements=?3, data=?4 WHERE id=?5`, { 1: briefing.name, 2: briefing.public, 3: JSON.stringify(briefing.elements), 4: JSON.stringify(briefing.data), 5: briefing.id })
         })
 
         socket.on("upload-miz", async ({ id, file }) => {
-            console.log(file)
             fs.mkdir(`miz/${id}/`, err => {
                 fs.writeFile(`miz/${id}/file.miz`, file, err => {
                     if (!err) {

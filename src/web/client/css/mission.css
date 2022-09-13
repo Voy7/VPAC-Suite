@@ -288,13 +288,7 @@
 
 .stats ul li .rotate { transform: rotate(45deg) translate(0, -1px); }
 .stats ul li .shrink { scale: 0.85 }
-
-.stats ul li hr {
-    width: 100%;
-    margin: 5px;
-    color: var(--border-color-1);
-    background-color: var(--border-color-1);
-}
+.stats ul li hr { width: 100%; margin: 5px; background-color: var(--border-color-1); }
 
 @media screen and (max-width: 900px) {
     #main-mission-container { flex-wrap: wrap; }
