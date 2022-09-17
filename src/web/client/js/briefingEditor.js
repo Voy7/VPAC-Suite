@@ -178,7 +178,7 @@ function selectElement(order) {
             miz.groups[coalition].forEach(group => {
                 group.units.forEach(unit => {
                     unitsInfo.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
-                    if (unit.type == unit.long) unitsUnknown.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
+                    if (unit.icon == "/assets/default-icon-red.png") unitsUnknown.push({ value: unit.name, label: `${coalition.toLocaleUpperCase()}: ${unit.name} (${unit.type})` })
                 })
             })
         })

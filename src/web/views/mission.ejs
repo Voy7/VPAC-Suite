@@ -46,6 +46,7 @@
 
                         let aakills = 0
                         let agkills = 0
+                        let unknowns = 0
 
                         // Set default user info / fetch unique user data.
                         let aircraft = dcs.parseLong(entries[0].playerAircraft)
@@ -66,7 +67,8 @@
                                 if (entry.event == "KILL") {
                                     const unitType = dcs.unitType(entry.killedUnit)
                                     if (unitType == "A" || unitType == "H") aakills++
-                                    else if (entry.killedUnit != "Unknown") agkills ++
+                                    else if (entry.killedUnit == "Unknown") unknowns++
+                                    else agkills ++
 
                                     if (!clusters.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)) clusters.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, 0)
                                     if (!killInfo.get(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`)) killInfo.set(`${entry.killedSide}-${dcs.parseLong(entry.killedUnit)}`, [])
@@ -164,7 +166,7 @@
                                     </div>
                                 <% } %>
                             <% })
-                            if (aakills == 0 && agkills == 0) { %>
+                            if (aakills == 0 && agkills == 0 && unknowns == 0) { %>
                                 <p class="no-kills">No Recorded Kills</p>
                             <% } %>
                             <ul>

@@ -50,14 +50,14 @@ function main(g, app, render, getLoginInfo) {
         const briefings = await db.briefingGetInfo("*")
         if (briefings.get(req.body.briefingClone)) {
             const clone = await db.briefingGetInfo(req.body.briefingClone)
-            db.run(`UPDATE briefings SET name=?1, elements=?2, data=?3 WHERE id=?4`, { 1: req.body.briefingName, 2: JSON.stringify(clone.elements), 3: JSON.stringify(clone.data), 4: id })
+            db.run(`UPDATE briefings SET name=?1, elements=?2, data=?3 WHERE id=?4`, { 1: req.body.briefingName.replaceAll(" ", "_"), 2: JSON.stringify(clone.elements), 3: JSON.stringify(clone.data), 4: id })
             if (!fse.existsSync(`miz/${req.body.briefingClone}/`)) return
             fse.cp(`miz/${req.body.briefingClone}/`, `miz/${id}/`, { recursive: true }, err => {
                 res.redirect(`/briefing-editor/${id}`)
             })
         }
         else {
-            db.run(`UPDATE briefings SET name=?1 WHERE id=?2`, { 1: req.body.briefingName, 2: id })
+            db.run(`UPDATE briefings SET name=?1 WHERE id=?2`, { 1: req.body.briefingName.replaceAll(" ", "_"), 2: id })
             res.redirect(`/briefing-editor/${id}`)
         }
     })
@@ -78,7 +78,6 @@ function main(g, app, render, getLoginInfo) {
 
     app.post("/developer_update", async (req, res) => {
         if (!await authUser(req, res)) return
-        console.log(req.body)
         db.run(`UPDATE developers SET name=?1, image=?2, color=?3, modules=?4 WHERE name=?5`, { 1: req.body.developerName, 2: req.body.developerImage, 3: req.body.developerColor, 4: req.body.developerModules, 5: req.body.developer })
         res.redirect(`/admin?s=developers&i=${req.body.index}`)
     })

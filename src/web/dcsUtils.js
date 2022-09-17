@@ -40,10 +40,12 @@ const unitList = [
     ["KC130", "KC-130", "KC-130 Tanker", "A", "KC130-red"],
     ["KC-135", "KC-135", "KC-135 Tanker", "A", "KC130-red"],
     ["KC135MPRS", "KC-135MPRS", "KC-135MPRS Tanker", "A", "KC130-red"],
+    ["MQ-9", "MQ-9", "MQ-9 Reaper", "A", "TF51-red"],
     ["Mirage-F1", "F1", "Mirage F1", "A", "MIG21-red"],
     ["M-2000", "M-2000C", "Mirage 2000C", "A", "MIG21-red"],
     ["A-50", "A-50", "A-50 Mainstay", "A", "KC130-red"],
     ["An-30", "An-30M", "An-30M Clank", "A", "KC130-red"],
+    ["Yak-40", "Yak-40", "Yak-40", "A", "A10-red"],
     ["IL-76", "IL-76", "IL-76 Candid", "A", "KC130-red"],
     ["IL-78", "IL-78", "IL-78 Midas", "A", "KC130-red"],
     ["Tu-22", "Tu-22", "Tu-22 Blinder", "A", "KC130-red"],
@@ -84,7 +86,7 @@ const unitList = [
     ["snr s-125 tr", "SA-3", "SA-3 Track Radar", "EW"],
     ["5p73 s-125 ln", "SA-3", "SA-3 Launcher", "LS; 11"],
     ["RLS_19J6", "SA-5", "SA-5 Search Radar", "EW"],
-    ["RLS_19J6", "SA-5", "SA-5 Track Radar", "EW"],
+    ["RPC_5N62V", "SA-5", "SA-5 Track Radar", "EW"],
     ["S-200_Launcher", "SA-5", "SA-5 Launcher", "LS; 80"],
     ["Kub 1S91", "SA-6", "SA-6 Kub S/T Radar", "EW"],
     ["Kub 2P25", "SA-6", "SA-6 Kub Launcher", "MS; 8"],
@@ -125,6 +127,7 @@ const unitList = [
     ["Patriot ln", "Patriot", "Patriot Launcher", "LS; 25"],
     ["Roland", "Roland", "Roland ADS", "MS; 3.5"],
     ["HQ-7_LN_SP", "HQ-7", "HQ-7 Banner", "MS; 8"],
+    ["Soldier stinger", "Stinger", "FIM-92 Stinger", "MS; 3"],
 
     // AAA Guns
     ["ZSU-23-4", "AAA", "ZSU-23-4 23mm Shilka", "AAA"],
@@ -132,6 +135,8 @@ const unitList = [
     ["ZU-23 Emplacement", "AAA", "ZU-23 23mm AAA Emplacement", "AAA"],
     ["S-60", "AAA", "S-60 57mm AAA", "AAA"],
     ["ZSU_57", "AAA", "ZSU-57 57mm AAA", "AAA"],
+    ["M1097", "AAA", "M1097 Avenger AAA", "AAA"],
+    ["M48 ", "AAA", "M48 Chaparral AAA", "AAA"],
     
     // EW Radars
     ["EWR 1L119", "EWR", "EWR 1L119", "EW"],
@@ -140,7 +145,7 @@ const unitList = [
 
     // Infantry
     ["Infantry", "Infantry", "Infantry", "IF"],
-    ["Soildier", "Infantry", "Infantry", "IF"],
+    ["Soldier", "Infantry", "Infantry", "IF"],
     ["Paratrooper", "Infantry", "Paratrooper", "IF"],
     ["Infantry AK", "Infantry", "Infantry AK-47", "IF"],
     ["Infantry AK-47", "Infantry", "Infantry AK-47", "IF"],
@@ -171,16 +176,27 @@ const unitList = [
     ["Chieftain_mk3", "MBT", "Chieftain Mk.3 MBT", "ART"],
     ["Smerch_HE", "Artillery", "Smerch 300mm Artillery", "ARL"],
     ["Grad-URAL", "Artillery", "MLRS Grad 122mm", "ARL"],
+    ["PLZ05", "Artillery", "PLZ-05 155mm Artillery", "ARL"],
+    ["M-109", "Artillery", "M109 155mm Artillery", "ARL"],
+    ["Leopard-2", "MBT", "Leopard 2 MBT", "ART"],
+    ["M-1 Abrams", "MBT", "M1 Abrams MBT", "ART"],
+    ["M-2 Bradley", "IFV", "M2 Bradley IFV", "ART"],
+    ["M1134", "ATGM", "M1134 Stryker ATGM", "ART"],
+    ["Marder", "IFV", "Marder IFV", "ART"],
+    ["VAB_Mephisto", "ATGM", "VAB Mephisto ATGM", "ART"],
+    ["M1045 HMMWV TOW", "ATGM", "M1045 HMMWV ATGM", "ARW"],
+    ["M1043 HMMWV Armament", "HMMWV", "M1043 HMMWV", "ARW"],
+
 
 
     // Support Utlity
-    ["Ural-375 PBU", "Ural-375", "Ural-375 PBU Truck", "S"],
-    ["Ural-375", "Ural-375", "Ural-375 Truck", "S"],
-    ["Ural-4320T", "Ural-4320T", "Ural-4320T Truck", "S"],
-    ["ZIL-135", "ZIL-135", "ZIL-135 Truck", "S"],
-    ["M 818", "M 818", "M-818 Truck", "S"],
-    ["KAMAZ", "KAMAZ", "KAMAZ Truck", "S"],
-    ["UAZ-469", "UAZ-469", "UAZ-469 Jeep", "S"],
+    ["Ural-375 PBU", "Truck", "Ural-375 PBU Truck", "S"],
+    ["Ural-375", "Truck", "Ural-375 Truck", "S"],
+    ["Ural-4320T", "Truck", "Ural-4320T Truck", "S"],
+    ["ZIL-135", "Truck", "ZIL-135 Truck", "S"],
+    ["M 818", "Truck", "M818 Heavy Truck", "S"],
+    ["KAMAZ", "Truck", "KAMAZ Truck", "S"],
+    ["UAZ-469", "Truck", "UAZ-469 Jeep", "S"],
     ["ERO_Tent", "Tent", "Tent", "S"],
     ["Small Warehouse", "Warehouse", "Warehouse", "S"],
 
@@ -233,7 +249,7 @@ function parseLong(name) {
 }
 
 function unitIcon(name) {
-    let icon = `/assets/armor-tracked-icon-red.png`
+    let icon = `/assets/default-icon-red.png`
     unitList.forEach(unit => {
         if (!name.startsWith(unit[0])) return
         let type = unit[3].split("; ")[0]

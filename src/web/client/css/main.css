@@ -15,6 +15,8 @@
     --border-color-2: rgb(70, 70, 70);
 }
 
+body { background-color: rgb(30, 30, 30); }
+
 .bg {
     position: fixed;
     height: 100vh;
