@@ -285,6 +285,15 @@ function unitType(name) {
     return type
 }
 
+function unitCode(name) {
+    let code = null
+    unitList.forEach(unit => {
+        if (!name.startsWith(unit[0])) return
+        code = unit[3].split("; ")[0]
+    })
+    return code
+}
+
 function unitThreatRing(name) {
     let size = null
     unitList.forEach(unit => {
@@ -299,4 +308,4 @@ function parseTimeShort(time) {
     else return "-/-"
 }
 
-module.exports = { parseShort, parseLong, unitIcon, unitType, unitThreatRing, parseTimeShort }
+module.exports = { parseShort, parseLong, unitIcon, unitType, unitCode, unitThreatRing, parseTimeShort }

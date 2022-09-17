@@ -158,7 +158,7 @@
 #elements-container #options {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    /* gap: 15px; */
     min-width: 500px;
     padding: 10px;}
 
@@ -171,6 +171,7 @@
     display: block;
     width: 300px;
     padding: .3em;
+    margin-bottom: 15px;
     font-size: 16px;
     background-color: rgb(50, 50, 50);
     border: 1px solid var(--border-color-2);
@@ -188,6 +189,7 @@
     width: 500px;
     height: 150px;
     padding: .3em;
+    margin-bottom: 15px;
     font-size: 14px;
     background-color: rgb(40, 40, 40);
     border: 1px solid var(--border-color-2);
@@ -201,6 +203,7 @@
     display: block;
     min-width: 8em;
     padding: .2em;
+    margin-bottom: 15px;
     font-size: 16px;
     background-color: var(--bg-color-2);
     border: 1px solid var(--border-color-1);
@@ -208,6 +211,7 @@
 
 #options .delete-element {
     padding: .2em .4em;
+    margin-top: 10px;
     font-size: 15px;
     color: rgb(255, 125, 125);
     background: none;
@@ -218,8 +222,8 @@
 }
 
 #options .delete-element:hover { color: white; background-color: rgb(255, 125, 125); }
-#options .no-miz { color: rgb(255, 100, 100); }
-#options .note { font-size: 15px; color: rgb(100, 100, 100); }
+#options .no-miz { margin-bottom: 15px; color: rgb(255, 100, 100); }
+#options .note { margin: 15px 0; font-size: 15px; color: rgb(100, 100, 100); }
 
 /* -- Modals -- */
 /* New element modal */

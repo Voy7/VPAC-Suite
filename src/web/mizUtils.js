@@ -54,6 +54,7 @@ async function getMissionData(data) {
                                 long: dcs.parseLong(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
                                 icon: dcs.unitIcon(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
                                 ring: dcs.unitThreatRing(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
+                                code: dcs.unitCode(await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.type`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.x`),
                                 y: await get(data, `coalition.${coalition}.country.${country.key.value}.vehicle.group.${vehicle.key.value}.units.${unit.key.value}.y`),
                             })

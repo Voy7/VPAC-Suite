@@ -1,4 +1,3 @@
-const debugUnits = false
 const coalitions = ["blue", "red"]
 
 function updateBriefing(briefing) {
@@ -259,6 +258,7 @@ function initMap() {
 
     // Update/put all the elements on the map.
     function populateMap() {
+        const mapOptions = briefing.elements.find(e => e.type == "map").args
         const coalitions = ["red", "blue"]
         const flightPath = []
         const threatRings = []
@@ -282,12 +282,6 @@ function initMap() {
         // Groups / aircraft.
         coalitions.forEach(coalition => {
             miz.groups[coalition].forEach(group => {
-                if (debugUnits) {
-                    // Get name of all units
-                    group.units.forEach(unit => {
-                        console.log(`%c[${unit.name}]: ${unit.type}`, "color: aqua;")
-                    })
-                }
                 if (group.type == "ground") {
                     if (group.name.startsWith("AIRPORT")) {
                         const airport = group.name.replace("AIRPORT ", "")
@@ -300,10 +294,24 @@ function initMap() {
                         createHTMLMapMarker({ map, html, position: group.loc })
                     }
                     if (group.hiddenOnMFD == "true") return
+
                     let ringUnit = null
                     group.units.forEach(unit => {
                         if (unit.ring) ringUnit = unit
                     })
+
+                    // Hide certain unit types options gate.
+                    let code = group.units[0].code
+                    if (ringUnit != null) code = ringUnit.code
+                    if (mapOptions.hideArmor == true && code == "ART") return
+                    if (mapOptions.hideArmor == true && code == "ARW") return
+                    if (mapOptions.hideArtillery == true && code == "ARL") return
+                    if (mapOptions.hideInfantry == true && code == "IF") return
+                    if (mapOptions.hideSupport == true && code == "S") return
+                    if (mapOptions.hideAAA == true && code == "AAA") return
+                    if (mapOptions.hideSAMs == true && code == "LS") return
+                    if (mapOptions.hideSAMs == true && code == "MS") return
+                    if (mapOptions.hideEWR == true && code == "EW") return
 
                     let html = `<img src="${group.units[0].icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${group.units[0].short}</div>`                    
                     if (ringUnit) html = `<img src="${ringUnit.icon}" class="sam icon-${coalition} map-item" /><div class="sam-label map-item">${ringUnit.short}</div>`                    
@@ -322,7 +330,8 @@ function initMap() {
                 }
                 else if (group.type == "ship") {
                     if (group.hiddenOnMFD == "true") return
-                    console.log(group.units)
+                    if (mapOptions.hideShips == true) return
+
                     group.units.forEach(ship => {
                         if (ship.id == 1) {
                             let html = `<img src="${ship.icon}" class="ship icon-${coalition} map-item" /></div><div class="ship-label marker-${coalition}">${ship.short}</div>`

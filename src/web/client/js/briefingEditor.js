@@ -170,7 +170,15 @@ function selectElement(order) {
     // Options for all different types of elements.
     // --------------------------------------------
     if (element.type == "map") { // Map
-        addOption(element, "note", "There are no options for this element.")
+        addOption(element, "hideArmor", "Hide Armor", "checkbox")
+        addOption(element, "hideArtillery", "Hide Artillery", "checkbox")
+        addOption(element, "hideInfantry", "Hide Infantry", "checkbox")
+        addOption(element, "hideSupport", "Hide Support Vehicles", "checkbox")
+        addOption(element, "hideAAA", "Hide AAA", "checkbox")
+        addOption(element, "hideSAMs", "Hide SAMs", "checkbox")
+        addOption(element, "hideEWR", "Hide Radars", "checkbox")
+        addOption(element, "hideShips", "Hide Ships", "checkbox")
+        addOption(element, "note", `<span style="color: aqua;">NOTE: You must refresh the page to see these changes.</span>`)
         if (!miz) return addOption(element, "no-miz")
         let unitsInfo = []
         let unitsUnknown = []
