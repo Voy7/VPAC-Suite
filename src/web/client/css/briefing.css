@@ -115,6 +115,7 @@ hr {
 .waypoints-chart .task { width: 550px; text-align: left; font-size: 17px; color: black; }
 .waypoints-chart .alt { width: 100px; text-align: center; color: black; }
 .waypoints-chart .dist { width: 100px; text-align: center; color: black; }
+.waypoints-chart .tos { width: 100px; text-align: center; color: black; }
 .waypoints-chart tr:nth-child(odd) { background-color: rgb(210, 210, 210); }
 
 /* Element - Weather info */
@@ -297,14 +298,26 @@ hr {
     z-index: 1001;
 }
 
-.waypoint::after {
+.waypoint-label {
+    transform: translate(5px, -23px);
+    /* top: -14px; */
+    /* left: 12px; */
+    padding: 0 1px;
+    white-space: nowrap;
+    font-size: 17px;
+    color: white;
+    background-color: rgba(60, 59, 0, 0.7);
+    z-index: 1001;
+}
+
+/* .waypoint::after {
     position: relative;
     top: -14px;
     left: 12px;
     font-size: 17px;
     color: white;
     content: attr(data-label);
-}
+} */
 
 .airport {
     width: 20px;

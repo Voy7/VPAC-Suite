@@ -50,6 +50,7 @@ function updateBriefing(briefing) {
                         <td class="task">${waypoint.task}</td>
                         <td class="alt">${waypoint.alt}</td>
                         <td class="dist">${waypoint.distance}</td>
+                        <td class="tos">${waypoint.tos}</td>
                     </tr>`
             }
             addElement(`
@@ -58,7 +59,7 @@ function updateBriefing(briefing) {
                     <img src="/assets/logo.png" />
                     <table cellspacing="0">
                         <tr class="rows-header">
-                            <td>#</td><td>Location</td><td>Task</td><td>Alt</td><td>Dist</td>
+                            <td>#</td><td>Location</td><td>Task</td><td>Alt</td><td>Dist</td><td>TOS</td>
                         </tr>
                         ${waypoints}
                     </table>
@@ -69,6 +70,7 @@ function updateBriefing(briefing) {
                 let task = "-"
                 let alt = `-`
                 let distance = "-"
+                let tos = "-"
                 if (waypoint && labels[waypoint.id - 1]) {
                     loc = labels[waypoint.id - 1].loc
                     task = labels[waypoint.id - 1].task
@@ -80,7 +82,8 @@ function updateBriefing(briefing) {
                     else distance = `${Math.round(dist / 1852).toLocaleString("en-US")} nm`
                 }
                 if (waypoint) alt = `${Math.round(waypoint.alt * 3.28).toLocaleString("en-US")} ft`
-                return { loc, task, distance, alt }
+                if (waypoint && waypoint.etaFixed == 'true') tos = new Date((parseInt(miz.date.time) + parseInt(waypoint.eta)) * 1000).toISOString().slice(11, 19)
+                return { loc, task, distance, alt, tos }
             }
         }
         else if (element.type == "radioChart") {
@@ -362,7 +365,7 @@ function initMap() {
                                 let html = `<img src="${group.units[0].icon}" class="aircraft icon-${coalition} map-item" style="transform: translate(-50%, -50%) rotate(0deg);" /><div class="aircraft-label map-item aircraft-${coalition}">${group.units[0].short} (${group.name.split('-')[0]})</div>`
                                 createHTMLMapMarker({ map, html, position: waypoint.loc })
                                 let orbit = new google.maps.Circle({
-                                    center: waypoint.loc, strokeColor: "#326973", strokeWeight: 1.5, radius: 10000
+                                    center: waypoint.loc, strokeColor: "#326973", strokeWeight: 1.5, fillOpacity: 0, radius: 10000
                                 })
                                 orbit.setMap(map)
                             }
@@ -423,7 +426,13 @@ function initMap() {
             group.route.forEach(waypoint => {
                 if (!waypoint || waypoint.id <= 1) return
                 path.push(waypoint.loc)
-                let html = `<div class="waypoint map-item" data-label="${waypoint.id - 1}"></div>`
+                let totSpan = ``
+                if (waypoint.etaFixed == 'true') {
+                    let milSeconds = (parseInt(miz.date.time) + parseInt(waypoint.eta)) * 1000
+                    let tot = new Date(milSeconds).toISOString().slice(11, 19)
+                    totSpan = `<span class="wyp-label-extra">. TOS ${tot}</span>`
+                }
+                let html = `<div class="waypoint map-item"></div><div class="waypoint-label map-item">${waypoint.id - 1}${totSpan}</div>`
                 createHTMLMapMarker({ map, html, position: waypoint.loc })
             })
             waypointPath = new google.maps.Polyline({
@@ -441,6 +450,7 @@ function initMap() {
         optionsHTML += `<li data-option="terrain" class="item-selected"><img class="icon-blue" src="/assets/infantry-icon-red.png" /><span>Terrain</span></li>`
         optionsHTML += `<li data-option="sams" class="item-selected"><img class="icon-blue" src="/assets/motorized-sam-icon-red.png" /><span>SAM Rings</span></li>`
         optionsHTML += `<li data-option="airports" class="item-selected"><img class="icon-blue" src="/assets/truck-icon-red.png" /><span>Airfields</span></li>`
+        optionsHTML += `<li data-option="wypLabels" class="item-selected"><img class="icon-blue" src="/assets/FA18-red.png" /><span>Wyp TOS</span></li>`
         optionsHTML += `</ul>`
         optionsElement.innerHTML = optionsHTML.trim()
         document.querySelector("#map").appendChild(optionsElement)
@@ -473,6 +483,10 @@ function initMap() {
             if (option == "airports") {
                 if (options[option]) $(".airport").fadeIn(300)
                 else $(".airport").fadeOut(0)
+            }
+            if (option == "wypLabels") {
+                if (options[option]) $(".wyp-label-extra").fadeIn(300)
+                else $(".wyp-label-extra").fadeOut(0)
             }
         }
     }

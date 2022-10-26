@@ -173,6 +173,8 @@ async function getMissionData(data) {
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.x`),
                                 y: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.y`),
                                 alt: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.alt`),
+                                eta: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.ETA`),
+                                etaFixed: await get(data, `coalition.${coalition}.country.${country.key.value}.plane.group.${plane.key.value}.route.points.${route.key.value}.ETA_locked`),
                                 orbit: orbit
                             }
                         })
@@ -228,7 +230,9 @@ async function getMissionData(data) {
                                 loc: convertMapCoords(map, await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.x`), await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.y`)),
                                 x: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.x`),
                                 y: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.y`),
-                                alt: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.alt`)
+                                alt: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.alt`),
+                                eta: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.ETA`),
+                                etaFixed: await get(data, `coalition.${coalition}.country.${country.key.value}.helicopter.group.${helicopter.key.value}.route.points.${route.key.value}.ETA_locked`)
                             }
                         })
                         groups[coalition].push({
