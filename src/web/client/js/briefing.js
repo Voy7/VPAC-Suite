@@ -418,6 +418,9 @@ function initMap() {
             document.querySelectorAll(".waypoint").forEach(waypoint => {
                 waypoint.remove()
             })
+            document.querySelectorAll(".waypoint-label").forEach(waypoint => {
+                waypoint.remove()
+            })
 
             const group = getGroupByName(name)
             if (!group) return
