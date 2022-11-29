@@ -67,10 +67,9 @@ header ul {
 }
 
 header ul::-webkit-scrollbar { display: none; }
-header ul li { padding: .8em 0; }
+header ul li { padding: .8em 0; white-space: nowrap; }
 
 header ul li a {
-    /* margin: 0 5px; */
     padding: .7em 0.8em;
     font-size: 16px;
     text-decoration: none;

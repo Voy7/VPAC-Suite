@@ -52,6 +52,7 @@
             <% })
             let index = 0
             missionOrder.forEach(mission => {
+                if (mission.players.length <= 1) return
                 index++
                 if (index == 1) { %>
                     <h3>MOST RECENT MISSION</h3>
@@ -102,7 +103,7 @@
         <section id="about-container">
             <h3>ABOUT MISSIONS</h3>
             <div class="about">
-                <p>VPAC currently runs campaign missions every Friday and Saturday night. One-off missions may also be hosted during week days at the discretion of squadron leaders. Each mission lasts 2-3 hours and starts with a 10-20 minute briefing.<br /><br />To see accurate mission times and to RSVP, please see the <span>#mission-announcements</span> channel on Discord.</p>
+                <p>VPAC currently runs campaign missions every Friday and Saturday night. One-off missions may also be hosted during week days at the discretion of squadron leaders. Each mission lasts 2-3 hours and starts with a 20-30 minute briefing.<br /><br />To see accurate mission times and to RSVP, please see the <span>#mission-announcements</span> channel on Discord.</p>
             </div>
             <h3>GLOBAL MISSION STATS</h3>
             <div class="all-stats">
