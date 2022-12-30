@@ -46,7 +46,11 @@ function main(g) {
         render(req, res, "missions", { missions, briefings })
     })
 
-    app.get("/resources", async (req, res) => render(req, res, "resources"))
+    app.get("/gallery", async (req, res) => {
+        let guild = await db.get("guild")
+        let images = guild.galleryImages
+        render(req, res, "gallery", { images })
+    })
 
     app.get("/modules", async (req, res) => {
         let developers = await db.developerGetInfo("*")

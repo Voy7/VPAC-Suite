@@ -22,6 +22,7 @@ function main(g) {
 
         if (g.guild) {
             require("./discordCache") (g)
+            require("./banner") (g)
             console.log(`${g.bot.user.username} is now active.`.green)
         }
         else console.log(`Could not find specified Discord server!`.red)

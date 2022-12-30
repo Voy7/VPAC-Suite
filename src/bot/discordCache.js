@@ -1,7 +1,7 @@
 const db = require("../database")
 
 // Every 5 minutes fetch members, roles, etc from Discord.
-function discordCacheLoop(g) {
+async function discordCacheLoop(g) {
     const members = []
     const roles = []
 
@@ -27,9 +27,23 @@ function discordCacheLoop(g) {
             icon: role.icon
         })
     })
+
+    // Gallery
+    let galleryImages = []
+    const galleryChannel = g.guild.channels.cache.find(f => f.id == g.config.bot.galleryChannel)
+    if (galleryChannel) {
+        const messages = await galleryChannel.messages.fetch({ limit: 100 })
+        messages.forEach(message => {
+            if (message.attachments.size <= 0) return
+            message.attachments.forEach(img => {
+                galleryImages.push(img.url)
+            })
+            message.react("✅")
+        })
+    }
     
     // Update database with new info.
-    db.set("guild", { members, roles })
+    db.set("guild", { members, roles,  galleryImages })
     
     // Loop this function every 5 minutes.
     setTimeout(() => { discordCacheLoop(g) }, 300000)

@@ -37,6 +37,8 @@ document.addEventListener("keydown", event => {
 })
 
 // Background loading image until page loads.
+// Or if it's been more than 3 seconds.
 $(window).on("load", function() {
     $("#loading-container").fadeOut(100)
 })
+setTimeout(() => { $("#loading-container").fadeOut(100) }, 3000)

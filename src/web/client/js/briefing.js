@@ -265,6 +265,7 @@ function initMap() {
         const coalitions = ["red", "blue"]
         const flightPath = []
         const threatRings = []
+        const supportAircraftOrbits = []
         let waypointPath = null
         let firstAircraft = null
 
@@ -356,7 +357,7 @@ function initMap() {
                     })
                 }
                 else if (group.type == "aircraft") {
-                    // Racetrack aircraft
+                    // Racetrack/Support aircraft
                     if (group.task == "Refueling" || group.task == "AWACS") {
                         if (coalition != "blue") return
                         group.route.forEach(waypoint => {
@@ -368,6 +369,7 @@ function initMap() {
                                     center: waypoint.loc, strokeColor: "#326973", strokeWeight: 1.5, fillOpacity: 0, radius: 10000
                                 })
                                 orbit.setMap(map)
+                                supportAircraftOrbits.push(orbit)
                             }
                             if (waypoint.orbit == "Race-Track") {
                                 let flyTo = group.route[waypoint.id + 1]
@@ -382,6 +384,7 @@ function initMap() {
                                     path, strokeColor: "#326973", strokeWeight: 2.5, strikeStyle: "Dashed"
                                 })
                                 flightPath[group.name].setMap(map)
+                                supportAircraftOrbits.push(flightPath[group.name])
                             }
                         })
                     }
@@ -454,6 +457,7 @@ function initMap() {
         optionsHTML += `<li data-option="sams" class="item-selected"><img class="icon-blue" src="/assets/motorized-sam-icon-red.png" /><span>SAM Rings</span></li>`
         optionsHTML += `<li data-option="airports" class="item-selected"><img class="icon-blue" src="/assets/truck-icon-red.png" /><span>Airfields</span></li>`
         optionsHTML += `<li data-option="wypLabels" class="item-selected"><img class="icon-blue" src="/assets/FA18-red.png" /><span>Wyp TOS</span></li>`
+        optionsHTML += `<li data-option="supportAircraft" class="item-selected"><img class="icon-blue" src="/assets/E3A-red.png" /><span>Support A/C</span></li>`
         optionsHTML += `</ul>`
         optionsElement.innerHTML = optionsHTML.trim()
         document.querySelector("#map").appendChild(optionsElement)
@@ -490,6 +494,18 @@ function initMap() {
             if (option == "wypLabels") {
                 if (options[option]) $(".wyp-label-extra").fadeIn(300)
                 else $(".wyp-label-extra").fadeOut(0)
+            }
+            if (option == "supportAircraft") {
+                if (options[option]) {
+                    supportAircraftOrbits.forEach(line => { line.setMap(map) })
+                    $(".aircraft").fadeIn(300)
+                    $(".aircraft-label").fadeIn(300)
+                }
+                else {
+                    supportAircraftOrbits.forEach(line => { line.setMap(null) })
+                    $(".aircraft").fadeOut(0)
+                    $(".aircraft-label").fadeOut(0)
+                }
             }
         }
     }
