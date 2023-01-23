@@ -127,10 +127,11 @@ dist
 .pnp.*
 
 # VPAC-Suite specific
+.env
 config.json
 database.sqlite
 ssl/
 miz/
-mission
+src/web/.next/
 src/lua/*
 !src/lua/VPAC-Stats/
