@@ -1,9 +1,18 @@
-const dcsUtils = require("./web/dcsUtils")
-const sqlite3 = require("sqlite3")
-const db = new sqlite3.Database("./database.sqlite")
-const fs = require("fs")
-const miz = require("./web/mizUtils")
-const luaJson = require("luaparse")
+import sqlite3 from 'sqlite3'
+import luaJson from 'luaparse'
+import fs from 'fs'
+import dcsUtils from './dcsUtils.js'
+import miz from './mizUtils.js'
+
+const db = new sqlite3.Database('./database.sqlite')
+
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS users (id TEXT, ucid TEXT, key TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS missions (mission TEXT, event TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS squadrons (id TEXT, role TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS briefings (id TEXT, name TEXT, public TEXT, elements TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS developers (name TEXT, image TEXT, link TEXT, color TEXT, modules TEXT, extra TEXT)`)
+})
 
 // Run given query/queries.
 function run(queries, values) {
@@ -326,5 +335,6 @@ function developerGetInfo(name) {
     })
 }
 
-// Export modules.
-module.exports = { run, set, get, setUser, getUser, missionAddEvent, missionGetEvent, missionGetInfo, squadronGetInfo, resourceGetInfo, briefingGetInfo, developerGetInfo }
+// Export module.
+export default db
+// module.exports = { db, run, set, get, setUser, getUser, missionAddEvent, missionGetEvent, missionGetInfo, squadronGetInfo, resourceGetInfo, briefingGetInfo, developerGetInfo }

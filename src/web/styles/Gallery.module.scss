@@ -1,0 +1,28 @@
+#gallery {
+  #images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+}
+
+.image {
+  opacity: 0;
+  transition: 1s;
+  cursor: pointer;
+}
+
+#image_modal {
+  img {
+    padding: 20px;
+    object-fit: contain;
+    animation: 150ms modal-image-fade ease-in-out forwards;
+  }
+
+  @keyframes modal-image-fade {
+    from { scale: 0; }
+    to { scale: 1; }
+  }
+}

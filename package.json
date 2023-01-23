@@ -1,33 +1,32 @@
 {
-  "name": "vpac-suite",
-  "version": "1.0.0",
-  "description": "All things related to the VPAC DCS group. Controls the website, Discord bot, lua scripts & others.",
-  "main": "src/main.js",
-  "author": {
-    "name": "Voy"
+  "name": "vpac",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js --experimental-modules",
+    "build": "next build ./src/web",
+    "start": "cross-env PROJECT_MODE=production node src/server.js --experimental-modules"
   },
   "dependencies": {
-    "archiver": "^5.3.1",
-    "bcrypt": "^5.0.1",
     "colors": "^1.4.0",
-    "cors": "^2.8.5",
-    "discord.js": "^13.6.0",
-    "dotenv": "^16.0.1",
-    "ejs": "^3.1.7",
-    "express": "^4.17.3",
-    "express-flash": "^0.0.2",
-    "express-session": "^1.17.3",
+    "cookie": "^0.5.0",
+    "cross-env": "^7.0.3",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
-    "fs-extra": "^10.1.0",
-    "https": "^1.0.0",
-    "ip": "^1.1.5",
+    "fs-extra": "^11.1.0",
     "luaparse": "^0.3.1",
     "net": "^1.0.2",
-    "passport": "^0.6.0",
-    "passport-local": "^1.0.0",
-    "path": "^0.12.7",
-    "socket.io": "^4.5.0",
-    "sqlite3": "^5.0.5",
+    "next": "13.1.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sass": "^1.57.1",
+    "sqlite3": "^5.1.4",
     "zip-lib": "^0.7.3"
+  },
+  "devDependencies": {
+    "eslint": "8.31.0",
+    "eslint-config-next": "13.1.1"
   }
 }

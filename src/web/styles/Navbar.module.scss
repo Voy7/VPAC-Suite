@@ -1,0 +1,100 @@
+#navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  gap: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url('/assets/bg4.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-blend-mode: darken;
+  border-bottom: 1px solid gray;
+  overflow: hidden;
+
+  #logo {
+    padding: 10px;
+    opacity: 0.9;
+    scale: 0.9;
+    transition: 300ms;
+    &:hover { opacity: 1; scale: 1; }
+  }
+
+  @media (max-width: 700px) {
+    justify-content: unset;
+  }
+
+  #center {
+    max-width: 100%;
+
+    #title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        margin: 0;
+        padding: 5px;
+        font-size: 1.6rem;
+        text-align: center;
+        color: white;
+        animation: shimmer 1s ease-in-out;
+
+        @keyframes shimmer {
+          0% { translate: 0 0; color: white; }
+          30% { translate: 0 -3px; color: rgb(175, 255, 255); }
+          70% { translate: 0 1px; }
+          100% { translate: 0 0; color: white; }
+        }
+  
+        @media (max-width: 700px) {
+          font-size: 1.2rem;
+        }
+      }
+    }
+    
+    #pages {
+      display: flex;
+      overflow-x: scroll;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+  
+      a {
+        padding: 5px 15px;
+        font-size: 1.2rem;
+        text-decoration: none;
+        white-space: nowrap;
+        color: rgb(200, 200, 200);
+        transition: 150ms;
+        &:hover { color: rgb(230, 230, 230); scale: 1.1; }
+        &.selected { color: white; border-bottom: 2px solid pink; scale: 1; }
+        @media (max-width: 700px) {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+.login_button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 15px;
+  font-size: 1rem;
+  color: rgb(230, 230, 230);
+  cursor: pointer;
+
+  img { border-radius: 50%; }
+
+  a {
+    padding: 4px 8px;
+    font-size: 1rem;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}

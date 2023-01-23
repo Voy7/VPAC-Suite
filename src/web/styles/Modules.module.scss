@@ -1,0 +1,106 @@
+// .bg { background-image: url("/assets/bg8.png"); }
+
+#modules {
+  #developers {
+    width: 90vw;
+    margin: 0 auto;
+    background: blue;
+
+    // Kind of hacky way, but only way I could find to keep the containers centered.
+    @media screen and ( max-width: calc(370px * 7) ) { & { width: calc(370px * 6); } }
+    @media screen and ( max-width: calc(370px * 6) ) { & { width: calc(370px * 5); } }
+    @media screen and ( max-width: calc(370px * 5) ) { & { width: calc(370px * 4); } }
+    @media screen and ( max-width: calc(370px * 4) ) { & { width: calc(370px * 3); } }
+    @media screen and ( max-width: calc(370px * 3) ) { & { width: calc(370px * 2); } }
+    @media screen and ( max-width: calc(370px * 2) ) { & { width: calc(370px * 1); } }
+
+    .developer {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 5px;
+      width: 350px;
+      min-height: 140px;
+      margin: 10px;
+      float: left;
+      background-color: var(--bg-color-1);
+      border: 1px solid var(--border-color-1);
+      border-radius: 10px;
+      overflow: hidden;
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        width: 100%;
+        padding: 3px;
+        border-bottom: 1px solid var(--border-color-1);
+        background-color: rgb(40, 40, 60);
+
+        img {
+          width: 40px;
+          height: 40px;
+          background-color: rgba(0, 0, 0, 0.5);
+          border-radius: 50%;
+        }
+      }
+
+      h2 { font-size: 1.1rem; }
+
+      .body {
+        width: 100%;
+        padding: 0 10px 10px 10px;
+
+        h3 {
+          margin: 10px 0 3px 0;
+          font-weight: normal;
+          font-size: 16px;
+          color: rgb(128, 128, 128);
+        }
+      }
+
+      table {
+        width: 100%;
+        
+        td { padding: 0 3px; color: inherit; }
+        
+        tr {
+          margin: 1px 0;
+          font-size: 15px;
+          color: rgb(170, 170, 170);
+          &:hover { background-color: var(--bg-color-2); cursor: default; }
+          
+          // Seperate colors for different status.
+          &.Released { color: rgb(180, 255, 180); }
+          &.Early { color: rgb(180, 255, 180); }
+          &.In { color: rgb(180, 255, 255); }
+  
+          a {
+            color: inherit;
+            &.source:hover { color: rgb(0, 0, 255); }
+          }
+  
+          .name {
+            max-width: 180px;
+            min-width: 180px;
+            padding-right: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            &:hover { white-space: unset; }
+          }
+  
+          .status {
+            max-width: 160px;
+            min-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            &:hover { white-space: unset; }
+          }
+        }
+      }
+    }
+  }
+}

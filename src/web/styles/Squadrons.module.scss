@@ -1,0 +1,121 @@
+#squadrons {
+  #squadrons_list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+
+    .squadron {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: clamp(300px, 420px, 90vw);
+      // height: clamp(100%, 300px, 90vw);
+      background: var(--bg-color-1);
+      border: 1px solid var(--border-color-2);
+      border-radius: 10px;
+      overflow: hidden;
+
+      &[data-squadron="vfa37"] { border-color: orange; }
+      &[data-squadron="13th"] { border-color: blue; }
+
+      header {
+        padding: 20px 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        background-image: url('/assets/bg2.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        background-blend-mode: darken;
+        border-bottom: 1px solid black;
+
+        &[data-squadron="vfa37"] { background-image: url('/assets/bg8.png'); }
+        &[data-squadron="vx9"] { background-image: url('/assets/bg3.png'); }
+        &[data-squadron="13th"] { background-image: url('/assets/bg1.png'); }
+        &[data-squadron="vma223"] { background-image: url('/assets/bg5.png'); }
+        &[data-squadron="110th"] { background-image: url('/assets/bg3.png'); }
+        &[data-squadron="229th"] { background-image: url('/assets/bg2.png'); }
+        &[data-squadron="607th"] { background-image: url('/assets/bg3.png'); }
+
+        // border: 3px solid blue;
+
+        h2 {
+          margin: 0;
+          font-size: 1.25rem;
+          text-align: center;
+          color: white;
+        }
+
+        h3 {
+          margin: 10px 0 0 0;
+          font-size: 1.1rem;
+          text-align: center;
+          color: var(--text-color-2);
+        }
+      }
+
+      p {
+        padding: 0 13px 5px 13px;
+        font-size: .95rem;
+        color: var(--text-color-2);
+      }
+
+      h4 {
+        margin: 5px 10px;
+        font-size: 1rem;
+        font-weight: normal;
+        letter-spacing: 1px;
+        color: var(--text-color-3);
+      }
+
+      .members {
+        display: flex;
+        align-items: center;
+        margin: 0 7px 10px 7px;
+        padding: 5px 3px;
+        border-radius: 8px;
+        cursor: pointer;
+        &:hover { background: var(--bg-color-3); }
+
+        img { margin-right: -3px; border-radius: 50%; }
+      }
+
+      .callsigns {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 10px 20px 10px;
+
+        span {
+          padding: .2rem .4rem;
+          font-size: 1rem;
+          color: white;
+          background: rgb(40, 40, 40);
+          border: 1px solid rgb(50, 50, 50);
+          border-radius: 8px;
+        }
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+        // background: red;
+
+        button, a {
+          padding: .3em .6em;
+          text-decoration: none;
+          font-size: 1rem;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        button { background: rgb(45, 45, 45); }
+        a { background: rgb(0, 141, 141); }
+      }
+    }
+  }
+}

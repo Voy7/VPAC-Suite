@@ -1,0 +1,34 @@
+#login {
+  min-height: 75vh;
+  padding: 20px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: clamp(300px, 380px, 100%);
+    padding: 20px;
+    margin: auto;
+    background: var(--bg-color-1);
+    border: 2px solid var(--border-color-1);
+    border-radius: 10px;
+
+    label { text-align: center; }
+    input {
+      padding: 2px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: .3em;
+      font-size: 1rem;
+      color: white;
+      background: none;
+      border: 1px solid var(--border-color-2);
+      border-radius: 8px;
+      transition: 300ms;
+      cursor: pointer;
+      &:hover { background: aqua; }
+    }
+  }
+}
