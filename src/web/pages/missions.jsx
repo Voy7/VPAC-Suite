@@ -12,7 +12,7 @@ const DEFAULT_MISSIONS_COUNT = 20
 export default function Missions({ login, missions, publicBriefings }) {
   const [missionsCount, setMissionsCount] = useState(DEFAULT_MISSIONS_COUNT)
   
-  useEffect(() => useBackground('/assets/bg3.png', 0.75), [])
+  useEffect(() => useBackground('/backgrounds/bg3.png', 0.75), [])
   
   return (
     <>
@@ -33,7 +33,7 @@ export default function Missions({ login, missions, publicBriefings }) {
             </div>
           )
         })}
-        <h1>PREVIOUS MISSIONS</h1>
+        <h1>PREVIOUS MISSIONS ({missions.length})</h1>
         <div className={styles.container}>
           <table cellSpacing="0" id={styles.missions_list}>
             <tr className={styles.header}>
@@ -88,17 +88,15 @@ export default function Missions({ login, missions, publicBriefings }) {
   )
 }
 
-// Fetch login status & info function.
-import getLoginInfo from '/functions/getLoginInfo'
+// Pass login info to props and any other needed data.
 import getMissions from '/functions/getMissions'
-import getBriefing from '/functions/getBriefing'
+import getBriefings from '/functions/getBriefings'
 export async function getServerSideProps(context) {
-  const login = await getLoginInfo(context.req)
   const missions = await getMissions('*')
-  const briefings = await getBriefing('*')
+  const briefings = await getBriefings('*')
   const publicBriefings = briefings.filter(briefing => {
     return briefing.public && !missions.find(f => f.name == briefing.name)
   })
   
-  return { props: { login, missions, publicBriefings }}
+  return { props: { login: context.res.login, missions, publicBriefings }}
 }

@@ -6,7 +6,7 @@ import useBackground from '/hooks/useBackground'
 
 // Image gallery page.
 export default function Gallery({ login, images }) {
-  useBackground('/assets/bg5.png', 0.7)
+  useBackground('/backgrounds/bg5.png', 0.7)
   
   const shuffled = images
     .map(value => ({ value, sort: Math.random() }))
@@ -33,12 +33,10 @@ export default function Gallery({ login, images }) {
   )
 }
 
-// Fetch login status & info function.
-import getLoginInfo from '/functions/getLoginInfo'
+// Pass login info to props and any other needed data.
 import getGuild from '/functions/getGuild'
 export async function getServerSideProps(context) {
-  const login = await getLoginInfo(context.req)
   const guild = await getGuild()
   const images = guild.galleryImages ? guild.galleryImages : []
-  return { props: { login, images }}
+  return { props: { login: context.res.login, images }}
 }

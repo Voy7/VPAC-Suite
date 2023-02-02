@@ -23,20 +23,20 @@
       header {
         padding: 20px 10px;
         background-color: rgba(0, 0, 0, 0.5);
-        background-image: url('/assets/bg2.png');
+        background-image: url('/backgrounds/bg2.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
         background-blend-mode: darken;
         border-bottom: 1px solid black;
 
-        &[data-squadron="vfa37"] { background-image: url('/assets/bg8.png'); }
-        &[data-squadron="vx9"] { background-image: url('/assets/bg3.png'); }
-        &[data-squadron="13th"] { background-image: url('/assets/bg1.png'); }
-        &[data-squadron="vma223"] { background-image: url('/assets/bg5.png'); }
-        &[data-squadron="110th"] { background-image: url('/assets/bg3.png'); }
-        &[data-squadron="229th"] { background-image: url('/assets/bg2.png'); }
-        &[data-squadron="607th"] { background-image: url('/assets/bg3.png'); }
+        &[data-squadron="vfa37"] { background-image: url('/backgrounds/bg8.png'); }
+        &[data-squadron="vx9"] { background-image: url('/backgrounds/bg3.png'); }
+        &[data-squadron="13th"] { background-image: url('/backgrounds/bg1.png'); }
+        &[data-squadron="vma223"] { background-image: url('/backgrounds/bg5.png'); }
+        &[data-squadron="110th"] { background-image: url('/backgrounds/bg3.png'); }
+        &[data-squadron="229th"] { background-image: url('/backgrounds/bg2.png'); }
+        &[data-squadron="607th"] { background-image: url('/backgrounds/bg3.png'); }
 
         // border: 3px solid blue;
 
@@ -117,5 +117,31 @@
         a { background: rgb(0, 141, 141); }
       }
     }
+  }
+}
+
+// Squadron members modal.
+#members_modal {
+  width: clamp(300px, 450px, 100%);
+  max-height: 90vh;
+  padding: 10px;
+  background: var(--bg-color-1);
+  border: 2px solid var(--border-color-1);
+  border-radius: 10px;
+  overflow-y: scroll;
+
+  h2 {
+    margin: 10px 0 20px 0;
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--text-color-1);
+  }
+
+  h3 {
+    margin: 20px 0 5px 0;
+    font-size: 1.15rem;
+    font-weight: normal;
+    letter-spacing: 1px;
+    color: var(--text-color-2);
   }
 }

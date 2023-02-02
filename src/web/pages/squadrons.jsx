@@ -1,17 +1,23 @@
 import styles from '/styles/Squadrons.module.scss'
 import Navbar from '/components/Navbar'
+import SquadronMembersModal from '/components/SquadronMembersModal'
 
 import useBackground from '/hooks/useBackground'
 import Image from 'next/image'
+import { useState } from 'react'
 
 // Home page.
 export default function Squadrons({ login, squadrons }) {
-  useBackground('/assets/bg3.png', 0.7)
+  const [membersModal, setMembersModal] = useState(null)
+
+  useBackground('/backgrounds/bg3.png', 0.7)
   
-  console.log(squadrons)
   return (
     <>
       <Navbar login={login} currentPage="Squadrons" />
+
+      { membersModal && <SquadronMembersModal squadron={membersModal} close={() => setMembersModal(null)} /> }
+
       <main id={styles.squadrons}>
         <h1>SQUADRONS</h1>
         <div id={styles.squadrons_list}>
@@ -26,14 +32,14 @@ export default function Squadrons({ login, squadrons }) {
                 <div>
                   <header data-squadron={squadron.short}>
                     <h2>{squadron.name}</h2>
-                    <h3>{squadron.airframes.join(', ')}</h3>
+                    <h3>{squadron.airframes}</h3>
                   </header>
                   <p>{squadron.description}</p>
                 </div>
                 <div>
                   <h4>SQUADRON MEMBERS ({squadron.members.length}):</h4>
-                  <div className={styles.members}>
-                    {squadron.members.map(member => {
+                  <div className={styles.members} onClick={() => setMembersModal(squadron)}>
+                    { squadron.members.map(member => {
                       return (
                         <Image src={member.avatar} alt="PFP" width="20" height="20" />
                       )
@@ -41,7 +47,7 @@ export default function Squadrons({ login, squadrons }) {
                   </div>
                   <h4>COMMON CALLSIGNS:</h4>
                   <div className={styles.callsigns}>
-                    { squadron.callsigns.map(callsign => {
+                    { squadron.callsigns.split(',').map(callsign => {
                       return (
                         <span>{callsign}</span>
                       )
@@ -61,11 +67,9 @@ export default function Squadrons({ login, squadrons }) {
   )
 }
 
-// Fetch login status & info function.
-import getLoginInfo from '/functions/getLoginInfo'
+// Pass login info to props and any other needed data.
 import getSquadrons from '/functions/getSquadrons'
 export async function getServerSideProps(context) {
-  const login = await getLoginInfo(context.req)
   const squadrons = await getSquadrons()
-  return { props: { login, squadrons }}
+  return { props: { login: context.res.login, squadrons }}
 }

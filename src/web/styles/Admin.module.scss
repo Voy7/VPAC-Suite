@@ -1,0 +1,139 @@
+#admin {
+  margin: 20px;
+  
+  min-height: 75vh;
+  background: var(--bg-color-1);
+  border: 1px solid var(--border-color-1);
+
+  #sections {
+    border-bottom: 1px solid var(--border-color-1);
+
+    button {
+      padding: .5em 1em .4em 1em;
+      font-size: 1.1rem;
+      color: rgb(200, 200, 200);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+
+      &.selected {
+        color: white;
+        border-color: pink;
+      }
+    }
+  }
+
+  #body {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin: 20px;
+  }
+}
+
+// Sidebar item selection.
+.items {
+  width: 250px;
+  border: 1px solid var(--border-color-1);
+
+  header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 1.1rem;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    padding: .25em;
+    font-size: 1rem;
+    color: var(--text-color-1);
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      color: white;
+      background: var(--bg-color-3);
+    }
+
+    &.selected {
+      color: white;
+      background: var(--bg-color-4);
+    }
+
+    span {
+      min-width: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+// Options / main content area.
+#options {
+  display: flex;
+  flex-direction: column;
+  width: clamp(200px, 600px, 100%);
+
+  h2 {
+    margin: 10px 0;
+    font-size: 1.3rem;
+  }
+
+  label {
+    margin: 10px 0 3px 0;
+    font-size: 1.05rem;
+    color: white;
+  }
+
+  input, textarea {
+    font-size: 1rem;
+    color: var(--text-color-1);
+    background: var(--bg-color-2);
+    border: 1px solid var(--border-color-2);
+  }
+
+  .no_item {
+    margin: 0;
+    font-weight: normal;
+    font-size: 1.1rem;
+    color: var(--text-color-3);
+  }
+}
+
+// Save changes button.
+#save_changes {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  // width: 100%;
+  margin: 10px;
+  padding: 10px;
+  font-size: 1.15rem;
+  color: var(--text-color-1);
+  background: black;
+  border: 1px solid var(--border-color-3);
+  border-radius: 10px;
+  z-index: 1;
+
+  button {
+    padding: .4em .8em;
+    font-size: 1.15rem;
+    color: white;
+    background: rgb(0, 216, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}

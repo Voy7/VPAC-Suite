@@ -3,7 +3,7 @@ import db from '../../database.js'
 // Get specific or all missions, only full player
 // stats is given if selecting a specific mission.
 // (mission = Name of mission, options.createIfNull = boolean).
-export default function getBriefing(briefing, name, options) {
+export default function getBriefings(briefing, name, options) {
   return new Promise(resolve => {
     const query = briefing == '*'
       ? `SELECT * FROM briefings`

@@ -11,8 +11,8 @@ export default async function discordCacheLoop(guild) {
     members.push({
       id: member.user.id,
       name: member.user.username,
-      nickname: member.nickname,
-      avatar: member.user.avatarURL(),
+      nickname: member.nickname ? member.nickname : member.user.name,
+      avatar: member.user.avatarURL() ? member.user.avatarURL() : '/discord.png',
       roles: member._roles
     })
   })
@@ -23,7 +23,7 @@ export default async function discordCacheLoop(guild) {
       id: role.id,
       name: role.name,
       color: role.color,
-      icon: role.iconURL()
+      icon: role.iconURL() ? role.iconURL() : '/logo.png'
     })
   })
 

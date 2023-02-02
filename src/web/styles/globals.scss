@@ -26,6 +26,8 @@ body {
   box-sizing: border-box;
 }
 
+* { scrollbar-width: thin; }
+
 * input:focus { outline: 2px solid aqua; }
 
 // main { overflow-y: hidden; }
@@ -49,7 +51,7 @@ h1 {
   height: 100vh;
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.8);
-  background-image: url("/assets/bg1.png");
+  background-image: url("/backgrounds/bg1.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-blend-mode: soft-light;
@@ -80,6 +82,16 @@ h1 {
   padding: 20px;
   background: rgba(0, 0, 0, 0.75);
   z-index: 100;
+  cursor: zoom-out;
+  :first-child {
+    animation: modal-pop-in 150ms ease-in-out;
+
+    @keyframes modal-pop-in {
+      from { scale: 0; }
+      to { scale: 1; }
+    }
+  }
+  * { cursor: default; }
 }
 
 .loading {

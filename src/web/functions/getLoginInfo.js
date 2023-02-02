@@ -8,7 +8,7 @@ export default async function getLoginInfo(req) {
   const password = cookie.parse(req.headers.cookie)['vpac-password']
   const users = await getUser('*')
   const user = users.find(f => f.key == password)
-  if (!user) return { user: null }
+  if (!user) return null
 
   const guild = await getGuild()
   const member = guild.members.find(f => f.id == user.id)
@@ -24,5 +24,5 @@ export default async function getLoginInfo(req) {
     }
   }
 
-  return { login: null }
+  return null
 }

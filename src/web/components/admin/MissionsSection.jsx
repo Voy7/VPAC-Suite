@@ -1,16 +1,11 @@
 import styles from '/styles/Admin.module.scss'
-import Navbar from '/components/Navbar'
-import SquadronsSection from '/components/admin/SquadronsSection'
-// import MissionsSection from '/components/admin/MissionsSection'
 
-import useBackground from '/hooks/useBackground'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
-// Admin panel page.
-export default function Admin(props) {
+// Admin panel - Missions section.
+export default function MissionsSection(props) {
   const [section, setSection] = useState('Squadrons')
-  const [selectedItem, setSelectedItem] = useState(0)
   const [squadrons, setSquadrons] = useState(props.squadrons)
   const [missions, setMissions] = useState(props.missions)
   const [briefings, setBriefings] = useState(props.briefings)
@@ -27,14 +22,6 @@ export default function Admin(props) {
           <button className={section == 'Briefings' ? styles.selected : ''} onClick={() => setSection('Briefings')}>Briefings</button>
           <button className={section == 'Modules' ? styles.selected : ''} onClick={() => setSection('Modules')}>DCS Modules</button>
         </nav>
-        <div id={styles.body}>
-          { section == 'Squadrons' &&
-            <SquadronsSection
-              squadrons={squadrons} setSquadrons={setSquadrons}
-              selectedItem={selectedItem} setSelectedItem={setSelectedItem}
-            />
-          }
-        </div>
       </main>
     </>
   )

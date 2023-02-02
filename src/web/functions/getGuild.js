@@ -3,7 +3,7 @@ import db from '../../database.js'
 // Get the Discord guild object, members, roles, etc.
 export default function getGuld() {
   return new Promise(resolve => {
-    db.get(`SELECT * FROM guild`, (err, row) => {
+    db.get(`SELECT * FROM guild WHERE id = "main"`, (err, row) => {
       if (err) { console.log(err); resolve(null) }
       else resolve(JSON.parse(row.data))
     })

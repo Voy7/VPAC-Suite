@@ -5,7 +5,7 @@ import useBackground from '/hooks/useBackground'
 
 // DCS modules page.
 export default function Modules({ login, developers }) {
-  useBackground('/assets/bg8.png', 0.75)
+  useBackground('/backgrounds/bg8.png', 0.75)
 
   return (
     <>
@@ -65,11 +65,9 @@ function ModulesList({ title, modules }) {
   )
 }
 
-// Fetch login status & info function.
-import getLoginInfo from '/functions/getLoginInfo'
+// Pass login info to props and any other needed data.
 import getDCSModules from '/functions/getDCSModules'
 export async function getServerSideProps(context) {
-  const login = await getLoginInfo(context.req)
   const rawDevelopers = await getDCSModules()
   const developers = rawDevelopers.map(developer => {
     return {
@@ -81,5 +79,5 @@ export async function getServerSideProps(context) {
       others: developer.modules.split('\r\n').filter(module => module[0] == 'O')
     }
   })
-  return { props: { login, developers }}
+  return { props: { login: context.res.login, developers }}
 }

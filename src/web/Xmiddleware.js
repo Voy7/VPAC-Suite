@@ -1,8 +1,11 @@
+// import getLoginInfo from './functions/getLoginInfo'
 import { NextResponse } from 'next/server'
 
 const admins = JSON.parse(process.env.WEB_ADMINS)
 
-export default function middleware(req) {
+export default async function middleware(req) {
+  // const x = await getLoginInfo(req)
+  // console.log(req.headers.cookie)
   const url = req.nextUrl.pathname
   const password = req.cookies.get('vpac-password')?.value
   

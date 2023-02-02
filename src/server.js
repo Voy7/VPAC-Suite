@@ -4,6 +4,7 @@ import next from 'next'
 import dotenv from 'dotenv'
 import 'colors'
 
+
 // Load .env file.
 dotenv.config()
 
@@ -18,14 +19,19 @@ const app = next({ dev, hostname, port, dir: './src/web' })
 const handle = app.getRequestHandler()
 
 // Create Next.js server.
-app.prepare().then(() => {
+app.prepare().then(async () => {
+  const getLoginInfo = (await import('./web/functions/getLoginInfo.js')).default
   const server = createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true)
-      const { pathname, query } = parsedUrl
+      const { url, query } = parsedUrl
 
-      if (pathname === '/a') {
-        await app.render(req, res, '/a', query)
+      // Fetch user's login info.
+      res.login = await getLoginInfo(req)
+
+      if (url === '/login' || url === '/admin') {
+        if (res.login?.isAdmin) await app.render(req, res, '/admin', query)
+        else await app.render(req, res, '/login', query)
       }
 
       else await handle(req, res, parsedUrl)

@@ -8,39 +8,37 @@ const clients = new Map()
 export default function initializeTCPSocket() {
   const socket = net.createServer()
 
-  // Set TCP socket to listen on IP & port.
-  socket.listen(process.env.SOCKET_PORT, process.env.SOCKET_HOST, () => { 
-    console.log(`TCP socket listening on ${process.env.SOCKET_HOST}:${process.env.SOCKET_PORT}`.green)
+  // Set TCP socket to listen on configured port.
+  socket.listen(process.env.SOCKET_PORT, 'localhost', () => { 
+    console.log(`[Socket] TCP socket listening on: localhost:${process.env.SOCKET_PORT}`.green)
   })
 
   // On new connect, add IP to clients list for later use.
   socket.on('connection', connection => { 
     const clientAddress = `${connection.remoteAddress}:${connection.remotePort}`
     clients.set(clientAddress, null)
-    if (process.env.LOG_SOCKET_CONNECT) console.log(`Socket connected: ${clientAddress}`.green)
+    if (process.env.LOG_SOCKET_CONNECT) console.log(`[Socket] ${clientAddress}: Socket connected.`.green)
    
-    // When new data is sent, parse it in entry.js.
+    // When new data is sent, parse it in newEntry.js.
     connection.on('data', data => {
-      if (process.env.LOG_SOCKET_STATUS && data.toString().startsWith('STATUS;')) console.log(`${clientAddress}: `.cyan + `${data}`.gray)
-      else if (process.env.LOG_SOCKET_ENTRY) console.log(`${clientAddress}: `.cyan + `${data}`.gray)
+      if (process.env.LOG_SOCKET_STATUS && data.toString().includes('event=STATUS')) console.log(`[Socket] ${clientAddress}: `.cyan + `${data}`.gray)
+      else if (process.env.LOG_SOCKET_ENTRY) console.log(`[Socket] ${clientAddress}: `.cyan + `${data}`.gray)
       data.toString().split(';;').forEach(entry => {
-        if (entry == '') return
-        const args = entry.split(';')
-        newEntry(args, clients, clientAddress)
+        newEntry(entry, clients, clientAddress)
       })
     })
 
     // When connection closes, see if a ucid was set for
     // the client IP and then set their status to nothing.
     connection.on('close', (data) => { 
-      if (process.env.LOG_SOCKET_CONNECT) console.log(`Socket closed: ${clientAddress}`.yellow)
-      setUser(null, clients.get(clientAddress), null, [])
+      if (process.env.LOG_SOCKET_CONNECT) console.log(`[Socket] ${clientAddress}: Socket closed.`.yellow)
+      setUser(null, clients.get(clientAddress), null, {})
     })
 
     // Log any socket errors.
     connection.on('error', (err) => { 
-      console.log(`Error occurred in ${clientAddress}: ${err.message}`.red)
-      setUser(null, clients.get(clientAddress), null, [])
+      console.log(`[Socket] ${clientAddress}: Error occurred: ${err.message}`.red)
+      setUser(null, clients.get(clientAddress), null, {})
     })
   })
 }

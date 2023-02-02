@@ -7,11 +7,12 @@ import miz from './mizUtils.js'
 const db = new sqlite3.Database('./database.sqlite')
 
 db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS users (id TEXT, ucid TEXT, key TEXT, data TEXT)`)
-  db.run(`CREATE TABLE IF NOT EXISTS missions (mission TEXT, event TEXT, data TEXT)`)
-  db.run(`CREATE TABLE IF NOT EXISTS squadrons (id TEXT, role TEXT, data TEXT)`)
-  db.run(`CREATE TABLE IF NOT EXISTS briefings (id TEXT, name TEXT, public TEXT, elements TEXT, data TEXT)`)
-  db.run(`CREATE TABLE IF NOT EXISTS developers (name TEXT, image TEXT, link TEXT, color TEXT, modules TEXT, extra TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, ucid TEXT, key TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS missions (mission TEXT PRIMARY KEY, event TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS squadrons (id TEXT PRIMARY KEY, role TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS briefings (id TEXT PRIMARY KEY, name TEXT, public TEXT, elements TEXT, data TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS developers (name TEXT PRIMARY KEY, image TEXT, link TEXT, color TEXT, modules TEXT, extra TEXT)`)
+  db.run(`CREATE TABLE IF NOT EXISTS guild (id TEXT PRIMARY KEY, data TEXT)`)
 })
 
 // Run given query/queries.

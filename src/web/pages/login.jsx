@@ -37,9 +37,7 @@ export default function Login({ login }) {
   )
 }
 
-// Fetch login status & info function.
-import getLoginInfo from '/functions/getLoginInfo'
+// Pass login info to props and any other needed data.
 export async function getServerSideProps(context) {
-  const login = await getLoginInfo(context.req)
-  return { props: { login }}
+  return { props: { login: context.res.login }}
 }

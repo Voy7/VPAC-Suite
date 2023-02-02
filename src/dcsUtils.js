@@ -250,7 +250,7 @@ const unitList = [
 function parseShort(name) {
     let res = name.split(" ")[0]
     unitList.forEach(unit => {
-        if (name.startsWith(unit[0])) res = unit[1]
+        if (name?.startsWith(unit[0])) res = unit[1]
     })
     return res
 }
@@ -258,7 +258,7 @@ function parseShort(name) {
 function parseLong(name) {
     let res = name
     unitList.forEach(unit => {
-        if (name.startsWith(unit[0])) res = unit[2]
+        if (name?.startsWith(unit[0])) res = unit[2]
     })
     return res
 }
@@ -266,7 +266,7 @@ function parseLong(name) {
 function unitIcon(name) {
     let icon = `/assets/default-icon-red.png`
     unitList.forEach(unit => {
-        if (!name.startsWith(unit[0])) return
+        if (!name?.startsWith(unit[0])) return
         let type = unit[3].split("; ")[0]
         if (unit[4]) icon = `/assets/${unit[4]}.png`
         else if (type == "A") icon = `/assets/MIG29-red.png` // Aircraft
@@ -294,7 +294,7 @@ function unitIcon(name) {
 function unitType(name) {
     let type = "U"
     unitList.forEach(unit => {
-        if (!name.startsWith(unit[0])) return
+        if (!name?.startsWith(unit[0])) return
         type = unit[3].split("; ")[0]
     })
     return type
@@ -303,7 +303,7 @@ function unitType(name) {
 function unitCode(name) {
     let code = null
     unitList.forEach(unit => {
-        if (!name.startsWith(unit[0])) return
+        if (!name?.startsWith(unit[0])) return
         code = unit[3].split("; ")[0]
     })
     return code
@@ -312,7 +312,7 @@ function unitCode(name) {
 function unitThreatRing(name) {
     let size = null
     unitList.forEach(unit => {
-        if (!name.startsWith(unit[0])) return
+        if (!name?.startsWith(unit[0])) return
         if(unit[3].split("; ")[1]) size = unit[3].split("; ")[1]
     })
     return size

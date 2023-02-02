@@ -8,18 +8,18 @@ import { useEffect } from 'react'
 
 // Shuffled background images:
 const BACKGROUNDS = [
-  { src: '/assets/bg1.png', opacity: 0.65 },
-  { src: '/assets/bg2.png', opacity: 0.75 },
-  { src: '/assets/bg3.png', opacity: 0.65 },
-  { src: '/assets/bg6.png', opacity: 0.65 },
-  { src: '/assets/bg8.png', opacity: 0.7 }
+  { src: '/backgrounds/bg1.png', opacity: 0.65 },
+  { src: '/backgrounds/bg2.png', opacity: 0.75 },
+  { src: '/backgrounds/bg3.png', opacity: 0.65 },
+  { src: '/backgrounds/bg6.png', opacity: 0.65 },
+  { src: '/backgrounds/bg8.png', opacity: 0.7 }
 ]
 
 // Home page.
 export default function Home({ login, squadrons, guild }) {
   // Shuffle through background images.
   useEffect(() => {
-    useBackground('/assets/bg8.png', 0.7)
+    useBackground('/backgrounds/bg8.png', 0.7)
     let bg = null
     const loop = setInterval(() => {
       const list = BACKGROUNDS.filter(f => f.src != bg?.src)
@@ -103,13 +103,11 @@ export default function Home({ login, squadrons, guild }) {
   )
 }
 
-// Fetch login status & info function.
-import getLoginInfo from '/functions/getLoginInfo'
+// Pass login info to props and any other needed data.
 import getSquadrons from '/functions/getSquadrons'
 import getGuild from '/functions/getGuild'
 export async function getServerSideProps(context) {
-  const login = await getLoginInfo(context.req)
   const squadrons = await getSquadrons()
   const guild = await getGuild()
-  return { props: { login, squadrons, guild }}
+  return { props: { login: context.res.login, squadrons, guild }}
 }

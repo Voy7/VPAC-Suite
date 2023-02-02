@@ -29,14 +29,25 @@ export default async function getSquadrons() {
     const role = guild.roles.find(f => f.id == squadron.role)
     
     const members = []
+    const recruits = []
     guild.members.forEach(member => {
       if (!member.roles.includes(squadron.role)) return
-      members.push({
-        id: member.id,
-        name: member.name,
-        nickname: member.nickname ? member.nickname : member.name,
-        avatar: member.avatar
-      })
+      if (member.roles.includes(process.env.BOT_PILOT_ROLE)) {
+        members.push({
+          id: member.id,
+          name: member.name,
+          nickname: member.nickname ? member.nickname : member.name,
+          avatar: member.avatar
+        })
+      }
+      else {
+        recruits.push({
+          id: member.id,
+          name: member.name,
+          nickname: member.nickname ? member.nickname : member.name,
+          avatar: member.avatar
+        })
+      }
     })
 
     return {
@@ -47,9 +58,10 @@ export default async function getSquadrons() {
       short: squadron.short,
       description: info.description,
       checkride: info.checkride,
-      airframes: info.airframes.split(","),
-      callsigns: info.callsigns.split(","),
-      members: members
+      airframes: info.airframes,
+      callsigns: info.callsigns,
+      members: members,
+      recruits: recruits
     }
   }
 }

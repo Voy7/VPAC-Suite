@@ -1,4 +1,4 @@
-import getBriefing from './getBriefing.js'
+import getBriefings from './getBriefings.js'
 import getUserInfo from './getUserInfo.js'
 import dcsUtils from '../../dcsUtils.js'
 import db from '../../database.js'
@@ -10,7 +10,7 @@ export default function getMission(mission) {
   return new Promise(async resolve => {
     const missions = new Map()
     
-    const briefings = await getBriefing('*')
+    const briefings = await getBriefings('*')
 
     const query = mission == '*'
       ? `SELECT * FROM missions`

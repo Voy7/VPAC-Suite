@@ -25,7 +25,6 @@ export default function initializeBot() {
   })
 
   bot.on("messageCreate", message => {
-    console.log(message.content)
     if (message.author == bot.user) return
     if (!message.content.startsWith(process.env.BOT_PREFIX)) return
 
