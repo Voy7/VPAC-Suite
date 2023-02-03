@@ -50,7 +50,7 @@
     align-items: center;
     gap: 3px;
     width: 100%;
-    padding: .25em;
+    padding: 3px 4px;
     font-size: 1rem;
     color: var(--text-color-1);
     background: none;
@@ -65,6 +65,8 @@
     &.selected {
       color: white;
       background: var(--bg-color-4);
+      padding-left: 2px;
+      border-left: 2px solid pink;
     }
 
     span {
@@ -87,12 +89,24 @@
     font-size: 1.3rem;
   }
 
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .input {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px 10px 0;
+  }
+
   label {
     margin: 3px 0;
     font-size: 1.05rem;
     color: white;
   }
 
+  // Text/text-block inputs.
   input[type="text"], textarea {
     font-size: 1rem;
     color: var(--text-color-1);
@@ -102,49 +116,66 @@
 
   input[type="text"] { width: clamp(150px, 300px, 300px); }
 
-  input[type="file"] {
-    width: min-content;
-    font-size: 0;
-    color: transparent;
-
-    &::file-selector-button {
-      padding: .2em 1em;
-      font-size: 1rem;
-      color: var(--text-color-1);
-      background-color: var(--bg-color-3);
-      border: 2px dashed var(--border-color-3);
-      border-radius: 5px;
-      cursor: pointer;
-      &:hover { background-color: var(--bg-color-4); }
-    }
-  }
-
-  .input {
-    display: flex;
-    flex-direction: column;
-    margin: 10px 20px 10px 0;
-  }
-
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
+  // Image/file input.
   .image_input {
     display: flex;
     align-items: center;
     gap: 20px;
-    background: red;
+
+    input[type="file"] {
+      width: min-content;
+      font-size: 0;
+      color: transparent;
+  
+      &::file-selector-button {
+        padding: .2em 1em;
+        font-size: 1rem;
+        color: var(--text-color-1);
+        background-color: var(--bg-color-3);
+        border: 2px dashed var(--border-color-3);
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover { background-color: var(--bg-color-4); }
+      }
+    }
 
     .image {
       height: 80px;
       width: 80px;
+      margin: 0 40px 10px 0;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-blend-mode: darken;
-      &.banner { width: 170px; }
+      border: 1px solid var(--border-color-2);
+      &.banner { width: 250px; }
     }
+  }
+
+  // Slider input.
+  .slider_input {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 1rem;
+    color: var(--text-color-1);
+
+    input[type="range"] {
+      width: 100px;
+      margin-bottom: 5px;
+      color: aqua;
+      outline: none;
+    }
+  }
+
+  // Color picker input.
+  input[type="color"] {
+    width: 100px;
+    height: 35px;
+    background: var(--border-color-2);
+    border: none;
+    padding: 2px;
+    border-radius: 3px;
   }
 
   .no_item {

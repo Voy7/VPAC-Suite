@@ -5,7 +5,7 @@ import cookie from 'cookie'
 const admins = JSON.parse(process.env.WEB_ADMINS)
 
 export default async function getLoginInfo(req) {
-  const password = cookie.parse(req.headers.cookie)['vpac-password']
+  const password = req.headers.cookie ? cookie.parse(req.headers.cookie)['vpac-password'] : null
   const users = await getUser('*')
   const user = users.find(f => f.key == password)
   if (!user) return null

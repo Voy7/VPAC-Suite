@@ -59,6 +59,7 @@
       overflow-x: scroll;
       scrollbar-width: none;
       -ms-overflow-style: none;
+      &::-webkit-scrollbar { display: none; }
   
       a {
         padding: 5px 15px;

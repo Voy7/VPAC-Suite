@@ -10,7 +10,7 @@ export default function InputImage({ label, value, darkness, save, type }) {
   // Transform image based on type prop.
   async function parseImage(file) {
     let [resolution, ratio] = [300, 1] // Default: Square
-    if (type == 'banner') [resolution, ratio] = [500, 16/9] // Banner
+    if (type == 'banner') [resolution, ratio] = [500, 2.5/1] // Banner
     setter(await cropImage(file, resolution, ratio))
   }
 
@@ -23,17 +23,22 @@ export default function InputImage({ label, value, darkness, save, type }) {
           onChange={(e) => { parseImage(e.target.files[0]); save(true) }}
         />
       </div>
-      <div className={styles.input}>
-        <label htmlFor={`${id}-darkness`}>Darkness</label>
-        <input
-          id={`${id}-darkness`} type="range" min="0" max="100"
-          value={dark} onChange={(e) => { setDark(e.target.value); save(true) }}
-        />
-      </div>
+      { darkness &&
+        <div className={styles.input}>
+          <label htmlFor={`${id}-darkness`}>Darkness Layer</label>
+          <div className={styles.slider_input}>
+            <input
+              id={`${id}-darkness`} type="range" min="0" max="100"
+              value={dark} onChange={(e) => { setDark(e.target.value); save(true) }}
+            />
+            <span>{dark}%</span>
+          </div>
+        </div>
+      }
       <div
         className={`${styles.image} ${styles[type]}`}
         style={{backgroundImage: `url(${data})`, backgroundColor: `rgba(0, 0, 0, ${dark / 100})`}}
-      ></div>
+        ></div>
     </div>
   )
 }

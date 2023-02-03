@@ -27,10 +27,10 @@ export default function Squadrons({ login, squadrons }) {
                 key={squadron.short}
                 data-squadron={squadron.short}
                 className={`${styles.squadron} animation-fade`}
-                style={{ animationDelay: `${(index + 1) * 150}ms` }}
+                style={{ borderColor: squadron.color, animationDelay: `${(index + 1) * 150}ms` }}
               >
                 <div>
-                  <header data-squadron={squadron.short}>
+                  <header data-squadron={squadron.short} style={{backgroundImage: `url(${squadron.banner})`, backgroundColor: `rgba(0, 0, 0, ${squadron.darkness / 100})`}}>
                     <h2>{squadron.name}</h2>
                     <h3>{squadron.airframes}</h3>
                   </header>
