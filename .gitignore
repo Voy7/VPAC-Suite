@@ -7,5 +7,6 @@ database.sqlite
 ssl/
 miz/
 src/web/.next/
+src/web/public/img/*
 src/lua/*
 !src/lua/VPAC-Stats/

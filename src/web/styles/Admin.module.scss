@@ -80,7 +80,7 @@
 #options {
   display: flex;
   flex-direction: column;
-  width: clamp(200px, 600px, 100%);
+  // width: clamp(200px, 600px, 100%);
 
   h2 {
     margin: 10px 0;
@@ -88,16 +88,63 @@
   }
 
   label {
-    margin: 10px 0 3px 0;
+    margin: 3px 0;
     font-size: 1.05rem;
     color: white;
   }
 
-  input, textarea {
+  input[type="text"], textarea {
     font-size: 1rem;
     color: var(--text-color-1);
     background: var(--bg-color-2);
     border: 1px solid var(--border-color-2);
+  }
+
+  input[type="text"] { width: clamp(150px, 300px, 300px); }
+
+  input[type="file"] {
+    width: min-content;
+    font-size: 0;
+    color: transparent;
+
+    &::file-selector-button {
+      padding: .2em 1em;
+      font-size: 1rem;
+      color: var(--text-color-1);
+      background-color: var(--bg-color-3);
+      border: 2px dashed var(--border-color-3);
+      border-radius: 5px;
+      cursor: pointer;
+      &:hover { background-color: var(--bg-color-4); }
+    }
+  }
+
+  .input {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 20px 10px 0;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .image_input {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: red;
+
+    .image {
+      height: 80px;
+      width: 80px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-blend-mode: darken;
+      &.banner { width: 170px; }
+    }
   }
 
   .no_item {

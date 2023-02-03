@@ -9,6 +9,8 @@ export default async function handler(req, res) {
 
   db.run(`UPDATE squadrons SET data=?1 WHERE id=?2`, {
     1: JSON.stringify({
+      banner: 0,
+      darkness: req.body.darkness,
       description: req.body.description,
       callsigns: req.body.callsigns,
       airframes: req.body.airframes,
@@ -16,6 +18,7 @@ export default async function handler(req, res) {
     }),
     2: req.body.id
   })
+  console.log(req.body)
 
   const newSquadrons = await getSquadrons('*')
   res.status(200).json({ success: true, newSquadrons })
