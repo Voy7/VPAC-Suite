@@ -23,6 +23,7 @@ export default function SquadronsSection(
   const [savable, setSavable] = useState(false)
 
   useEffect(() => {
+    console.log('selected item')
     setSavable(false)
     const squadron = squadrons.find(f => f.short == selectedItem)
     setItemData(squadron)
@@ -34,6 +35,8 @@ export default function SquadronsSection(
     setAirframes(squadron?.airframes)
     setCheckride(squadron?.checkride)
   }, [selectedItem])
+
+  // useEffect(() => setSelectedItem(squadrons[0]?.short), [])
 
   // Update squadron info.
   async function update() {
@@ -76,7 +79,7 @@ export default function SquadronsSection(
         })}
       </nav>
 
-      { itemData && // Options
+      { itemData &&
         <div id={styles.options}>
           <h2>{itemData.name}</h2>
           <div className={styles.row}>

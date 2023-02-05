@@ -76,6 +76,15 @@
       overflow: hidden;
     }
   }
+
+  .dot_gray, .dot_blue {
+    width: 10px;
+    height: 10px;
+    border: 1px solid black;
+    border-radius: 50%;
+    &.dot_gray { background: var(--bg-color-4); }
+    &.dot_blue { background: aqua; }
+  }
 }
 
 // Options / main content area.
@@ -159,31 +168,44 @@
     gap: 3px;
     font-size: 1rem;
     color: var(--text-color-1);
+    cursor: default;
 
     input[type="range"] {
       width: 100px;
       margin-bottom: 5px;
       color: aqua;
       outline: none;
+      cursor: pointer;
     }
   }
 
   // Color picker input.
-  input[type="color"] {
-    width: 100px;
-    height: 35px;
-    background: var(--border-color-2);
-    border: none;
-    padding: 2px;
-    border-radius: 3px;
-  }
+  .color_input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    color: var(--text-color-1);
+    cursor: default;
 
-  .no_item {
-    margin: 0;
-    font-weight: normal;
-    font-size: 1.1rem;
-    color: var(--text-color-3);
+    input[type="color"] {
+      width: 100px;
+      height: 35px;
+      background: var(--border-color-2);
+      border: none;
+      padding: 2px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
   }
+}
+
+// No item selected.
+.no_item {
+  margin: 0;
+  font-weight: normal;
+  font-size: 1.1rem;
+  color: var(--text-color-3);
 }
 
 // Save changes button.
@@ -195,7 +217,6 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  // width: 100%;
   margin: 10px;
   padding: 10px;
   font-size: 1.15rem;
@@ -204,14 +225,63 @@
   border: 1px solid var(--border-color-3);
   border-radius: 10px;
   z-index: 1;
+  cursor: default;
+  animation: save-pop 150ms cubic-bezier(.17,.67,.87,1.5);
 
   button {
     padding: .4em .8em;
     font-size: 1.15rem;
     color: white;
-    background: rgb(0, 216, 0);
+    background: rgb(0, 220, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    &:hover { background: rgb(0, 180, 0); }
+  }
+
+  @keyframes save-pop {
+    from { translate: 0 100px; }
+    to { translate: 0 0; }
+  }
+}
+
+// Delete item button & modal.
+#delete_modal {
+  padding: 10px 30px;
+  background: var(--bg-color-1);
+  border: 1px solid var(--border-color-1);
+  border-radius: 10px;
+
+  h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 1.3rem;
+  }
+
+  p {
+    font-size: 1.05rem;
+    color: var(--text-color-1);
+  }
+
+  button {
+    width: 100%;
+    margin: 3px 0;
+    padding: 5px;
+    font-size: 1.05rem;
+    background: var(--bg-color-3);
+    border-radius: 10px;
+    cursor: pointer;
+
+    &#cancel {
+      color: var(--text-color-1);
+      border: 1px solid var(--border-color-3);
+      &:hover { color: white; background: var(--bg-color-4); }
+    }
+
+    &#delete {
+      color: rgb(255, 127, 127);
+      border: 1px solid rgb(255, 127, 127);
+      &:hover { color: white; background: rgb(255, 127, 127); }
+    }
   }
 }

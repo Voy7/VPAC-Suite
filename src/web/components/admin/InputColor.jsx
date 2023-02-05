@@ -8,10 +8,13 @@ export default function InputColor({ label, value, save }) {
   return (
     <div className={styles.input}>
       <label htmlFor={id}>{label}</label>
-      <input
-        id={id} type="color"
-        value={data} onChange={(e) => { setter(e.target.value); save(true) }}
-      />
+      <div className={styles.color_input}>
+        <input
+          id={id} type="color"
+          value={data} onChange={(e) => { setter(e.target.value); save(true) }}
+        />
+        <span>{data}</span>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import styles from '/styles/Admin.module.scss'
 import Navbar from '/components/Navbar'
 import SquadronsSection from '/components/admin/SquadronsSection'
-// import MissionsSection from '/components/admin/MissionsSection'
+import MissionsSection from '/components/admin/MissionsSection'
 
 import useBackground from '/hooks/useBackground'
 import Image from 'next/image'
@@ -34,6 +34,12 @@ export default function Admin(props) {
               selectedItem={selectedItem} setSelectedItem={setSelectedItem}
             />
           }
+          { section == 'Missions' &&
+          <MissionsSection
+            missions={missions} setMissions={setMissions}
+            selectedItem={selectedItem} setSelectedItem={setSelectedItem}
+          />
+        }
         </div>
       </main>
     </>
