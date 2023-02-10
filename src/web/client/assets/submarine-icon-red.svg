@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1000" height="1000" viewBox="0 0 1000 1000" xml:space="preserve">
+<desc>Created with Fabric.js 3.5.0</desc>
+<defs>
+</defs>
+<rect x="0" y="0" width="100%" height="100%" fill="#ffffff"></rect>
+<g transform="matrix(5.9809 0 0 5.9809 500.0029 500.0029)" id="962709"  >
+<g style="" vector-effect="non-scaling-stroke"   >
+		<g transform="matrix(1 0 0 1 0 0)"  >
+<path style="stroke: rgb(0,0,0); stroke-width: 4; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(255,128,128); fill-rule: nonzero; opacity: 1;"  transform=" translate(-100, -100)" d="M 100 28 L 172 100 L 100 172 L 28 100 L 100 28 Z" stroke-linecap="round" />
+</g>
+		<g transform="matrix(1 0 0 1 0 1.8424)" style=""  >
+		<text xml:space="preserve" font-family="Arial" font-size="42" font-style="normal" font-weight="bold" style="stroke: none; stroke-width: 4; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-30.3312" y="13.1939" >DD</tspan></text>
+</g>
+</g>
+</g>
+<g transform="matrix(3.1447 0 0 2.5329 500.0036 500.001)" id="182840" clip-path="url(#CLIPPATH_3)"  >
+<clipPath id="CLIPPATH_3" >
+	<rect transform="matrix(1 0 0 1 0 0.0002)" id="clip0_302_52" x="-79.5" y="-79" rx="0" ry="0" width="159" height="158" />
+</clipPath>
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; is-custom-font: none; font-file-url: none; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-79.5, -78.9998)" d="M 158.553 77.2093 L 120.406 11.5305 C 119.865 10.5695 118.861 9.95602 117.754 9.90882 H 41.6641 C 40.4877 9.89837 39.3963 10.5179 38.8082 11.5305 L 0.457077 77.412 C -0.152359 78.4326 -0.152359 79.7024 0.457077 80.7229 L 38.8082 146.672 C 39.4144 147.538 40.399 148.065 41.4601 148.091 H 117.754 C 118.818 148.076 119.808 147.546 120.406 146.672 L 158.553 80.5202 C 159.149 79.4958 159.149 78.234 158.553 77.2093 Z" stroke-linecap="round" />
+</g>
+</svg>

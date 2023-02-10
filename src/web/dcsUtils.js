@@ -21,13 +21,13 @@ const unitList = [
     ["A-10A", "A-10A", "A-10A Warthog", "A", "A10-red"],
     ["A-10C", "A-10C", "A-10C Warthog", "A", "A10-red"],
     ["AV8", "AV-8B", "AV-8B Harrier", "A", "AV8B-red"],
-    ["C-5", "C-5A", "C-5A Galaxy", "A", "KC130-red"],
+    ["C5_Galaxy", "C-5A", "C-5A Galaxy", "A", "KC130-red"],
     ["C-17", "C-17A", "C-17A Globemaster", "A", "KC130-red"],
     ["C-130", "C-130", "C-130 Hercules", "A", "KC130-red"],
     ["E-3A", "E-3A", "E-3A Sentry", "A", "E3A-red"],
     ["E-2C", "E-2C", "E-2C Hawkeye", "A", "E3A-red"],
     ["E-2D", "E-2D", "E-2D Hawkeye", "A", "E3A-red"],
-    ["Hercules", "AC-130", "AC-130 Hercules", "A", "KC130-red"],
+    ["Hercules", "C-130", "C-130 Hercules", "A", "KC130-red"],
     ["F-4E", "F-4E", "F-4E Phantom II", "A", "F4-red"],
     ["F-5E", "F-5E", "F-5E Tiger II", "A", "F5-red"],
     ["F-14A", "F-14A", "F-14A Tomcat", "A", "F14-red"],
@@ -40,6 +40,8 @@ const unitList = [
     ["KC130", "KC-130", "KC-130 Tanker", "A", "KC130-red"],
     ["KC-135", "KC-135", "KC-135 Tanker", "A", "KC130-red"],
     ["KC135MPRS", "KC-135MPRS", "KC-135MPRS Tanker", "A", "KC130-red"],
+    ["KC_10_Extender_D", "KC-10", "KC-10 Extender-D", "A", "KC130-red"],
+    ["KC_10_Extender", "KC-10", "KC-10 Extender", "A", "KC130-red"],
     ["MQ-9", "MQ-9", "MQ-9 Reaper", "A", "TF51-red"],
     ["Mirage-F1", "F1", "Mirage F1", "A", "MIG21-red"],
     ["M-2000", "M-2000C", "Mirage 2000C", "A", "MIG21-red"],
@@ -161,6 +163,7 @@ const unitList = [
     // Sea/Land Missiles
     ["Silkworm_SR", "Silkworm", "HY-2 Silkworm Radar", "ARL"],
     ["hy_launcher", "Silkworm", "HY-2 Silkworm Launcher", "ARL"],
+    ["Scud_B", "Scud", "SS-1C Scud-B", "ARL"],
 
     // Armor
     ["BMP-1", "BMP-1", "BMP-1 IFV", "ART"],
@@ -169,6 +172,7 @@ const unitList = [
     ["M-113", "APC", "M113 APC", "ART"],
     ["BTR_D", "APC", "APC BTR-D", "ART"],
     ["BTR-80", "APC", "APC BTR-80", "ART"],
+    ["BTR-82", "APC", "APC BTR-82A", "ART"],
     ["tt_DSHK", "Scout LC", "Scout LC 12.7mm MG", "ARW"],
     ["tt_KORD", "Scout LC", "Scout LC 12.7mm MG", "ARW"],
     ["HL_DSHK", "Scout HL", "Scout HL 12.7mm MG", "ARW"],
@@ -196,15 +200,16 @@ const unitList = [
     ["M1043 HMMWV Armament", "HMMWV", "M1043 HMMWV", "ARW"],
 
 
-
     // Support Utlity
     ["Ural-375 PBU", "Truck", "Ural-375 PBU Truck", "S"],
     ["Ural-375", "Truck", "Ural-375 Truck", "S"],
     ["Ural-4320T", "Truck", "Ural-4320T Truck", "S"],
 	["Ural-4320", "Truck", "Ural-4320 Truck", "S"],
     ["ZIL-131", "Truck", "ZIL-131 Truck", "S"],
+    ["ZiL-131", "Truck", "ZIL-131 Truck", "S"],
     ["ZIL-135", "Truck", "ZIL-135 Truck", "S"],
     ["GAZ-66", "Truck", "GAZ-66 Truck", "S"],
+    ["ATZ-5", "Truck", "ATZ-5 Truck", "S"],
     ["ATZ-10", "Truck", "ATZ-10 Truck", "S"],
     ["ATZ-60", "Truck", "ATZ-60 Truck", "S"],
     ["ATMZ-5", "Truck", "ATMZ-5 Truck", "S"],
@@ -212,8 +217,11 @@ const unitList = [
     ["KAMAZ", "Truck", "KAMAZ Truck", "S"],
     ["UAZ-469", "Truck", "UAZ-469 Jeep", "S"],
     ["M978 HEMT", "Truck", "M978 HEMT Tanker", "S"],
+    ["Tigr", "Truck", "LUV Tigr Truck", "S"],
+    ["Hummer", "HMMWV", "LUV HMMWV Jeep", "S"],
     ["ERO_Tent", "Tent", "Tent", "S"],
     ["Small Warehouse", "Warehouse", "Warehouse", "S"],
+    ["generator_5i57", "Power Station", "Diesel Power Station 5i57A", "S"],
 
     // Ships
     ["CVN_59", "CVN-59", "CVN-59", "CV; 16"],
@@ -231,6 +239,14 @@ const unitList = [
     ["Type_052C", "Type 052C", "Type 052C", "DD; 54"],
     ["Type_054A", "Type 054A", "Type 054A", "FF; 24"],
     ["Type_071", "Type 071", "Type 071", "CC"],
+    ["Type_093", "Type 093", "Type 093", "SB"],
+    ["IMPROVED_KILO", "Improved Kilo", "636 Improved Kilo", "SB"],
+    ["BDK-775", "LS Ropucha", "LS Ropucha", "FF"],
+    ["PIOTR", "Pyotr Velikiy", "1144.2 Pyotr Velikiy", "CC; 64"],
+    ["ALBATROS", "Grisha", "1124.4 Grisha", "FF; 5"],
+    ["MOLNIYA", "Molniya", "1241.1 Molniya", "FF; 1"],
+    ["REZKY", "Rezky", "1135M Rezky", "DD; 5"],
+    ["NEUSTRASH", "Neustrashimy", "11540 Neustrashimy", "DD; 6"],
     ["La_Combattante_II", "Ship", "La Combattante II F.A.C", "SH"],
 
     // Munition Weapons
@@ -282,11 +298,12 @@ function unitIcon(name) {
         else if (type == "EW") icon = `/assets/radar-icon-red.png` // Radar
         else if (type == "IF") icon = `/assets/infantry-icon-red.png` // Infantry
         else if (type == "S") icon = `/assets/truck-icon-red.png` // Support Utility
-        else if (type == "SH") icon = `/assets/truck-icon-red.svg` // Generic Ships
-        else if (type == "CV") icon = `/assets/carrier-icon-red.svg` // Generic Ships
-        else if (type == "CC") icon = `/assets/cruiser-icon-red.svg` // Generic Ships
-        else if (type == "DD") icon = `/assets/destroyer-icon-red.svg` // Generic Ships
-        else if (type == "FF") icon = `/assets/frigate-icon-red.svg` // Generic Ships
+        else if (type == "SH") icon = `/assets/truck-icon-red.png` // Generic Ships
+        else if (type == "CV") icon = `/assets/carrier-icon-red.svg` // Carrier Ships
+        else if (type == "CC") icon = `/assets/cruiser-icon-red.svg` // Cruiser Ships
+        else if (type == "DD") icon = `/assets/destroyer-icon-red.svg` // Destroyer Ships
+        else if (type == "FF") icon = `/assets/frigate-icon-red.svg` // Frigate Ships
+        else if (type == "SB") icon = `/assets/truck-icon-red.png` // Submarines
     })
     return icon
 }

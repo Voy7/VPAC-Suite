@@ -243,12 +243,23 @@ function initMap() {
     // Wait a second to let the map finish loading.
     setTimeout(() => {
         map.addListener("zoom_changed", () => {
-            if (map.zoom <= 7) $(".sam-label").fadeOut(500)
-            else $(".sam-label").fadeIn(500)
+            if (map.zoom <= 7) {
+                $(".sam-label").fadeOut(500)
+                $(".ship-label").fadeOut(500)
+                $(".sam").css('opacity', '0.5')
+                $(".ship").css('opacity', '0.5')
+            }
+            else {
+                $(".sam-label").fadeIn(500)
+                $(".ship-label").fadeIn(500)
+                $(".sam").css('opacity', '1')
+                $(".ship").css('opacity', '1')
+            }
             if (map.zoom <= 9) $(".map-item-extra").fadeOut(500)
             else $(".map-item-extra").fadeIn(500)
         })
         $(".sam-label").fadeOut(0)
+        $(".ship-label").fadeOut(0)
     }, 1000)
 
     // Only populate map once miz is loaded.
