@@ -2,6 +2,7 @@ import styles from '/styles/Admin.module.scss'
 import Navbar from '/components/Navbar'
 import SquadronsSection from '/components/admin/SquadronsSection'
 import MissionsSection from '/components/admin/MissionsSection'
+import BriefingsSection from '/components/admin/BriefingsSection'
 
 import useBackground from '/hooks/useBackground'
 import Image from 'next/image'
@@ -11,6 +12,7 @@ import { useState, useEffect } from 'react'
 export default function Admin(props) {
   const [section, setSection] = useState('Squadrons')
   const [selectedItem, setSelectedItem] = useState(0)
+  const [error, setError] = useState()
   const [squadrons, setSquadrons] = useState(props.squadrons)
   const [missions, setMissions] = useState(props.missions)
   const [briefings, setBriefings] = useState(props.briefings)
@@ -31,16 +33,31 @@ export default function Admin(props) {
           { section == 'Squadrons' &&
             <SquadronsSection
               squadrons={squadrons} setSquadrons={setSquadrons}
-              selectedItem={selectedItem} setSelectedItem={setSelectedItem}
+              selectedItem={selectedItem} setSelectedItem={setSelectedItem} setError={setError}
             />
           }
           { section == 'Missions' &&
-          <MissionsSection
-            missions={missions} setMissions={setMissions}
-            selectedItem={selectedItem} setSelectedItem={setSelectedItem}
-          />
-        }
+            <MissionsSection
+              missions={missions} setMissions={setMissions}
+              selectedItem={selectedItem} setSelectedItem={setSelectedItem} setError={setError}
+            />
+          }
+          { section == 'Briefings' &&
+            <BriefingsSection
+              briefings={briefings} setBriefings={setBriefings}
+              selectedItem={selectedItem} setSelectedItem={setSelectedItem} setError={setError}
+            />
+          }
         </div>
+        { error &&
+          <div className="modal_bg" onClick={() => setError(null)}>
+            <div id={styles.error_modal} onClick={(e) => e.stopPropagation()}>
+              <h2>An Error Occurred</h2>
+              <p>{error}</p>
+              <button id={styles.cancel} onClick={() => setError(null)}>Ok</button>
+            </div>
+          </div>
+        }
       </main>
     </>
   )

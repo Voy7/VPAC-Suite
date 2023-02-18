@@ -26,7 +26,6 @@ export default async function handler(req, res) {
     }),
     2: req.body.id
   })
-  // console.log(req.body)
 
   const newSquadrons = await getSquadrons('*')
   res.status(200).json({ success: true, newSquadrons })

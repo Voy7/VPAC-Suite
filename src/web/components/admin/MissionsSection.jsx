@@ -1,36 +1,65 @@
 import styles from '/styles/Admin.module.scss'
+import SaveChanges from '/components/admin/SaveChanges'
 import DeleteItem from '/components/admin/DeleteItem'
+import InputText from '/components/admin/InputText'
 import { useState, useEffect } from 'react'
 
 // Admin panel - Missions section.
 export default function MissionsSection(
-  { missions, setMissions, selectedItem, setSelectedItem }
+  { missions, setMissions, selectedItem, setSelectedItem, setError }
 ) {
   const [itemData, setItemData] = useState()
+  const [name, setName] = useState()
   const [savable, setSavable] = useState(false)
+  
+  useEffect(() => setSelectedItem(missions[0]?.name), [])
 
   useEffect(() => {
     const mission = missions.find(f => f.name == selectedItem)
     setItemData(mission)
+    setName(mission?.name?.replace(/_/g, ' '))
   }, [selectedItem])
 
-  // useEffect(() => setSelectedItem(squadrons[0]?.short), [])
+  // Update mission info.
+  async function update() {
+    setSavable(false)
+    const res = await fetch('/api/updateMission', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: itemData.name, name })
+    })
+
+    const { success, err, newMissions } = await res.json()
+    if (success) {
+      setMissions(newMissions)
+      setSelectedItem(name.replace(/ /g, '_'))
+    }
+    else setError(err)
+  }
 
   // Delete selected mission.
   async function remove() {
-    // setSavable(false)
-    const res = await fetch(`/api/deleteMission/${itemData.name}`, {
-      method: 'POST'
+    const res = await fetch('/api/deleteMission', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: itemData.name })
     })
 
-    const { success, newMissions } = await res.json()
-    if (success) setMissions(newMissions)
+    const { success, err, newMissions } = await res.json()
+    if (success) {
+      setMissions(newMissions)
+      setSelectedItem(null)
+    }
+    else setError(err)
   }
 
   return (
     <>
       <nav className={styles.items}>
-        <header>Missions</header>
+        <header>
+          Missions
+          <span>{missions.length}</span>
+        </header>
         { missions.map(mission => {
           return (
             <button
@@ -53,7 +82,11 @@ export default function MissionsSection(
             <li>Start Date: {itemData.date}</li>
             <li>Players: {itemData.players.length}</li>
           </ul>
-          <DeleteItem savable={savable} setSavable={setSavable} onClick={remove} />
+          <InputText label="Mission Name" value={[name, setName]} save={setSavable} />
+          <div className={styles.row}>
+            <SaveChanges label="Save Changes" onClick={update} savable={savable} setSavable={setSavable} />
+            <DeleteItem label="Delete Mission" onClick={remove} />
+          </div>
         </div>
       }
       { !itemData && <h6 className={styles.no_item}>No item currently selected.</h6> }

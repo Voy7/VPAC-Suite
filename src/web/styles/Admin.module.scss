@@ -35,14 +35,47 @@
 // Sidebar item selection.
 .items {
   width: 250px;
+  max-height: 450px;
+  overflow-y: auto;
   border: 1px solid var(--border-color-1);
 
   header {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 8px;
     padding: 10px;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    font-weight: bold;
+    cursor: default;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 1.4rem;
+      min-width: 1.4rem;
+      padding: .1em .2em;
+      font-size: 1rem;
+      color: var(--text-color-2);
+      background: var(--bg-color-4);
+      border-radius: 50%;
+    }
+
+    button {
+      width: min-content;
+      margin: 0;
+      padding: .1em .2em;
+      font-size: 1rem;
+      white-space: nowrap;
+      color: rgb(100, 255, 100);
+      background: var(--bg-color-3);
+      border: 1px solid var(--border-color-3);
+      border-radius: 8px;
+      transition: 150ms;
+      cursor: pointer;
+      &:hover { color: white; background: rgb(100, 255, 100); }
+    }
   }
 
   button {
@@ -96,6 +129,13 @@
   h2 {
     margin: 10px 0;
     font-size: 1.3rem;
+  }
+
+  ul {
+    margin: 10px 10px 0 0;
+    padding-left: 15px;
+    font-size: .95rem;
+    color: var(--text-color-2);
   }
 
   .row {
@@ -208,8 +248,27 @@
   color: var(--text-color-3);
 }
 
-// Save changes button.
-#save_changes {
+// Save changes button & popup.
+#save_button {
+  width: min-content;
+  margin: 10px 10px 10px 0;
+  padding: .3em .6em;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  color: rgb(180, 180, 255);
+  background: var(--bg-color-3);
+  border: 1px solid var(--border-color-3);
+  border-radius: 10px;
+  transition: 150ms;
+  opacity: 0.5;
+  cursor: no-drop;
+  &.savable {
+    opacity: 1; cursor: pointer;
+    &:hover { color: white; background: rgb(180, 180, 255); }
+  }
+}
+
+#save_popup {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -246,22 +305,30 @@
 }
 
 // Delete item button & modal.
-#delete_modal {
+#delete_button {
+  width: min-content;
+  margin: 10px 10px 10px 0;
+  padding: .3em .6em;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  color: rgb(255, 95, 95);
+  background: var(--bg-color-3);
+  border: 1px solid var(--border-color-3);
+  border-radius: 10px;
+  transition: 150ms;
+  cursor: pointer;
+  &:hover { color: white; background: rgb(255,85, 95); }
+}
+
+#delete_modal,
+#error_modal {
   padding: 10px 30px;
   background: var(--bg-color-1);
   border: 1px solid var(--border-color-1);
   border-radius: 10px;
 
-  h2 {
-    margin: 0;
-    text-align: center;
-    font-size: 1.3rem;
-  }
-
-  p {
-    font-size: 1.05rem;
-    color: var(--text-color-1);
-  }
+  h2 { margin: 0; text-align: center; font-size: 1.3rem; }
+  p { font-size: 1.05rem; color: var(--text-color-1); }
 
   button {
     width: 100%;
@@ -269,19 +336,19 @@
     padding: 5px;
     font-size: 1.05rem;
     background: var(--bg-color-3);
+    border: 1px solid var(--border-color-3);
     border-radius: 10px;
+    transition: 150ms;
     cursor: pointer;
 
     &#cancel {
       color: var(--text-color-1);
-      border: 1px solid var(--border-color-3);
       &:hover { color: white; background: var(--bg-color-4); }
     }
 
     &#delete {
-      color: rgb(255, 127, 127);
-      border: 1px solid rgb(255, 127, 127);
-      &:hover { color: white; background: rgb(255, 127, 127); }
+      color: rgb(255, 95, 95);
+      &:hover { color: white; background: rgb(255, 95, 95); }
     }
   }
 }

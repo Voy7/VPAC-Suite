@@ -3,7 +3,7 @@ import useCloseModal from '/hooks/useCloseModal'
 import { useState, useEffect } from 'react'
 
 // Admin panel - Delete item button.
-export default function DeleteItem({ onClick }) {
+export default function DeleteItem({ label, onClick }) {
   const [openModal, setOpenModal] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -15,11 +15,11 @@ export default function DeleteItem({ onClick }) {
 
   return (
     <>
-      <button className={styles.delete_button} onClick={() => setOpenModal(true)}>Delete Item</button>
+      <button id={styles.delete_button} onClick={() => setOpenModal(true)}>{label}</button>
       { openModal &&
         <div className="modal_bg" onClick={close}>
           <div id={styles.delete_modal} onClick={(e) => e.stopPropagation()}>
-            <h2>Delete Item</h2>
+            <h2>{label}?</h2>
             <p>Are you sure you want to delete this?</p>
             <button id={styles.cancel} onClick={close}>No, Cancel</button>
             <button id={styles.delete} onClick={onClick}>Yes, Delete It</button>

@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react'
 
 // Admin panel - Squadrons section.
 export default function SquadronsSection(
-  { squadrons, setSquadrons, selectedItem, setSelectedItem }
+  { squadrons, setSquadrons, selectedItem, setSelectedItem, setError }
 ) {
   const [itemData, setItemData] = useState()
   const [banner, setBanner] = useState()
@@ -21,6 +21,8 @@ export default function SquadronsSection(
   const [description, setDescription] = useState()
   const [checkride, setCheckride] = useState()
   const [savable, setSavable] = useState(false)
+
+  useEffect(() => setSelectedItem(squadrons[0]?.short), [])
 
   useEffect(() => {
     console.log('selected item')
@@ -35,8 +37,6 @@ export default function SquadronsSection(
     setAirframes(squadron?.airframes)
     setCheckride(squadron?.checkride)
   }, [selectedItem])
-
-  // useEffect(() => setSelectedItem(squadrons[0]?.short), [])
 
   // Update squadron info.
   async function update() {
@@ -58,13 +58,16 @@ export default function SquadronsSection(
 
     const { success, newSquadrons } = await res.json()
     if (success) setSquadrons(newSquadrons)
+    else setError(err)
   }
 
   return (
     <>
-      <SaveChanges savable={savable} setSavable={setSavable} onClick={update} />
       <nav className={styles.items}>
-        <header>Squadrons</header>
+        <header>
+          Squadrons
+          <span>{squadrons.length}</span>
+        </header>
         { squadrons.map(squadron => {
           return (
             <button
@@ -92,6 +95,7 @@ export default function SquadronsSection(
           </div>
           <InputBlock label="Description" value={[description, setDescription]} save={setSavable} />
           <InputBlock label="Checkride Info" value={[checkride, setCheckride]} save={setSavable} />
+          <SaveChanges savable={savable} setSavable={setSavable} onClick={update} />
         </div>
       }
       { !itemData && <h6 className={styles.no_item}>No item currently selected.</h6> }

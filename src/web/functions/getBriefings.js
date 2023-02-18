@@ -16,12 +16,13 @@ export default function getBriefings(briefing, name, options) {
       if (err) resolve(null)
       else {
         if (briefing == '*') {
-          const briefings = rows.map(row => {
-            return {
+          const briefings = []
+          rows.forEach(row => {
+            briefings.unshift({
               name: row.name,
               id: row.id,
               public: row.public == 'true'
-            }
+            })
           })
 
           resolve(briefings)
